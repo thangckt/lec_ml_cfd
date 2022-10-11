@@ -1,5 +1,5 @@
-title: My sample book
-author: The Jupyter Book Community
+title: Machine learning in computational fluid dynamics
+author: AndreWeiner, converted by thangckt
 # logo: logo.png
 execute:
   execute_notebooks: force
