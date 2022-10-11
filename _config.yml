@@ -1,6 +1,16 @@
+#######################################################################################
+# A default configuration that will be loaded for all jupyter books
+# Users are expected to override these values in their own `_config.yml` file.
+# This is also the "master list" of all allowed keys and values.
+
+#######################################################################################
+# Book settings
 title: Machine learning in computational fluid dynamics
 author: AndreWeiner, converted by thangckt
 # logo: logo.png
+
+#######################################################################################
+# Execution settings
 execute:
   execute_notebooks: force
 
@@ -8,7 +18,31 @@ execute:
 # bibtex_bibfiles:
 #   - references.bib
 
+#######################################################################################
+# HTML-specific settings
+html:
+  favicon                   : "https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"  # A path to a favicon image
+  extra_navbar              : ""  # Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
+  extra_footer              : ""  # Will be displayed underneath the footer.
+  google_analytics_id       : ""  # A GA id that can be used to track book views.
+  home_page_in_navbar       : true  # Whether to include your home page in the left Navigation Bar
 
+#######################################################################################
+# Launch button settings
+launch_buttons:
+  notebook_interface        : classic  # The interface interactive links will activate ["classic", "jupyterlab"]
+  binderhub_url             : ""       # https://mybinder.org  # The URL of the BinderHub (e.g., https://mybinder.org)
+  jupyterhub_url            : ""  # The URL of the JupyterHub (e.g., https://datahub.berkeley.edu)
+  thebe                     : false  # Add a thebe button to pages (requires the repository to run on Binder)
+  colab_url                 : "" # The URL of Google Colab (https://colab.research.google.com)
+
+repository:
+  url                       : https://github.com/executablebooks/jupyter-book  # The URL to your book's repository
+  path_to_book              : ""  # A path to your book's folder, relative to the repository root.
+  branch                    : master  # Which branch of the repository should be used when creating links
+
+#######################################################################################
+# Advanced and power-user settings
 sphinx:
   config:
     html_js_files:
