@@ -1,7 +1,7 @@
 format: jb-book
 root: README
 parts:
-  - caption: Name of Part 1
+  - caption: Lectures
     chapters:
     - file: notebooks/ml_cfd_intro
     - file: notebooks/cfd_intro
@@ -14,7 +14,7 @@ parts:
     - file: notebooks/cylinder_bayesian_opt
     - file: notebooks/cylinder_drl
 
-  - caption: Name of Part 1
+  - caption: Exercises
     chapters:
     - file: notebooks/system_setup
     - file: notebooks/cfd_intro_exercise
