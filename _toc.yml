@@ -1,6 +1,6 @@
 format: jb-book
-root: intro
+root: README
 chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+- file: notebooks/cfd_intro
+- file: notebooks/bubble_path_classification
+- file: coherent_structures_dim_reduction
