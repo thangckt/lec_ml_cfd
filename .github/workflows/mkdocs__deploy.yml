@@ -23,4 +23,4 @@ jobs:
       - name: MkDocs gh-deploy
         run: |
           pip install jupyter-book
-          jupyter-book build notebooks/
+          jupyter-book build ./
