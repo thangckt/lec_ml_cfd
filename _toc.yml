@@ -16,6 +16,7 @@ parts:
 
   - caption: Exercises
     chapters:
+    - file: notebooks/python_intro
     - file: notebooks/system_setup
     - file: notebooks/cfd_intro_exercise
     - file: notebooks/ml_intro_exercise
