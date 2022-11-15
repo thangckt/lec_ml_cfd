@@ -9,13 +9,11 @@ touch post.foam
 # mesh creation
 runApplication blockMesh
 
-# set inlet velocity
+# set velocity field
 cp -r 0.org 0
-runApplication setExprBoundaryFields
+runApplication setExprFields
 
-# decompose and run case
-runApplication decomposePar
-runParallel renumberMesh -overwrite
-runParallel $(getApplication)
+# run scalarTransportFoam
+runApplication $(getApplication)
 
 #------------------------------------------------------------------------------

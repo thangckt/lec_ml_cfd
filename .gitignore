@@ -11,3 +11,5 @@ output
 .vscode
 datasets
 drl_test_1
+ml-cfd
+openfoam
