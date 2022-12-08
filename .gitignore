@@ -1,5 +1,7 @@
 __pycache__/
 .ipynb_checkpoints
+**/.ipynb_checkpoints/
+**/__pycache__/
 *.so
 *.sif
 profile_default/
