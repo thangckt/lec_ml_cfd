@@ -22,11 +22,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install jupyter-book ghp-import
+          pip install jupyter-book ghp-import torch
 
       - name: build jupyter-book and copy book's HTML to the gh-pages branch
         run: |
-          jupyter-book build ./    
-          ghp-import -n -p -f _build/html             
+          jupyter-book build ./
+          ghp-import -n -p -f _build/html
 
 
