@@ -1,0 +1,1549 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Computing highly accurate mass transfer at rising bubbles &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Approximating the flow past a cylinder with limited data" href="cylinder_pinn.html" />
+    <link rel="prev" title="Predicting the stability regime of rising bubbles" href="bubble_path_classification.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/mass_transfer_regression.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-high-schmidt-number-problem">
+   The high Schmidt number problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#decoupling-two-phase-flow-and-mass-transfer">
+   Decoupling two-phase flow and mass transfer
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-processing-and-visualization">
+   Data processing and visualization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-creation">
+   Model creation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rise-velocity">
+     Rise velocity
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#surface-velocity">
+     Surface velocity
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bubble-shape">
+     Bubble shape
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model-export">
+     Model export
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#single-phase-flow-simulations-with-mass-transfer">
+   Single-phase flow simulations with mass transfer
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analyzing-the-results">
+   Analyzing the results
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Computing highly accurate mass transfer at rising bubbles</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-high-schmidt-number-problem">
+   The high Schmidt number problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#decoupling-two-phase-flow-and-mass-transfer">
+   Decoupling two-phase flow and mass transfer
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-processing-and-visualization">
+   Data processing and visualization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-creation">
+   Model creation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rise-velocity">
+     Rise velocity
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#surface-velocity">
+     Surface velocity
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bubble-shape">
+     Bubble shape
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model-export">
+     Model export
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#single-phase-flow-simulations-with-mass-transfer">
+   Single-phase flow simulations with mass transfer
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analyzing-the-results">
+   Analyzing the results
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="computing-highly-accurate-mass-transfer-at-rising-bubbles">
+<h1>Computing highly accurate mass transfer at rising bubbles<a class="headerlink" href="#computing-highly-accurate-mass-transfer-at-rising-bubbles" title="Permalink to this headline">#</a></h1>
+<p>In this notebook, we cover the following topics:</p>
+<ul class="simple">
+<li><p>The high Schmidt number problem</p></li>
+<li><p>Decoupling two-phase flow and mass transfer</p></li>
+<li><p>Two-phase flow simulation of a single rising bubble</p></li>
+<li><p>Data processing and visualization</p></li>
+<li><p>Model creation</p>
+<ul>
+<li><p>Rise velocity</p></li>
+<li><p>Surface velocity</p></li>
+<li><p>Bubble radius</p></li>
+<li><p>Model export</p></li>
+</ul>
+</li>
+<li><p>Single-phase flow simulation with mass transfer</p></li>
+</ul>
+<section id="the-high-schmidt-number-problem">
+<h2>The high Schmidt number problem<a class="headerlink" href="#the-high-schmidt-number-problem" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="decoupling-two-phase-flow-and-mass-transfer">
+<h2>Decoupling two-phase flow and mass transfer<a class="headerlink" href="#decoupling-two-phase-flow-and-mass-transfer" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="data-processing-and-visualization">
+<h2>Data processing and visualization<a class="headerlink" href="#data-processing-and-visualization" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from typing import List, Tuple
+from glob import glob
+from os.path import isdir, join
+from copy import deepcopy
+import matplotlib.pyplot as plt
+import torch as pt
+import numpy as np
+from pandas import DataFrame, read_csv, to_numeric
+from lecture_utils import train_model, create_simple_network
+
+# increase plot resolution
+plt.rcParams[&quot;figure.dpi&quot;] = 160
+
+# dataset directory
+data = &quot;../datasets/ellipsoidal_bubble&quot;
+
+# set default dtype to double precision
+pt.set_default_dtype(pt.float64)
+
+# make results reproducible
+pt.manual_seed(0)
+
+# create output directory
+output = &quot;output&quot;
+!mkdir -p $output
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def load_logfile(path: str) -&gt; DataFrame:
+    columns = [&quot;t&quot;, &quot;vol&quot;, &quot;x&quot;, &quot;y&quot;, &quot;z&quot;, &quot;ux&quot;, &quot;uy&quot;, &quot;uz&quot;, &quot;area&quot;]
+    log = read_csv(path, sep=&quot;\s+&quot;, header=None, names=columns, on_bad_lines=&quot;skip&quot;).dropna()
+    log = log[to_numeric(log.t, errors=&quot;coerce&quot;).isnull() == False].reset_index(drop=True)
+    return log.apply(to_numeric)
+
+log = load_logfile(join(data, &quot;log.solver&quot;))
+log.head()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>t</th>
+      <th>vol</th>
+      <th>x</th>
+      <th>y</th>
+      <th>z</th>
+      <th>ux</th>
+      <th>uy</th>
+      <th>uz</th>
+      <th>area</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000000</td>
+      <td>0.083315</td>
+      <td>3.500000</td>
+      <td>0.294497</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>1.570654</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.001045</td>
+      <td>0.083308</td>
+      <td>3.500011</td>
+      <td>0.292478</td>
+      <td>0.0</td>
+      <td>0.002986</td>
+      <td>0.000113</td>
+      <td>0.0</td>
+      <td>1.572102</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.002477</td>
+      <td>0.083306</td>
+      <td>3.500008</td>
+      <td>0.292458</td>
+      <td>0.0</td>
+      <td>0.005118</td>
+      <td>-0.000109</td>
+      <td>0.0</td>
+      <td>1.571829</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.004044</td>
+      <td>0.083307</td>
+      <td>3.500015</td>
+      <td>0.292159</td>
+      <td>0.0</td>
+      <td>0.008566</td>
+      <td>-0.000015</td>
+      <td>0.0</td>
+      <td>1.571621</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.005663</td>
+      <td>0.083308</td>
+      <td>3.500029</td>
+      <td>0.292319</td>
+      <td>0.0</td>
+      <td>0.011656</td>
+      <td>-0.000133</td>
+      <td>0.0</td>
+      <td>1.571783</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>write_times = pt.arange(0.0, 15, 0.15)
+xc = pt.zeros_like(write_times)
+uxc = pt.zeros_like(write_times)
+for i, t in enumerate(write_times):
+    row = log.iloc[(log.t-t.item()).abs().argsort()[0]]
+    xc[i] = row.x
+    uxc[i] = row.ux
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(log.t, log.x, label=&quot;center of mass&quot;)
+plt.scatter(write_times, xc, s=5, c=&quot;C1&quot;, label=&quot;write times&quot;, zorder=5)
+plt.legend()
+plt.xlabel(r&quot;$\tilde{t}$&quot;)
+plt.ylabel(r&quot;$\tilde{x}_b$&quot;)
+plt.savefig(join(output, &quot;bubble_position.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_7_0.png" src="../_images/mass_transfer_regression_7_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(log.t, log.ux, label=&quot;terminal velocity&quot;)
+plt.scatter(write_times, uxc, s=5, c=&quot;C1&quot;, label=&quot;write times&quot;, zorder=5)
+plt.legend()
+plt.xlabel(r&quot;$\tilde{t}$&quot;)
+plt.ylabel(r&quot;$\tilde{U}_b$&quot;)
+plt.savefig(join(output, &quot;bubble_speed.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_8_0.png" src="../_images/mass_transfer_regression_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>files = glob(join(data, r&quot;plic/*&quot;))
+print(files[:2])
+iterations = sorted(set([name.split(&quot;_&quot;)[-2] for name in files]), key=int)
+assert len(iterations) == 100, &quot;expected exactly 100 snapshots&quot;
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;../datasets/ellipsoidal_bubble/plic/points_000067_n002.txt&#39;, &#39;../datasets/ellipsoidal_bubble/plic/points_000024_n003.txt&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def parse_processor_file(path: str) -&gt; pt.Tensor:
+    with open(path, &quot;r&quot;) as f:
+        lines = [list(map(float, line.strip().split(&quot; &quot;))) for line in f if line.strip()]
+    return pt.tensor(lines)
+
+parse_processor_file(files[0])[:2]
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[ 2.6985e+01,  0.0000e+00,  9.9568e-01, -4.3208e-03,  2.7620e+00,
+          0.0000e+00],
+        [ 2.6986e+01,  7.3242e-03,  9.9568e-01, -4.3208e-03,  2.7636e+00,
+         -1.1328e-02]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def load_interface_snapshot(path: str, iteration: int, np: int) -&gt; pt.Tensor:
+    p_data = []
+    for p in range(np):
+        p_data.append(
+            parse_processor_file(f&quot;{path}points_{iteration:06d}_n{p:03d}.txt&quot;)
+        )
+    p_data = pt.cat(p_data)
+    return p_data[p_data[:, -1].abs() &lt; 10]
+
+load_interface_snapshot(join(data, &quot;plic/&quot;), 0, 4).shape
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([276, 6])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>if_data = [load_interface_snapshot(join(data, &quot;plic/&quot;), int(i), 4) for i in iterations]
+for i, (xc_i, ub_i) in enumerate(zip(xc, uxc)):
+    if_data[i][:, 0] -= xc_i  # make position relative
+    if_data[i][:, 4] -= ub_i  # make velocity relative
+    if_data[i][:, 2:4] /= if_data[i][:, 2:4].norm(dim=-1).unsqueeze(-1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def convert_to_polar(xy: pt.Tensor) -&gt; pt.Tensor:
+    rphi = pt.zeros_like(xy)
+    rphi[:, 0] = xy.norm(dim=1)
+    rphi[:, 1] = pt.asin(xy[:, 1]/rphi[:, 0])
+    rphi[xy[:, 0] &lt; 0.0, 1] = np.pi - rphi[xy[:, 0] &lt; 0.0, 1]
+    return rphi
+
+shape_polar = [convert_to_polar(i[:, :2]) for i in if_data]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4))
+for i, (shape_xy, shape_rphi) in enumerate(zip(if_data[::10], shape_polar[::10])):
+    ax1.scatter(shape_xy[:, 1], shape_xy[:, 0], s=5)
+    ax2.scatter(shape_rphi[:, 1], shape_rphi[:, 0], s=5)
+    ax1.set_aspect(&quot;equal&quot;)
+
+ax1.set_xlabel(r&quot;$\tilde{x}$&quot;)
+ax1.set_ylabel(r&quot;$\tilde{y}$&quot;)
+ax2.set_xlabel(r&quot;$\vartheta$&quot;)
+ax2.set_ylabel(r&quot;$\tilde{r}$&quot;)
+ax1.set_title(&quot;Cartesian coord.&quot;)
+ax2.set_title(&quot;polar coord.&quot;)
+plt.savefig(join(output, &quot;shape_over_time.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_14_0.png" src="../_images/mass_transfer_regression_14_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def project_velocity(normal: pt.Tensor, velocity: pt.Tensor):
+    vn = -(velocity * normal).sum(dim=1)
+    tangential = pt.zeros_like(normal)
+    tangential[:, 0] = normal[:, 1]
+    tangential[:, 1] = -normal[:, 0]
+    vt = (velocity * tangential).sum(dim=1)
+    return pt.stack((vn, vt)).T
+
+projected_velocity = [project_velocity(i[:, 2:4], i[:, 4:]) for i in if_data]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4))
+for i, (rphi, vel) in enumerate(zip(shape_polar[::10], projected_velocity[::10])):
+    ax1.scatter(rphi[:, 1], vel[:, 0], s=5)
+    ax2.scatter(rphi[:, 1], vel[:, 1], s=5)
+
+ax1.set_xlabel(r&quot;$\vartheta$&quot;)
+ax1.set_ylabel(r&quot;$\tilde{v}_n$&quot;)
+ax2.set_xlabel(r&quot;$\vartheta$&quot;)
+ax2.set_ylabel(r&quot;$\tilde{v}_t$&quot;)
+ax1.set_title(&quot;Cartesian coord.&quot;)
+ax2.set_title(&quot;polar coord.&quot;)
+plt.savefig(join(output, &quot;velocity_projected_over_time.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_16_0.png" src="../_images/mass_transfer_regression_16_0.png" />
+</div>
+</div>
+</section>
+<section id="model-creation">
+<h2>Model creation<a class="headerlink" href="#model-creation" title="Permalink to this headline">#</a></h2>
+<section id="rise-velocity">
+<h3>Rise velocity<a class="headerlink" href="#rise-velocity" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rv_max = uxc.max()
+rv_min = pt.zeros_like(rv_max)
+rv_norm = (uxc - rv_min) / (rv_max - rv_min)
+wt_max = write_times.max()
+wt_min = pt.zeros_like(wt_max)
+wt_norm = (write_times - wt_min) / (wt_max - wt_min)
+rv_dataset = pt.utils.data.TensorDataset(wt_norm.unsqueeze(-1), rv_norm.unsqueeze(-1))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def split_and_train(dataset, model, epochs, batch_size=None, lr_min=1.0e-4, lr_max=1.0e-2, train_frac=0.9, patience=20):
+    n_train = int(len(dataset)*train_frac)
+    n_val = len(dataset) - n_train
+    batch_size = n_train if batch_size is None else batch_size
+    train, val = pt.utils.data.random_split(dataset, (n_train, n_val))
+    train_loader = pt.utils.data.DataLoader(train, batch_size=batch_size, shuffle=True)
+    val_loader = pt.utils.data.DataLoader(val, batch_size=len(val))
+    optimizer = pt.optim.AdamW(model.parameters(), lr=lr_max)
+    scheduler = pt.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer, mode=&quot;min&quot;, factor=0.5, patience=patience, min_lr=lr_min)
+    results = train_model(
+        model,
+        pt.nn.MSELoss(),
+        train_loader, val_loader,
+        epochs=epochs,
+        lr_schedule=scheduler,
+        optimizer=optimizer
+    )
+    return model, results
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class RVModelNorm(pt.nn.Module):
+    def __init__(self, n_neurons=100, n_hidden=2, activation=pt.nn.Tanh):
+        super(RVModelNorm, self).__init__()
+        self._model = create_simple_network(1, 1, n_neurons, n_hidden, activation)
+
+    def forward(self, x):
+        return self._model(x) * x
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>best_val_loss = float(&quot;inf&quot;)
+
+for k in range(5):
+    pt.manual_seed(k)
+    model = RVModelNorm()
+    model, results = split_and_train(rv_dataset, model, 500, 20)
+    if results[&quot;val_loss&quot;].values[-1] &lt; best_val_loss:
+        best_val_loss = results[&quot;val_loss&quot;].values[-1]
+        print(f&quot;\nBest validation loss decreased to {best_val_loss:2.4e}&quot;)
+        best_rv_model_norm = deepcopy(model)
+        best_results_rv = deepcopy(results)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Epoch  499/499 - Training loss: 6.135854e-05; Validation loss: 8.702406e-06
+Best validation loss decreased to 8.7024e-06
+ Epoch  499/499 - Training loss: 1.132306e-04; Validation loss: 1.414502e-06
+Best validation loss decreased to 1.4145e-06
+ Epoch  499/499 - Training loss: 6.099338e-05; Validation loss: 1.118540e-04
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(best_results_rv[&quot;epoch&quot;], best_results_rv[&quot;train_loss&quot;], label=&quot;training&quot;)
+plt.plot(best_results_rv[&quot;epoch&quot;], best_results_rv[&quot;val_loss&quot;], label=&quot;validation&quot;)
+
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;MSE&quot;)
+plt.yscale(&quot;log&quot;)
+plt.legend()
+plt.xlim(0, 500)
+plt.savefig(join(output, &quot;rv_mse_loss.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_22_0.png" src="../_images/mass_transfer_regression_22_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class RVModel(pt.nn.Module):
+    def __init__(self, rv_model_norm, rv_min, rm_max, t_min, t_max):
+        super(RVModel, self).__init__()
+        self._model = rv_model_norm
+        self._rv_min = rv_min
+        self._rv_max = rv_max
+        self._t_min = t_min
+        self._t_max = t_max
+
+    def forward(self, x):
+        x_norm = (x.unsqueeze(1) - self._t_min) / (self._t_max - self._t_min)
+        rv_norm = self._model(x_norm)
+        return (rv_norm * (self._rv_max - self._rv_min) + self._rv_min).squeeze()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rv_model = RVModel(best_rv_model_norm, rv_min, rv_max, wt_min, wt_max)
+t_plot = pt.linspace(0.0, 15.0, 100)
+rv_pred = rv_model(t_plot).detach()
+plt.plot(t_plot, rv_pred, label=&quot;prediction&quot;)
+plt.scatter(write_times, uxc, s=5, c=&quot;C1&quot;, label=&quot;write times&quot;, zorder=5)
+plt.legend()
+plt.xlabel(r&quot;$\tilde{t}$&quot;)
+plt.ylabel(r&quot;$\tilde{U}_b$&quot;)
+plt.savefig(join(output, &quot;rv_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_24_0.png" src="../_images/mass_transfer_regression_24_0.png" />
+</div>
+</div>
+</section>
+<section id="surface-velocity">
+<h3>Surface velocity<a class="headerlink" href="#surface-velocity" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>phi = pt.linspace(-np.pi/2, 1.5*np.pi, 100)
+plt.plot(phi, phi.sin(), label=r&quot;$\mathrm{sin}(\vartheta)$&quot;)
+plt.plot(phi, phi.cos(), label=r&quot;$\mathrm{cos}(\vartheta)$&quot;)
+plt.xlabel(r&quot;$\vartheta$&quot;)
+plt.legend()
+plt.axvline(0.0, ls=&quot;--&quot;, c=&quot;k&quot;)
+plt.axvline(np.pi, ls=&quot;--&quot;, c=&quot;k&quot;)
+plt.savefig(join(output, &quot;sin_symmetry.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_26_0.png" src="../_images/mass_transfer_regression_26_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def reshape_surface_data(theta, field, time):
+    dataset = []
+    for i in range(len(theta)):
+        n_points = len(theta[i])
+        data_i = pt.zeros((n_points, 3))
+        data_i[:, 0] = theta[i]
+        data_i[:, 1] = time[i]
+        data_i[:, 2] = field[i]
+        dataset.append(data_i)
+    return pt.cat(dataset, dim=0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>theta = [data[:, 1] for data in shape_polar]
+vel = [data[:, 1] for data in projected_velocity]
+tv_data = reshape_surface_data(theta, vel, write_times)
+tv_max = tv_data[:, 1:].max(dim=0).values
+tv_min = pt.zeros_like(tv_max)
+tv_norm = pt.zeros_like(tv_data)
+tv_norm[:, 0] = tv_data[:, 0]
+tv_norm[:, 1:] = (tv_data[:, 1:] - tv_min) / (tv_max - tv_min)
+tv_dataset = pt.utils.data.TensorDataset(tv_norm[:, :2], tv_norm[:, 2].unsqueeze(-1))
+len(tv_dataset)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>47465
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class TVVelocityNorm(pt.nn.Module):
+    def __init__(self, n_neurons=100, n_hidden=5, activation=pt.nn.ReLU):
+        super(TVVelocityNorm, self).__init__()
+        self._model_norm = create_simple_network(2, 1, n_neurons, n_hidden, activation)
+
+    def forward(self, x):
+        sin = pt.sin(x[:, 0]).unsqueeze(-1)
+        x = pt.stack((pt.cos(x[:, 0]), x[:, 1])).T
+        return self._model_norm(x) * sin * x[:, 1].unsqueeze(-1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>best_val_loss = float(&quot;inf&quot;)
+
+for k in range(1):
+    pt.manual_seed(k)
+    model = TVVelocityNorm()
+    model, results = split_and_train(tv_dataset, model, 50, 500, patience=1)
+    if results[&quot;val_loss&quot;].values[-1] &lt; best_val_loss:
+        best_val_loss = results[&quot;val_loss&quot;].values[-1]
+        print(f&quot;\nBest validation loss decreased to {best_val_loss:2.4e}&quot;)
+        best_tv_model_norm = deepcopy(model)
+        best_results_tv = deepcopy(results)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Epoch   49/49 - Training loss: 1.781350e-05; Validation loss: 1.865229e-05
+Best validation loss decreased to 1.8652e-05
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(best_results_tv[&quot;epoch&quot;], best_results_tv[&quot;train_loss&quot;], label=&quot;training&quot;)
+plt.plot(best_results_tv[&quot;epoch&quot;], best_results_tv[&quot;val_loss&quot;], label=&quot;validation&quot;)
+
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;MSE&quot;)
+plt.yscale(&quot;log&quot;)
+plt.legend()
+plt.xlim(0, 50)
+plt.savefig(join(output, &quot;tv_mse_loss.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_31_0.png" src="../_images/mass_transfer_regression_31_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class TVVelocity(pt.nn.Module):
+    def __init__(self, model_norm, t_min, t_max, tv_min, tv_max):
+        super(TVVelocity, self).__init__()
+        self._model = model_norm
+        self._t_min = t_min
+        self._t_max = t_max
+        self._tv_min = tv_min
+        self._tv_max = tv_max
+
+    def forward(self, x):
+        x_norm = pt.zeros_like(x)
+        x_norm[:, 0] = x[:, 0]
+        x_norm[:, 1] = (x[:, 1] - self._t_min) / (self._t_max - self._t_min)
+        y_norm = self._model(x_norm)
+        return (y_norm * (self._tv_max - self._tv_min) + self._tv_min).squeeze()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tv_model = TVVelocity(best_tv_model_norm, tv_min[0], tv_max[0], tv_min[1], tv_max[1])
+f = pt.zeros(100, 2)
+f[:, 0] = pt.linspace(-0.1, np.pi+0.1, 100)
+idx = list(range(0, 12, 1))
+n_rows = len(idx) / 4 if len(idx) % 4 == 0 else len(idx) / 4 + 1
+fig, axarr = plt.subplots(int(n_rows), 4, figsize=(8, n_rows*2), sharex=True, sharey=True)
+row, col = 0, 0
+for i in idx:
+    f[:, 1] = write_times[i]
+    vel_i = tv_model(f).detach()
+    axarr[row, col].plot(f[:, 0], vel_i, c=&quot;C1&quot;, label=&quot;prediction&quot;)
+    axarr[row, col].scatter(shape_polar[i][::4, 1], projected_velocity[i][::4, 1], marker=&quot;x&quot;, s=1, c=&quot;C0&quot;, zorder=5, label=&quot;reference&quot;)
+    axarr[row, col].set_title(r&quot;$\tilde{t}=&quot; +r&quot;{:2.2f}$&quot;.format(write_times[i]), fontsize=8)
+    if col == 0 and row == 0: axarr[row, col].legend(loc=0)
+    col += 1
+    if col % 4 == 0:
+        row += 1
+        col = 0
+for ax in axarr[:, 0]:
+    ax.set_ylabel(r&quot;$\tilde{v}_t$&quot;)
+for ax in axarr[-1, :]:
+    ax.set_xlabel(r&quot;$\vartheta$&quot;)
+plt.savefig(join(output, &quot;vt_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_33_0.png" src="../_images/mass_transfer_regression_33_0.png" />
+</div>
+</div>
+</section>
+<section id="bubble-shape">
+<h3>Bubble shape<a class="headerlink" href="#bubble-shape" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>theta = [data[:, 1] for data in shape_polar]
+rad = [data[:, 0] for data in shape_polar]
+rad_data = reshape_surface_data(theta, rad, write_times)
+rad_max = rad_data[:, 1:].max(dim=0).values
+rad_min = pt.zeros_like(rad_max)
+rad_min[1] = 0.5
+rad_norm = pt.zeros_like(rad_data)
+rad_norm[:, 0] = rad_data[:, 0]
+rad_norm[:, 1:] = (rad_data[:, 1:] - rad_min) / (rad_max - rad_min)
+rad_dataset = pt.utils.data.TensorDataset(rad_norm[:, :2], rad_norm[:, 2].unsqueeze(-1))
+len(rad_dataset)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>47465
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class RadNorm(pt.nn.Module):
+    def __init__(self, n_neurons=100, n_hidden=5, activation=pt.nn.ReLU):
+        super(RadNorm, self).__init__()
+        self._model_norm = create_simple_network(2, 1, n_neurons, n_hidden, activation)
+
+    def forward(self, x):
+        x = pt.stack((pt.cos(x[:, 0]), x[:, 1])).T
+        return self._model_norm(x) * x[:, 1].unsqueeze(-1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>best_val_loss = float(&quot;inf&quot;)
+
+for k in range(1):
+    pt.manual_seed(k)
+    model = RadNorm()
+    model, results = split_and_train(rad_dataset, model, 50, 100, patience=1)
+    if results[&quot;val_loss&quot;].values[-1] &lt; best_val_loss:
+        best_val_loss = results[&quot;val_loss&quot;].values[-1]
+        print(f&quot;\nBest validation loss decreased to {best_val_loss:2.4e}&quot;)
+        best_rad_model_norm = deepcopy(model)
+        best_results_rad = deepcopy(results)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Epoch   49/49 - Training loss: 9.303476e-05; Validation loss: 1.038798e-04
+Best validation loss decreased to 1.0388e-04
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(best_results_rad[&quot;epoch&quot;], best_results_rad[&quot;train_loss&quot;], label=&quot;training&quot;)
+plt.plot(best_results_rad[&quot;epoch&quot;], best_results_rad[&quot;val_loss&quot;], label=&quot;validation&quot;)
+
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;MSE&quot;)
+plt.yscale(&quot;log&quot;)
+plt.legend()
+plt.xlim(0, 50)
+plt.savefig(join(output, &quot;rad_mse_loss.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_38_0.png" src="../_images/mass_transfer_regression_38_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Rad(pt.nn.Module):
+    def __init__(self, model_norm, t_min, t_max, rad_min, rad_max):
+        super(Rad, self).__init__()
+        self._model = model_norm
+        self._t_min = t_min
+        self._t_max = t_max
+        self._rad_min = rad_min
+        self._rad_max = rad_max
+
+    def forward(self, x):
+        x_norm = pt.zeros_like(x)
+        x_norm[:, 0] = x[:, 0]
+        x_norm[:, 1] = (x[:, 1] - self._t_min) / (self._t_max - self._t_min)
+        y_norm = self._model(x_norm)
+        return (y_norm * (self._rad_max - self._rad_min) + self._rad_min).squeeze()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rad_model = Rad(best_rad_model_norm, rad_min[0], rad_max[0], rad_min[1], rad_max[1])
+f = pt.zeros(100, 2)
+f[:, 0] = pt.linspace(-0.1, np.pi+0.1, 100)
+idx = list(range(0, 12, 1))
+n_rows = len(idx) / 4 if len(idx) % 4 == 0 else len(idx) / 4 + 1
+fig, axarr = plt.subplots(int(n_rows), 4, figsize=(8, n_rows*2), sharex=True, sharey=True)
+row, col = 0, 0
+for i in idx:
+    f[:, 1] = write_times[i]
+    r_i = rad_model(f).detach()
+    axarr[row, col].plot(f[:, 0], r_i, c=&quot;C1&quot;, label=&quot;prediction&quot;)
+    axarr[row, col].scatter(shape_polar[i][::4, 1], shape_polar[i][::4, 0], marker=&quot;x&quot;, s=1, c=&quot;C0&quot;, zorder=5, label=&quot;reference&quot;)
+    axarr[row, col].set_title(r&quot;$\tilde{t}=&quot; +r&quot;{:2.2f}$&quot;.format(write_times[i]), fontsize=8)
+    if col == 0 and row == 0: axarr[row, col].legend(loc=0)
+    col += 1
+    if col % 4 == 0:
+        row += 1
+        col = 0
+for ax in axarr[:, 0]:
+    ax.set_ylabel(r&quot;$\tilde{r}$&quot;)
+for ax in axarr[-1, :]:
+    ax.set_xlabel(r&quot;$\vartheta$&quot;)
+plt.savefig(join(output, &quot;rad_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/mass_transfer_regression_40_0.png" src="../_images/mass_transfer_regression_40_0.png" />
+</div>
+</div>
+</section>
+<section id="model-export">
+<h3>Model export<a class="headerlink" href="#model-export" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def do_computation_0(a, b):
+    return a + b
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>comp_trace = pt.jit.trace(do_computation_0, example_inputs=(pt.ones(10), pt.ones(10)))
+comp_trace.graph
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>graph(%a : Double(10, strides=[1], requires_grad=0, device=cpu),
+      %b : Double(10, strides=[1], requires_grad=0, device=cpu)):
+  %2 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/1867394881.py:2:0
+  %3 : Double(10, strides=[1], requires_grad=0, device=cpu) = aten::add(%a, %b, %2) # /tmp/ipykernel_23891/1867394881.py:2:0
+  return (%3)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def do_computation_1(a, b, take_abs):
+    if take_abs:
+        return a.abs() + b.abs()
+    else:
+        return a + b
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>try:
+    comp_trace = pt.jit.trace(do_computation_1, example_inputs=(pt.ones(10), pt.ones(10), False))
+except Exception as e:
+    print(e)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Type &#39;Tuple[Tensor, Tensor, bool]&#39; cannot be traced. Only Tensors and (possibly nested) Lists, Dicts, and Tuples of Tensors can be traced
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def do_computation_2(a, b, take_abs=True):
+    if take_abs:
+        return a.abs() + b.abs()
+    else:
+        return a + b
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>comp_trace = pt.jit.trace(do_computation_2, example_inputs=(pt.ones(10), pt.ones(10)))
+comp_trace.graph
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>graph(%a : Double(10, strides=[1], requires_grad=0, device=cpu),
+      %b : Double(10, strides=[1], requires_grad=0, device=cpu)):
+  %2 : Double(10, strides=[1], requires_grad=0, device=cpu) = aten::abs(%a) # /tmp/ipykernel_23891/2143973957.py:3:0
+  %3 : Double(10, strides=[1], requires_grad=0, device=cpu) = aten::abs(%b) # /tmp/ipykernel_23891/2143973957.py:3:0
+  %4 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/2143973957.py:3:0
+  %5 : Double(10, strides=[1], requires_grad=0, device=cpu) = aten::add(%2, %3, %4) # /tmp/ipykernel_23891/2143973957.py:3:0
+  return (%5)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>comp_script = pt.jit.script(do_computation_2, example_inputs=(pt.ones(10), pt.ones(10), True))
+comp_script.graph
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/andre/Development/ml-cfd-lecture/ml-cfd/lib/python3.10/site-packages/torch/jit/_script.py:1280: UserWarning: Warning: monkeytype is not installed. Please install https://github.com/Instagram/MonkeyType to enable Profile-Directed Typing in TorchScript. Refer to https://github.com/Instagram/MonkeyType/blob/master/README.rst to install MonkeyType. 
+  warnings.warn(&quot;Warning: monkeytype is not installed. Please install https://github.com/Instagram/MonkeyType &quot;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>graph(%a.1 : Tensor,
+      %b.1 : Tensor,
+      %take_abs.1 : Tensor):
+  %10 : int = prim::Constant[value=1]()
+  %5 : bool = aten::Bool(%take_abs.1) # /tmp/ipykernel_23891/2143973957.py:2:7
+  %24 : Tensor = prim::If(%5) # /tmp/ipykernel_23891/2143973957.py:2:4
+    block0():
+      %7 : Tensor = aten::abs(%a.1) # /tmp/ipykernel_23891/2143973957.py:3:15
+      %9 : Tensor = aten::abs(%b.1) # /tmp/ipykernel_23891/2143973957.py:3:25
+      %11 : Tensor = aten::add(%7, %9, %10) # /tmp/ipykernel_23891/2143973957.py:3:15
+      -&gt; (%11)
+    block1():
+      %15 : Tensor = aten::add(%a.1, %b.1, %10) # /tmp/ipykernel_23891/2143973957.py:5:15
+      -&gt; (%15)
+  return (%24)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>with pt.no_grad():
+    rv_trace = pt.jit.trace(rv_model.eval(), example_inputs=pt.rand(2))
+rv_trace.graph
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>graph(%self.1 : __torch__.RVModel,
+      %x : Double(2, strides=[1], requires_grad=0, device=cpu)):
+  %_model : __torch__.RVModelNorm = prim::GetAttr[name=&quot;_model&quot;](%self.1)
+  %39 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %40 : Double(2, 1, strides=[1, 1], requires_grad=0, device=cpu) = aten::unsqueeze(%x, %39) # /tmp/ipykernel_23891/146180112.py:11:0
+  %41 : Double(requires_grad=0, device=cpu) = prim::Constant[value={0}]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %42 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %43 : Double(2, 1, strides=[1, 1], requires_grad=0, device=cpu) = aten::sub(%40, %41, %42) # /tmp/ipykernel_23891/146180112.py:11:0
+  %44 : Double(requires_grad=0, device=cpu) = prim::Constant[value={14.85}]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %45 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %46 : Double(requires_grad=0, device=cpu) = aten::sub(%44, %41, %45) # /tmp/ipykernel_23891/146180112.py:11:0
+  %input.1 : Double(2, 1, strides=[1, 1], requires_grad=0, device=cpu) = aten::div(%43, %46) # /tmp/ipykernel_23891/146180112.py:11:0
+  %99 : Tensor = prim::CallMethod[name=&quot;forward&quot;](%_model, %input.1)
+  %56 : Double(requires_grad=0, device=cpu) = prim::Constant[value={2.77891}]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %57 : Double(requires_grad=0, device=cpu) = prim::Constant[value={0}]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %58 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/146180112.py:11:0
+  %59 : Double(requires_grad=0, device=cpu) = aten::sub(%56, %57, %58) # /tmp/ipykernel_23891/146180112.py:11:0
+  %60 : Double(2, 1, strides=[1, 1], requires_grad=0, device=cpu) = aten::mul(%99, %59) # /tmp/ipykernel_23891/146180112.py:11:0
+  %61 : int = prim::Constant[value=1]() # /tmp/ipykernel_23891/146180112.py:12:0
+  %62 : Double(2, 1, strides=[1, 1], requires_grad=0, device=cpu) = aten::add(%60, %57, %61) # /tmp/ipykernel_23891/146180112.py:12:0
+  %63 : Double(2, strides=[1], requires_grad=0, device=cpu) = aten::squeeze(%62) # /tmp/ipykernel_23891/146180112.py:12:0
+  return (%63)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>res = rv_trace(pt.linspace(0.0, 5.0, 10, requires_grad=False)).detach()
+res
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0.0000, 0.8395, 1.5677, 2.0093, 2.2283, 2.3800, 2.4792, 2.5478, 2.5995,
+        2.6395])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rv_trace.save(join(output, &quot;rv_model.pt&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tv_trace = pt.jit.trace(tv_model, example_inputs=pt.rand((3, 2)))
+tv_trace.save(join(output, &quot;tv_model.pt&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rad_trace = pt.jit.trace(rad_model, example_inputs=pt.rand((3, 2)))
+rad_trace.save(join(output, &quot;rad_model.pt&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="single-phase-flow-simulations-with-mass-transfer">
+<h2>Single-phase flow simulations with mass transfer<a class="headerlink" href="#single-phase-flow-simulations-with-mass-transfer" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="analyzing-the-results">
+<h2>Analyzing the results<a class="headerlink" href="#analyzing-the-results" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="bubble_path_classification.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Predicting the stability regime of rising bubbles</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="cylinder_pinn.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Approximating the flow past a cylinder with limited data</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

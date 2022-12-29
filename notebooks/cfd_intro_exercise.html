@@ -1,0 +1,814 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>End-to-end simulations in OpenFOAM and Basilisk &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="End-to-end ML project with OpenFOAM and PyTorch" href="ml_intro_exercise.html" />
+    <link rel="prev" title="Setting up your system" href="system_setup.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/cfd_intro_exercise.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-i-flow-past-a-circular-cylinder-at-low-reynolds-number">
+   Part I: flow past a circular cylinder at low Reynolds number
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspecting-and-running-the-simulation-test-case">
+     Inspecting and running the simulation test-case
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualizing-the-flow-in-paraview">
+     Visualizing the flow in ParaView
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluating-lift-and-drag-coefficients">
+     Evaluating lift and drag coefficients
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-ii-rise-of-an-axis-symmetric-bubble-in-stagnant-liquid">
+   Part II: rise of an axis-symmetric bubble in stagnant liquid
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-bubble-solver">
+     The
+     <em>
+      bubble
+     </em>
+     solver
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compiling-the-solver">
+     Compiling the solver
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-a-simulation">
+     Performing a simulation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Visualizing the flow in ParaView
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>End-to-end simulations in OpenFOAM and Basilisk</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-i-flow-past-a-circular-cylinder-at-low-reynolds-number">
+   Part I: flow past a circular cylinder at low Reynolds number
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspecting-and-running-the-simulation-test-case">
+     Inspecting and running the simulation test-case
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualizing-the-flow-in-paraview">
+     Visualizing the flow in ParaView
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluating-lift-and-drag-coefficients">
+     Evaluating lift and drag coefficients
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-ii-rise-of-an-axis-symmetric-bubble-in-stagnant-liquid">
+   Part II: rise of an axis-symmetric bubble in stagnant liquid
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-bubble-solver">
+     The
+     <em>
+      bubble
+     </em>
+     solver
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compiling-the-solver">
+     Compiling the solver
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-a-simulation">
+     Performing a simulation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Visualizing the flow in ParaView
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="end-to-end-simulations-in-openfoam-and-basilisk">
+<h1>End-to-end simulations in OpenFOAM and Basilisk<a class="headerlink" href="#end-to-end-simulations-in-openfoam-and-basilisk" title="Permalink to this headline">#</a></h1>
+<section id="part-i-flow-past-a-circular-cylinder-at-low-reynolds-number">
+<h2>Part I: flow past a circular cylinder at low Reynolds number<a class="headerlink" href="#part-i-flow-past-a-circular-cylinder-at-low-reynolds-number" title="Permalink to this headline">#</a></h2>
+<p>For a description of the mathematical problem, refer to the article by <a class="reference external" href="http://www.mathematik.tu-dortmund.de/lsiii/cms/papers/SchaeferTurek1996.pdf">Schäfer and Turek (1996)</a>. The present OpenFOAM simulation is a modified version of the setups created by <a class="reference external" href="https://zenodo.org/record/4897961#.YYWzgLso9hE">Darshan Thummar</a> and <a class="reference external" href="https://zenodo.org/record/5634050#.YYWzeLso9hE">Fabian Gabriel</a>.</p>
+<section id="inspecting-and-running-the-simulation-test-case">
+<h3>Inspecting and running the simulation test-case<a class="headerlink" href="#inspecting-and-running-the-simulation-test-case" title="Permalink to this headline">#</a></h3>
+<p>Every OpenFOAM simulation is a hierarchical structure of folders and files. The top-level simulation folder always contains the following three sub-folders:</p>
+<ol class="simple">
+<li><p><em>system</em> - control dictionaries for solver execution, equation discretization, linear solvers, meshing, and others</p></li>
+<li><p><em>constant</em> - transport and thermophysical properties, the mesh (<em>polyMesh</em> folder), and geometry files</p></li>
+<li><p>a time folder; fields are written to time folders, where the folder name reflects the physical time at which the snapshot was taken; typically, there is a <em>0</em> (zero) folder to define initial conditions for each field; a <em><a class="reference external" href="http://0.org">0.org</a></em> folder indicates that one or more of the fields will be modified before starting the simulation, e.g, to set more complex, nonuniform initial conditions</p></li>
+</ol>
+<p>The simulation folder for this exercise is located at <em>test_cases/cylinder2D</em>. Before inspecting and running the simulation, we create a copy in the <em>exercises</em> folder. If you haven’t created the exercises folder yet, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assuming you are at the repository&#39;s top level</span>
+<span class="n">mkdir</span> <span class="n">exercises</span>
+</pre></div>
+</div>
+<p>For all OpenFOAM simulations in this lecture, we employ a dedicated Apptainer image. The logic of modifying the usual OpenFOAM commands is hidden in the <em>RunFunctions</em> script at the repositories top level. The script contains shell functions like <code class="docutils literal notranslate"><span class="pre">runApplication</span></code> and <code class="docutils literal notranslate"><span class="pre">runParallel</span></code>, which simplify the execution of OpenFOAM applications and write regular output as well as error messages to log files. These functions in turn rely on environment variables, which define the Apptainer image name and the location of the lecture repository on <em>your</em> system. The script <em>setup-env</em> defines all required shell variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># run at the repository&#39;s top level</span>
+<span class="n">source</span> <span class="n">setup</span><span class="o">-</span><span class="n">env</span>
+</pre></div>
+</div>
+<p>You can check the newly defined variables by typing *<span class="math notranslate nohighlight">\(ML_CFD* and pressing the TAB key twice (quickly). **Note that you have to source the environment variables whenever you open a new terminal.** Alternatively, you can add the line above to your `\)</span>HOME/.bashrc` file.</p>
+<p>Now let’s copy the simulation folder recursively (<em>-r</em> option), and navigate into the new folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">cylinder2D</span><span class="o">/</span> <span class="n">exercises</span><span class="o">/</span>
+<span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">cylinder2D</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>You can use the <em>ls</em> command to inspect the files and folders forming the simulation case. There are two scripts at the test case’s top level. The <em>Allrun</em> script executes all necessary pre-processing steps and starts the simulation using the Apptainer container. The <em>Allclean</em> script re-sets the folder to its initial state.</p>
+<p>Before starting the simulation, try to answer the following questions by browsing through all files and folders inside the <em>cylinder2D</em> folder:</p>
+<ul class="simple">
+<li><p>With how many MPI ranks (how many processor cores) is the simulation executed? Tip: parallelization in most CFD codes is based on domain decomposition.</p></li>
+<li><p>For which fields do we need initial and boundary conditions? Tip: check the initial time folder.</p></li>
+<li><p>Write down the function defining the inlet velocity. Tip: for which field do we define this boundary condition?</p></li>
+<li><p>Which utility is used for the domain discretization? Tip: check the section about mesh generation in the official <a class="reference external" href="https://www.openfoam.com/documentation/user-guide">user guide</a>.</p></li>
+<li><p>What is the Reynolds number based on the average inlet velocity and the cylinder’s diameter? Tip: try to answer this question in four steps:</p>
+<ul>
+<li><p>determine the kinematic viscosity</p></li>
+<li><p>determine the cylinder’s diameter</p></li>
+<li><p>determine the average inlet velocity</p></li>
+<li><p>plug these numbers into the definition of <span class="math notranslate nohighlight">\(Re\)</span></p></li>
+</ul>
+</li>
+<li><p>Is the numerical solver compressible or incompressible? Tip: search for the solver name in the <a class="reference external" href="https://www.openfoam.com/documentation/guides/latest/doc/">extended code guide</a>.</p></li>
+<li><p>What linear solver is used the solve the pressure Poisson equation? Tip: check the <em>fvSolution</em> dictionary.</p></li>
+<li><p>How is the convective term of the momentum equation discretized? Tip: check the <em>fvSchemes</em> dictionary.</p></li>
+<li><p>Which turbulence model is employed?</p></li>
+<li><p>How many time folders would you expect to be created? Tip: check the <em>controlDict</em>.</p></li>
+<li><p>Which file contains a dictionary to compute force coefficients?</p></li>
+</ul>
+<p>Now, let’s actually run the simulation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">Allrun</span>
+</pre></div>
+</div>
+<p>The simulation takes about 20-30 minutes to complete. In the meantime, try to answer the following questions:</p>
+<ul class="simple">
+<li><p>Which new folders are/were created?</p></li>
+<li><p>What do the processor[0-1] folders contain?</p></li>
+<li><p>How many cells does the mesh consist of? Let the following steps guide you:</p>
+<ul>
+<li><p>source the function to use the container: <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">$ML_CFD_BASE/RunFunctions</span></code></p></li>
+<li><p>run the <em>checkMesh</em> utility: <code class="docutils literal notranslate"><span class="pre">runApplication</span> <span class="pre">checkMesh</span></code></p></li>
+<li><p>inspect the <em>log.checkMesh</em> file</p></li>
+</ul>
+</li>
+<li><p>The force coefficients are written to the file <em>coefficient.dat</em>; where is the file located? Tip: use <code class="docutils literal notranslate"><span class="pre">find</span> <span class="pre">.</span> <span class="pre">-type</span> <span class="pre">f</span> <span class="pre">-name</span> <span class="pre">coefficient.dat</span></code></p></li>
+<li><p>What do the first four columns of <em>coefficient.dat</em> contain (after the header)? Tip: use <code class="docutils literal notranslate"><span class="pre">head</span> <span class="pre">-n</span> <span class="pre">20</span> <span class="pre">path/to/coefficient.dat</span></code> and refer to the <a class="reference external" href="https://www.openfoam.com/documentation/guides/latest/api/classFoam_1_1functionObjects_1_1forceCoeffs.html">documentation</a> for the acronyms</p></li>
+</ul>
+<p>Before we start to inspect and visualize the flow field, it is always a good idea to browse through the solver’s log file. Open the <em>log.pimpleFoam</em> file, preferably using a command line editor like <em>vim</em>, <em>nano</em>, or <em>emacs</em>, and try answering the following questions:</p>
+<ul class="simple">
+<li><p>How many seconds were needed to complete the simulation? Tip: go to the very end of the log file</p></li>
+<li><p>How many iterations on average did the <em>p</em>-<em>U</em> coupling take per time step?</p></li>
+<li><p>What was the maximum Courant number (roughly)?</p></li>
+</ul>
+<p>Inspecting the log file(s) should always be the first action in case your simulation did not execute as expected (crashes, unexpected results, extremely slow execution). There is an extremely useful utility to extract information about residuals and the iterative solution from the log files called <em>foamLog</em>. It can be used as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>source $ML_CFD_BASE/RunFunctions
+runApplication foamLog log.pimpleFoam
+</pre></div>
+</div>
+<p>A new <em>logs</em> folder will be created. To have a quick look at some residuals and iteration counts, we use a small tool called <em>Gnuplot</em>. If Gnuplot is not installed on your system, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">gnuplot</span>
+</pre></div>
+</div>
+<p>Then, navigate into the <em>logs</em> folder, and plot some of the available files, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">logs</span>
+<span class="n">gnuplot</span>
+<span class="c1"># now we are in a gnuplot shell</span>
+<span class="c1"># continuity error after the first p-U-coupling iteration over time</span>
+<span class="n">gnuplot</span><span class="o">&gt;</span> <span class="n">plot</span> <span class="s1">&#39;contCumulative_0&#39;</span>
+<span class="c1"># sometimes, it&#39;s helpful to use a logarithmic scale on the ordinate</span>
+<span class="n">gnuplot</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">logscale</span> <span class="n">y</span>
+<span class="c1"># final residual for p and Ux after fist p-U-coupling iteration</span>
+<span class="n">gnuplot</span><span class="o">&gt;</span> <span class="n">plot</span> <span class="s1">&#39;pFinalRes_0&#39;</span><span class="p">,</span> <span class="s1">&#39;UxFinalRes_0&#39;</span>
+<span class="c1"># iterations to solve for p in the first p-U-coupling iteration</span>
+<span class="n">gnuplot</span><span class="o">&gt;</span> <span class="n">unset</span> <span class="n">logscale</span> <span class="n">y</span>
+<span class="n">gnuplot</span><span class="o">&gt;</span> <span class="n">plot</span> <span class="s1">&#39;pIters_0&#39;</span>
+<span class="c1"># exit Gnuplot -&gt; q + Enter</span>
+</pre></div>
+</div>
+</section>
+<section id="visualizing-the-flow-in-paraview">
+<h3>Visualizing the flow in ParaView<a class="headerlink" href="#visualizing-the-flow-in-paraview" title="Permalink to this headline">#</a></h3>
+<p>Let’s have a look at the flow fields. To open ParaView, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># run this command at the simulation folder&#39;s top level</span>
+<span class="n">paraview</span> <span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+</pre></div>
+</div>
+<p><em>post.foam</em> is an empty dummy file to indicate ParaView that we are providing an OpenFOAM simulation. <strong>Before clicking on Apply,</strong> set the <em>Case Type</em> to <strong>Decomposed Case</strong>. To inspect the mesh, select <em>Surface With Edges</em> as representation. Then, return to the <em>Surface</em> representation and animate the velocity’s magnitude:</p>
+<ul class="simple">
+<li><p>select <em>U</em> in the fields drop down menu</p></li>
+<li><p>go to the last time step and click on the button <em>Rescale To Data Range</em> (a text is displayed when hovering with the mouse pointer over buttons)</p></li>
+<li><p>go back to the first time step and click on the play button</p></li>
+<li><p>enjoy the vortex street</p></li>
+</ul>
+<p>You can also save an animation by going to <em>File-&gt;Save Animation</em>.</p>
+<p>The domain is split into two sub-domains, one for each MPI rank (core). To visualize the decomposition, close ParaView, and execute the following steps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">processor0</span><span class="o">/</span><span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+<span class="n">touch</span> <span class="n">processor1</span><span class="o">/</span><span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+<span class="c1"># inspect the first processor domain</span>
+<span class="n">paraview</span> <span class="n">processor0</span><span class="o">/</span><span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+<span class="c1"># inspect the second processor domain</span>
+<span class="n">paraview</span> <span class="n">processor1</span><span class="o">/</span><span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluating-lift-and-drag-coefficients">
+<h3>Evaluating lift and drag coefficients<a class="headerlink" href="#evaluating-lift-and-drag-coefficients" title="Permalink to this headline">#</a></h3>
+<p>Typical target quantities for the flow past a cylinder are drag and lift forces acting on the cylinder. As the last step of this tutorial, we will plot drag and lift coefficients over time in a Jupyter notebook. Open up a new Jupyter notebook, give the file a sensible name, and add some description in the first cell, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Flow past a circular cylinder at low Reynolds number
+## Drag and lift coefficients
+
+The Reynolds number based on the cylinder diameter $d$, the average inlet velocity $\bar{U}$ and the kinematic viscosity $\nu$ is $Re=d\bar{U}/\nu = ...$.
+</pre></div>
+</div>
+<p>The Pandas module provides a powerful function to read comma-separated-value (CSV) files. The coefficients may be visualized as simple line plots with Matplotlib.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">read_csv</span>
+
+<span class="c1"># increase plot resolution</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">160</span>
+</pre></div>
+</div>
+<p>In the next cell, use the following gist as starting point and determine the missing parameters by inspecting the <em>coefficient.dat</em> file and consulting the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">read_csv documentation</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>path = &quot;path/to/coefficient.dat&quot;
+names = [&quot;t&quot;, &quot;cd&quot;, &quot;cl&quot;]
+data = read_csv(path, skiprows=???, header=0, sep=???, usecols=[0, 1, 3], names=names)
+data.head()
+</pre></div>
+</div>
+<p>Finally, we create a figure with two axes and plot both drag and lift coefficients as lines. Replace the indicated arguments of the plot function.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 4), sharex=True)
+
+ax1.plot(data.t, ???)
+ax2.plot(data.t, ???)
+ax2.set_xlabel(r&quot;$t$ in $s$&quot;)
+ax2.set_ylabel(r&quot;$c_l$&quot;)
+ax1.set_ylabel(r&quot;$c_d$&quot;)
+ax1.set_ylim(2.8, 3.3)
+plt.savefig(&quot;drag_and_lift.pdf&quot;, bbox_inches=&quot;tight&quot;)
+plt.plot()
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-ii-rise-of-an-axis-symmetric-bubble-in-stagnant-liquid">
+<h2>Part II: rise of an axis-symmetric bubble in stagnant liquid<a class="headerlink" href="#part-ii-rise-of-an-axis-symmetric-bubble-in-stagnant-liquid" title="Permalink to this headline">#</a></h2>
+<section id="the-bubble-solver">
+<h3>The <em>bubble</em> solver<a class="headerlink" href="#the-bubble-solver" title="Permalink to this headline">#</a></h3>
+<p>Basilisk is a highly specialized library for the simulation of mulTiphase flows with large differences in spatial scales. In contrast to OpenFOAM, simulations in Basilisk are not controlled by input dictionaries. Instead, a customized solver is compiled based on modular library components. The solver present in the <em>test_cases</em> folder performs the simulation of an axis-symmetric bubble (symmetric in azimuth direction around the rise direction) rising in a liquid tank. The solver itself is defined in the <em>bubble.c</em> source file. Additional header files write output files in the VTK format, which are useful for post-processing in ParaView.</p>
+</section>
+<section id="compiling-the-solver">
+<h3>Compiling the solver<a class="headerlink" href="#compiling-the-solver" title="Permalink to this headline">#</a></h3>
+<p>Compiling and running the simulation requires the <em>basilisk.sif</em> Apptainer container. We could use functions similar to <em>runApplication</em> and <em>runParallel</em> to automate running commands inside the container. However, this time, we walk manually through the process to understand a little bit better the interaction with the container. Compiling the solver is simplified by the <em>Makefile</em> located in the source folder. From the repository’s top-level, run the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a copy for the exercise</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">basilisk_solver</span><span class="o">/</span> <span class="n">exercises</span><span class="o">/</span>
+<span class="c1"># open a new shell in the Singularity container</span>
+<span class="n">apptainer</span> <span class="n">shell</span> <span class="n">basilisk</span><span class="o">.</span><span class="n">sif</span>
+<span class="c1"># now we are operating inside the container</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">basilisk_solver</span><span class="o">/</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">make</span> <span class="o">&amp;&gt;</span> <span class="n">log</span><span class="o">.</span><span class="n">make</span>
+</pre></div>
+</div>
+<p>Inspect the log file to see if any problems were encountered during the compilation by running <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">log.make</span></code>. In the same folder, you should now see a new binary file called <em>bubble</em>.</p>
+</section>
+<section id="performing-a-simulation">
+<h3>Performing a simulation<a class="headerlink" href="#performing-a-simulation" title="Permalink to this headline">#</a></h3>
+<p>The solver takes 4 arguments to control the simulation:</p>
+<ol class="simple">
+<li><p>the maximum refinement level; the solver employs adaptive mesh refinement; a denser mesh is used in some regions of the mesh to reduce the numerical error; the maximum refinement level limits the mesh refinement such that the smallest cells do not become too small (with every refinement, the time step drops and the cell count increases)</p></li>
+<li><p>the end time; the simulation is stopped after reaching this physical time</p></li>
+<li><p>the <a class="reference external" href="https://en.wikipedia.org/wiki/E%C3%B6tv%C3%B6s_number">Eötvös</a> or Bond number</p></li>
+<li><p>the <a class="reference external" href="https://en.wikipedia.org/wiki/Galilei_number">Galilei number</a></p></li>
+</ol>
+<p>We will discuss the definition and meaning of the dimensionless numbers in lecture 5. For now, it is sufficient to know that an Eötvös number of <span class="math notranslate nohighlight">\(Eo=115\)</span> combined with a Galilei number of <span class="math notranslate nohighlight">\(Ga=134\)</span> leads to a bubble in the so-called spherical cap regime. The following simulations completes in about 10-15 minutes. If your machine has more than 2 processor cores available, you can reduce the runtime by passing a higher value to <code class="docutils literal notranslate"><span class="pre">mpirun</span></code>, e.g., <code class="docutils literal notranslate"><span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">4</span></code> to run the simulation on 4 cores.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a dedicated folder for this test simulation</span>
+<span class="c1"># in the exercises/basilisk_solver/ folder</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="n">run</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">run</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">2</span> <span class="o">../</span><span class="n">bubble</span> <span class="mi">14</span> <span class="mi">10</span> <span class="mi">115</span> <span class="mi">134</span> <span class="o">&amp;&gt;</span> <span class="n">log</span><span class="o">.</span><span class="n">solver</span>
+<span class="c1"># once the solver is done, leave the container</span>
+<span class="n">exit</span>
+</pre></div>
+</div>
+<p>You can follow the solver’s progress by opening a new terminal and using <code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">log.solver</span></code>. To stop tracing the output, press <em>Ctrl+c</em>. Note that this key combination only stops the <em>tail</em> command but not the solver execution.</p>
+</section>
+<section id="id1">
+<h3>Visualizing the flow in ParaView<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>VTK files of the flow variables and the gas-liquid interface are stored in the <em>vtu</em> folder. To open the snapshots, navigate to <em>exercises/basilisk_solver/run/vtu/</em> and open ParaView.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: you have to exit the Apptainer container before opening ParaView</span>
+<span class="c1"># if you still see the &#39;Apptainer&gt;&#39; prompt, type &#39;exit&#39; and press enter</span>
+<span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">basilisk_solver</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">vtu</span><span class="o">/</span>
+<span class="n">paraview</span>
+</pre></div>
+</div>
+<p>To open the entire set of snapshots, click on <em>File-&gt;Open-&gt;bubble_…pvtu</em>. There are several interesting options to post-process this mulTiphase simulation. Here are some suggestions:</p>
+<ul class="simple">
+<li><p>visualize the mesh by selecting the <em>Surface With Edges</em> representation; advance the simulation time and observe, how the mesh changes</p></li>
+<li><p>select the volume fraction field <em>f</em>; the volume fraction is <span class="math notranslate nohighlight">\(f=0\)</span> inside the bubble, <span class="math notranslate nohighlight">\(f=1\)</span> outside the bubble, and <span class="math notranslate nohighlight">\(0&lt;f&lt;1\)</span> in cells containing the gas-liquid interface</p></li>
+<li><p>the reconstructed interface is stored as line segments in files named <em>plic_…pvtu</em>; they can be opened the same way as the field snapshots; the line segments are a little bit hard to see; to improve their visibility,</p>
+<ul>
+<li><p>chose the <em>Wireframe</em> representation</p></li>
+<li><p>set the <em>Line Width</em> value in the <em>Properties</em> panel to 3</p></li>
+<li><p>select a different color under <em>Edit Color Map</em></p></li>
+</ul>
+</li>
+<li><p>the <em>u.x</em> field holds the absolute velocity field; to depict potential recirculation zones, it is more suitable to switch to a moving reference frame by subtracting the rise velocity from the x-component of the velocity field; this computation can be done in ParaView:</p>
+<ul>
+<li><p>the (dimensionless) rise velocity is approximately <span class="math notranslate nohighlight">\(\tilde{U}_b=0.735\)</span> after 10 time units; refer to the 6th column of the solver log file</p></li>
+<li><p>in ParaView, apply the <em>Calulator</em> filter; refer to the image below for the computation</p></li>
+<li><p>apply the <em>Glyph</em> filter to visualize the recirculation zone in the bubble’s wake</p></li>
+</ul>
+</li>
+</ul>
+<img alt="../_images/calculator.png" src="../_images/calculator.png" />
+<p><strong>Congratulations! This completes the second and third exercise sessions.</strong></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="system_setup.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Setting up your system</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ml_intro_exercise.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">End-to-end ML project with OpenFOAM and PyTorch</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

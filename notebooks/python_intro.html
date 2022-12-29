@@ -1,0 +1,2529 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>A brief introduction to Python programming &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Setting up your system" href="system_setup.html" />
+    <link rel="prev" title="Controlling the flow past a cylinder" href="cylinder_drl.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/python_intro.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview">
+   Overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#built-in-functions-and-data-types">
+   Built-in functions and data types
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lists-tuples-and-dictionaries">
+     Lists, tuples, and dictionaries
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#looping-through-iterables">
+     Looping through iterables
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#list-and-dictionary-comprehensions">
+     List and dictionary comprehensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functions-and-lambda-functions">
+   Functions and Lambda functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#object-orientated-programming-in-python">
+   Object-orientated programming in python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#general-structure-and-initialization">
+     General structure and initialization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inheritance">
+     Inheritance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decorators">
+     Decorators
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-with-matplotlib">
+   Plotting with Matplotlib
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#line-plots">
+     Line plots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scatter-plots">
+     Scatter plots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#contour-and-filled-contour-plots">
+     Contour and filled contour plots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sub-plots">
+     Sub-plots
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pytorch">
+   PyTorch
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-with-tensors">
+     Working with tensors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#common-tensor-operations">
+     Common tensor operations
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#algebraic-operations">
+       Algebraic operations
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#flatten">
+       flatten()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#reshape">
+       reshape()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#squeeze-and-unsqueeze">
+       squeeze() and unsqueeze()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zeros-vs-zeros-like">
+       zeros() vs. zeros_like()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#min-vs-argmin">
+       min() vs. argmin()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#combining-tensor-operations">
+       Combining tensor operations
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#handling-column-like-data-with-pandas">
+   5. Handling column-like data with Pandas
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dealing-with-error-messages-and-debugging-code">
+   Dealing with error messages and debugging code
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#python-documentation">
+     Python documentation:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#other-references">
+     Other references:
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>A brief introduction to Python programming</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview">
+   Overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#built-in-functions-and-data-types">
+   Built-in functions and data types
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lists-tuples-and-dictionaries">
+     Lists, tuples, and dictionaries
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#looping-through-iterables">
+     Looping through iterables
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#list-and-dictionary-comprehensions">
+     List and dictionary comprehensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functions-and-lambda-functions">
+   Functions and Lambda functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#object-orientated-programming-in-python">
+   Object-orientated programming in python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#general-structure-and-initialization">
+     General structure and initialization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inheritance">
+     Inheritance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decorators">
+     Decorators
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-with-matplotlib">
+   Plotting with Matplotlib
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#line-plots">
+     Line plots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scatter-plots">
+     Scatter plots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#contour-and-filled-contour-plots">
+     Contour and filled contour plots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sub-plots">
+     Sub-plots
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pytorch">
+   PyTorch
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-with-tensors">
+     Working with tensors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#common-tensor-operations">
+     Common tensor operations
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#algebraic-operations">
+       Algebraic operations
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#flatten">
+       flatten()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#reshape">
+       reshape()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#squeeze-and-unsqueeze">
+       squeeze() and unsqueeze()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#zeros-vs-zeros-like">
+       zeros() vs. zeros_like()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#min-vs-argmin">
+       min() vs. argmin()
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#combining-tensor-operations">
+       Combining tensor operations
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#handling-column-like-data-with-pandas">
+   5. Handling column-like data with Pandas
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dealing-with-error-messages-and-debugging-code">
+   Dealing with error messages and debugging code
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#python-documentation">
+     Python documentation:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#other-references">
+     Other references:
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<p>Author(s): Janis Geise, Andre Weiner</p>
+<section class="tex2jax_ignore mathjax_ignore" id="a-brief-introduction-to-python-programming">
+<h1>A brief introduction to Python programming<a class="headerlink" href="#a-brief-introduction-to-python-programming" title="Permalink to this headline">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
+<p>Note that this notebook does not provide a comprehensive introduction to Python programming. It aims to explain Python functionality frequently used throughout lecture and exercise notebooks that students typically struggle with at the beginning. If you are already an experienced Python programmer, feel free to quickly skim through the notebook or to skip it entirely. If you consider yourself as a beginner both in Python and programming in general, we provide a list of resources for self-study at the end of this notebook. The following topics will be covered in this notebook:</p>
+<ul class="simple">
+<li><p>Built-in functions and data types</p></li>
+<li><p>Functions and lambda functions</p></li>
+<li><p>Object-oriented programming</p></li>
+<li><p>Plotting with Matplotlib</p>
+<ul>
+<li><p>Line plots</p></li>
+<li><p>Scatter plots</p></li>
+<li><p>Contour lines and filled contours</p></li>
+<li><p>sub-plots</p></li>
+</ul>
+</li>
+<li><p>PyTorch tensors</p>
+<ul>
+<li><p>Working with tensors</p></li>
+<li><p>Common tensor operations</p></li>
+</ul>
+</li>
+<li><p>Handling column-like data with Pandas</p></li>
+<li><p>Understanding error messages</p></li>
+<li><p>References</p></li>
+</ul>
+</section>
+<section id="built-in-functions-and-data-types">
+<h2>Built-in functions and data types<a class="headerlink" href="#built-in-functions-and-data-types" title="Permalink to this headline">#</a></h2>
+<p>Python provides a number of <a class="reference external" href="https://docs.python.org/3/library/functions.html">built-in functions</a> and data types to simplify and accelerate common tasks. While some of these functions and structures are intuitively clear for anyone with basic math and programming knowledge, e.g., <code class="docutils literal notranslate"><span class="pre">abs()</span></code> for computing the absolute value of a number, others may be harder to understand. This section discusses a few heavily-used built-in functions and data structures.</p>
+<section id="lists-tuples-and-dictionaries">
+<h3>Lists, tuples, and dictionaries<a class="headerlink" href="#lists-tuples-and-dictionaries" title="Permalink to this headline">#</a></h3>
+<p>Lists in Python are iterable containers in which objects of different types can be stored. Common attributes of lists are that we can iterate through them, append or delete list items, or merge them. In contrast to lists, tuples have a fixed length, which is defined when creating the tuple. Dictionaries are containers for data that come as key-value-pairs. The key might be the name of a person and the value might be the person’s email address.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create a list of strings
+labels = [&quot;x&quot;, &quot;U&quot;]
+print(labels)
+
+# append another label
+labels.append(&quot;p&quot;)
+print(labels)
+
+# get the first and last elements of the list
+print(f&quot;The first label is {labels[0]} and the last label is {labels[-1]}&quot;)
+
+# delete the first list element
+del labels[0]
+print(labels)
+
+# append one list to another
+print(labels + [&quot;x&quot;, &quot;y&quot;])
+
+# convert a list to a tuple
+labels_tuple = tuple(labels)
+print(labels_tuple)
+
+# store the unit associated with the label in a dictionary
+labels_and_units = {}
+labels_and_units[&quot;x&quot;] = &quot;m&quot;
+labels_and_units[&quot;U&quot;] = &quot;m/s&quot;
+print(labels_and_units)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;x&#39;, &#39;U&#39;]
+[&#39;x&#39;, &#39;U&#39;, &#39;p&#39;]
+The first label is x and the last label is p
+[&#39;U&#39;, &#39;p&#39;]
+[&#39;U&#39;, &#39;p&#39;, &#39;x&#39;, &#39;y&#39;]
+(&#39;U&#39;, &#39;p&#39;)
+{&#39;x&#39;: &#39;m&#39;, &#39;U&#39;: &#39;m/s&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># the length of a tuple is fixed
+labels_tuple.append(&quot;a&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># the length of a tuple is fixed</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">labels_tuple</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+
+<span class="ne">AttributeError</span>: &#39;tuple&#39; object has no attribute &#39;append&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="looping-through-iterables">
+<h3>Looping through iterables<a class="headerlink" href="#looping-through-iterables" title="Permalink to this headline">#</a></h3>
+<p>Both lists and tuples are iterables, meaning that we can iterate/loop through them. There are a number of strategies to iterate through one or multiple iterables, which are demonstrated in the next cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># classical C-like looping:
+# 1. determine the length of the list  with len()
+# 2. create an iterator of indices starting from 0
+# 3. use the loop variable i to access list elements
+for i in range(len(labels)):
+    print(f&quot;Label {i}: {labels[i]}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Label 0: U
+Label 1: p
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># a much more &quot;Pythonic&quot; way of looping over the list items
+for label in labels:
+    print(label)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>U
+p
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># in case the list index is really needed, use enumerate()
+for i, label in enumerate(labels):
+    print(f&quot;Label {i}: {label}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Label 0: U
+Label 1: p
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Pythonic loop over multiple iterables
+units = (&quot;m/s&quot;, &quot;Pa&quot;)
+for label, unit in zip(labels, units):
+    print(f&quot;{label} in {unit}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>U in m/s
+p in Pa
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># the same as above combined with enumerate
+for i, (label, unit) in enumerate(zip(labels, units)):
+    print(f&quot;Label {i}: {label} in {unit}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Label 0: U in m/s
+Label 1: p in Pa
+</pre></div>
+</div>
+</div>
+</div>
+<p>Both <code class="docutils literal notranslate"><span class="pre">zip()</span></code> and <code class="docutils literal notranslate"><span class="pre">enumerate()</span></code> return iterators. In contrast to lists or tuples, the content of iterators is only retrieved or created when it is really needed. For example, if we want to load and process large files stored on the hard drive, an iterator allows loading and processing one file after the other in order to reduce the memory consumption. However, in most cases considered here, we can simply convert the iterator into a list or tuple.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create an iterator for labels and units
+labels_and_units = zip(labels, units)
+
+# convert the iterator to a list of tuples and print the list
+print(list(labels_and_units))
+
+# printing the iterator directly does not have the desired effect
+print(labels_and_units)
+
+# moreover, we don&#39;t have an index-based access to the iterator
+print(labels_and_units[0])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;U&#39;, &#39;m/s&#39;), (&#39;p&#39;, &#39;Pa&#39;)]
+&lt;zip object at 0x7f12697a6f80&gt;
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="nb">print</span><span class="p">(</span><span class="n">labels_and_units</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># moreover, we don&#39;t have an index-based access to the iterator</span>
+<span class="ne">----&gt; </span><span class="mi">8</span> <span class="nb">print</span><span class="p">(</span><span class="n">labels_and_units</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="ne">TypeError</span>: &#39;zip&#39; object is not subscriptable
+</pre></div>
+</div>
+</div>
+</div>
+<p>A common error source when working with <code class="docutils literal notranslate"><span class="pre">zip()</span></code> is the handling of iterables with varying lengths. The iteration stops when the length of the shorted iterable passed to <code class="docutils literal notranslate"><span class="pre">zip()</span></code> is reached.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>labels.append(&quot;x&quot;)
+# we unpack the iterator for printing using *
+print(*zip(labels, units))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;U&#39;, &#39;m/s&#39;) (&#39;p&#39;, &#39;Pa&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Looping over the keys and values of a dictionary works in a similar way as described for list and tuples. The methods <code class="docutils literal notranslate"><span class="pre">keys()</span></code>, <code class="docutils literal notranslate"><span class="pre">values()</span></code>, and <code class="docutils literal notranslate"><span class="pre">items()</span></code> provide us with iterators for the dictionary’s keys, values, or key-value-pairs, respectively. Similar to the index-based access to the content of lists and tuples, we can access the value associated with a key using the <code class="docutils literal notranslate"><span class="pre">[]</span></code> operator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># for each key/label, print its value/unit
+for key in labels_and_units.keys():
+    print(f&quot;The unit of {key} is {labels_and_units[key]}&quot;)
+
+# loop over keys and values with zip
+for key, value in zip(labels_and_units.keys(), labels_and_units.values()):
+    print(f&quot;The unit of {key} is {value}&quot;)
+
+# even short than above
+for key, value in labels_and_units.items():
+    print(f&quot;The unit of {key} is {value}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The unit of x is m
+The unit of U is m/s
+The unit of x is m
+The unit of U is m/s
+The unit of x is m
+The unit of U is m/s
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="list-and-dictionary-comprehensions">
+<h3>List and dictionary comprehensions<a class="headerlink" href="#list-and-dictionary-comprehensions" title="Permalink to this headline">#</a></h3>
+<p>Comprehensions are an efficient way of creating new lists or dictionaries without for-loops. Especially, if a task needs to be repeated multiple times, comprehensions are short, clear and efficient. The general syntax is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># list comprehension</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">result_based_on_item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">]</span>
+<span class="c1"># dictionary comprehension</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">key_base_on_item</span> <span class="p">:</span> <span class="n">value_base_on_item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create a list of squared values
+list_of_numbers = [i**2 for i in range(10)]
+print(list_of_numbers)
+
+# create dictionary with string representations
+numbers_as_strings = {i : f&quot;({i})&quot; for i in list_of_numbers}
+print(numbers_as_strings)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+{0: &#39;(0)&#39;, 1: &#39;(1)&#39;, 4: &#39;(4)&#39;, 9: &#39;(9)&#39;, 16: &#39;(16)&#39;, 25: &#39;(25)&#39;, 36: &#39;(36)&#39;, 49: &#39;(49)&#39;, 64: &#39;(64)&#39;, 81: &#39;(81)&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Another common pattern is the addition of a logical statement to the comprehension. The extended syntax is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># simple if condition</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">result_based_on_item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">iterable</span> <span class="k">if</span> <span class="n">condition_based_on_item</span><span class="p">]</span>
+<span class="c1"># if-else condition</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">result_true</span> <span class="k">if</span> <span class="n">condition</span> <span class="k">else</span> <span class="n">results_false</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">]</span>
+<span class="c1"># if-else condition for dictionaries</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{(</span><span class="n">key_true</span> <span class="k">if</span> <span class="n">key_condition</span> <span class="k">else</span> <span class="n">key_false</span><span class="p">)</span> <span class="p">:</span> <span class="p">(</span><span class="n">value_true</span> <span class="k">if</span> <span class="n">value_condition</span> <span class="k">else</span> <span class="n">value_false</span> <span class="p">)</span> <span class="k">for</span> <span class="n">items</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># print only even numbers
+even_numbers = [i for i in list_of_numbers if i % 2 == 0]
+print(even_numbers)
+
+# create a dictionary with even-odd-labeling
+even_odd = {i : (&quot;even&quot; if i % 2 == 0 else &quot;odd&quot;) for i in list_of_numbers}
+print(even_odd)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0, 4, 16, 36, 64]
+{0: &#39;even&#39;, 1: &#39;odd&#39;, 4: &#39;even&#39;, 9: &#39;odd&#39;, 16: &#39;even&#39;, 25: &#39;odd&#39;, 36: &#39;even&#39;, 49: &#39;odd&#39;, 64: &#39;even&#39;, 81: &#39;odd&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is also possible to nest multiple comprehensions and conditionals. However, the resulting statements are often hard to read and error-prone. As a rule of thumb, there should be never more than two <code class="docutils literal notranslate"><span class="pre">for</span></code> statements inside the square or curly brackets.</p>
+</section>
+</section>
+<section id="functions-and-lambda-functions">
+<h2>Functions and Lambda functions<a class="headerlink" href="#functions-and-lambda-functions" title="Permalink to this headline">#</a></h2>
+<p>Functions are the simplest and most common way to avoid code duplication and to improve the program’s modularity and readability. In the function header, zero or more function parameters may be defined. Optionally, we can provide default arguments (values) for some of the parameters. The optional parameters always follow at the end of the parameter list. Moreover, functions may or may not return a result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># function without return argument
+def print_greeting(first_name, family_name):
+    print(f&quot;Hello {first_name} {family_name}!&quot;)
+
+print_greeting(&quot;Horace&quot;, &quot;Lamb&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello Horace Lamb!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># function with optional and return argument
+def format_arguments(parameters, arguments, separator=&quot;, &quot;):
+    formatted_arguments = separator.join(
+        [f&quot;{param}={arg}&quot; for param, arg in zip(parameters, arguments)]
+    )
+    return formatted_arguments
+
+# print with default separator
+print(format_arguments((&quot;a&quot;, &quot;b&quot;), (1, 2)))
+
+# print with different separator
+print(format_arguments((&quot;a&quot;, &quot;b&quot;), (1, 2), &quot;; &quot;))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a=1, b=2
+a=1; b=2
+</pre></div>
+</div>
+</div>
+</div>
+<p>Even though Python is an interpreted language without strict typing, it is good practice to use so-called type hints in the function definition. However, note that the type hints are not checked or enforced by the interpreter. Their main purpose is improved code readability and improved documentation, e.g., when using automatic documentation generators like <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># same as the last function above but with type hints
+def format_arguments(parameters: list, arguments: list, separator: str = &quot;, &quot;) -&gt; str:
+    formatted_arguments = separator.join(
+        [f&quot;{param}={arg}&quot; for param, arg in zip(parameters, arguments)]
+    )
+    return formatted_arguments
+
+print(format_arguments((&quot;a&quot;, &quot;b&quot;), (1, 2), &quot;; &quot;))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a=1; b=2
+</pre></div>
+</div>
+</div>
+</div>
+<p>Python supports multiple assignments in a single statement (line). Moreover, functions can return multiple arguments packed in a tuple. We can assign this tuple to a variable, or we can unpack the tuple into the individual return arguments.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># more specific type hinting
+from typing import Tuple
+
+def format_labels(x_label: str, y_label: str, x_unit: str, y_unit: str) -&gt; Tuple[str, str]:
+    label_with_unit_x = f&quot;{x_label} in {x_unit}&quot;
+    label_with_unit_y = f&quot;{y_label} in {y_unit}&quot;
+    return label_with_unit_x, label_with_unit_y
+
+# print the packed return arguments
+print(format_labels(&quot;x&quot;, &quot;y&quot;, &quot;m&quot;, &quot;m/s&quot;))
+
+# unpack into individual parameters, then print
+label_x, label_y = format_labels(&quot;x&quot;, &quot;y&quot;, &quot;m&quot;, &quot;m/s&quot;)
+print(f&quot;The figure shows {label_x} plotted against {label_y}&quot;)
+
+# we can combine the unpacking and printing in a single statement using *
+print(&quot;The figure shows {:s} plotted against {:s}&quot;.format(*format_labels(&quot;x&quot;, &quot;y&quot;, &quot;m&quot;, &quot;m/s&quot;)))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;x in m&#39;, &#39;y in m/s&#39;)
+The figure shows x in m plotted against y in m/s
+The figure shows x in m plotted against y in m/s
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lambda functions are small functions with limited complexity. In contrast to normal functions, lambda-functions consist of a single expression and are typically defined in a single line of code. Due to their limited complexity, they are often defined in place as arguments for other functions. The general syntax is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">lambda</span> <span class="n">argument_1</span><span class="p">,</span> <span class="n">argument_2</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">argument_N</span><span class="p">:</span> <span class="n">what_to_do</span>
+</pre></div>
+</div>
+<p>If the same lambda-functions ais employed repeatedly, we can also assign it to a variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># use lambda function to extract name suffix
+get_suffix = lambda name, separator: name.split(separator)[-1]
+folders = [f&quot;case_{i}&quot; for i in range(0, 21, 5)]
+suffixes = [get_suffix(folder, &quot;_&quot;) for folder in folders]
+for folder, suffix in zip(folders, suffixes):
+    print(f&quot;Folder {folder} has suffix {suffix}&quot;)
+
+# imagine you want to sort the folders according to their suffix;
+# naively, we could pass the list of folders to the sorted function
+print(&quot;Wrong sorting: &quot;, sorted(folders))
+# as you can see in the output, the items are sorted character by character;
+# therefore, case_10 is listed before case_5; in some situations we may easily
+# miss such a mistake, e.g., when testing only suffixes between 0 and 9
+
+# solution: we need to be more precise about the sorting criterion;
+# we want to sort based on the suffix and we want the suffix to be interpreted as integer and not as string
+# the criterion can be passed to the sort function using the &#39;key&#39; parameter
+print(&quot;Correct sorting: &quot;, sorted(folders, key=lambda case: int(case.split(&quot;_&quot;)[-1])))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Folder case_0 has suffix 0
+Folder case_5 has suffix 5
+Folder case_10 has suffix 10
+Folder case_15 has suffix 15
+Folder case_20 has suffix 20
+Wrong sorting:  [&#39;case_0&#39;, &#39;case_10&#39;, &#39;case_15&#39;, &#39;case_20&#39;, &#39;case_5&#39;]
+Correct sorting:  [&#39;case_0&#39;, &#39;case_5&#39;, &#39;case_10&#39;, &#39;case_15&#39;, &#39;case_20&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="object-orientated-programming-in-python">
+<h2>Object-orientated programming in python<a class="headerlink" href="#object-orientated-programming-in-python" title="Permalink to this headline">#</a></h2>
+<p>As many other programming languages, Python supports object-orientated programming. The following section provides a brief overview of object-orientated programming in python.</p>
+<section id="general-structure-and-initialization">
+<h3>General structure and initialization<a class="headerlink" href="#general-structure-and-initialization" title="Permalink to this headline">#</a></h3>
+<p>In Python, user-defined data types are defined with the keyword <code class="docutils literal notranslate"><span class="pre">class</span></code>. The class itself needs to have an <code class="docutils literal notranslate"><span class="pre">.__init__()</span></code> method in order to initialize attributes and methods.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># let&#39;s define a simple class
+class SimpleClass():
+    # currently the __init__() method is empty, so the class won&#39;t do anything
+    def __init__(self):
+        pass
+    
+# the class can now be instantiated
+new_class = SimpleClass()
+
+# and we can add some attributes
+new_class.new_attribute = 42
+
+print(&quot;new class attribute:&quot;, new_class.new_attribute)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>new class attribute: 42
+</pre></div>
+</div>
+</div>
+</div>
+<p>The keyword <code class="docutils literal notranslate"><span class="pre">self</span></code> represents the instance of the class and is required for accessing any attributes or methods of the class.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># we can initialize a class directly with attributes and methods as well:
+class AddNumbers():
+    # in this case, the value for y is given by default
+    def __init__(self, x, y = 2):
+        self.x = x
+        self.y = y
+    
+    # method for adding two numbers
+    def add_two_numbers(self):
+        return self.x + self.y
+    
+# since the value for y is given by default we can instanciate the class only ba passing in x as argument
+add = AddNumbers(x=1)
+print(f&quot;x, y = {add.x}, {add.y}&quot;)
+print(f&quot;{add.x} + {add.y} = {add.add_two_numbers()}&quot;)
+
+# alternatively, we can assign values for x and y when creating the instance
+add_2 = AddNumbers(x=5, y=37)
+print(f&quot;{add_2.x} + {add_2.y} = {add_2.add_two_numbers()}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x, y = 1, 2
+1 + 2 = 3
+5 + 37 = 42
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inheritance">
+<h3>Inheritance<a class="headerlink" href="#inheritance" title="Permalink to this headline">#</a></h3>
+<p>Python supports inheritance, which allows to inherit methods and properties from other classes. This is quite convenient, because methods which are already implemented can be used and extended without the necessity to write everything from scratch. Considering the previous example, imagine we now want to add two numbers and then compute the mean of it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># we could implement a completly new class from scratch...
+class ComputeMean():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    # method for adding two numbers
+    def mean_of_two_numbers(self):
+        return (self.x + self.y) / 2
+    
+# now compute the mean of two numbers
+comp_mean = ComputeMean(5, 3)
+print(&quot;mean of 5 and 3 = &quot;, comp_mean.mean_of_two_numbers())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mean of 5 and 3 =  4.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># ... but a more efficient way is inheriting the properties of our previously implemented class &#39;AddNumbers&#39;:
+class ComputeMean(AddNumbers):
+    def __init__(self, x, y):
+        # we need to initialize the parent class with the method &#39;super()&#39; and also the attributes we want to access
+        super().__init__(x, y)
+        
+    def mean_of_two_numbers(self):
+        # now we can use the method &#39;add_two_numbers()&#39; we already implemented in the parent class
+        return AddNumbers.add_two_numbers(self) / 2
+    
+# compute the mean of 8 and 4
+comp_mean = ComputeMean(8, 4)
+print(&quot;mean of 8 and 4 = &quot;, comp_mean.mean_of_two_numbers())
+
+# but we can also directly access the &#39;add_two_numbers&#39; method from the parent class without calling it
+print(&quot;8 + 4 = &quot;, comp_mean.add_two_numbers())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mean of 8 and 4 =  6.0
+8 + 4 =  12
+</pre></div>
+</div>
+</div>
+</div>
+<p>The parent class from which we want to inherit the properties needs to be passed into our child class as argument, as can be seen in the above examples. Further, we need to initilize the parent class by calling the built-in <code class="docutils literal notranslate"><span class="pre">super()</span></code> method. This allows us to access methods and other properties of the parent class without the need to implement them again in the child class. When calling the <code class="docutils literal notranslate"><span class="pre">super()</span></code> method, the attributes we want to initialize need to be passed into the <code class="docutils literal notranslate"><span class="pre">__init()__</span></code> method as well, e.g. the following would not work, since we didn’t initialize the attribute <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class ComputeMean(AddNumbers):
+    def __init__(self, x, y):
+        # if we forget to initialize the attributes, then we won&#39;t have access to it
+        super().__init__()
+        
+    def mean_of_two_numbers(self):
+        return AddNumbers.add_two_numbers(self) / 2
+    
+# compute the mean of 8 and 4
+comp_mean = ComputeMean(x=4, y=8)
+print(&quot;mean of 8 and 4 = &quot;, comp_mean.mean_of_two_numbers())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="k">return</span> <span class="n">AddNumbers</span><span class="o">.</span><span class="n">add_two_numbers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># compute the mean of 8 and 4</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="n">comp_mean</span> <span class="o">=</span> <span class="n">ComputeMean</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean of 8 and 4 = &quot;</span><span class="p">,</span> <span class="n">comp_mean</span><span class="o">.</span><span class="n">mean_of_two_numbers</span><span class="p">())</span>
+
+<span class="nn">Cell In [7], line 4,</span> in <span class="ni">ComputeMean.__init__</span><span class="nt">(self, x, y)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># if we forget to initialize the attributes, then we won&#39;t have access to it</span>
+<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<span class="ne">TypeError</span>: AddNumbers.__init__() missing 1 required positional argument: &#39;x&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class ComputeMean(AddNumbers):
+    def __init__(self, x, y):
+        # let&#39;s just initialize y and see what happens
+        super().__init__(y)
+        
+    def mean_of_two_numbers(self):
+        return AddNumbers.add_two_numbers(self) / 2
+    
+# compute the mean of 8 and 4
+comp_mean = ComputeMean(x=4, y=8)
+print(&quot;mean of 8 and 4 = &quot;, comp_mean.mean_of_two_numbers())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mean of 8 and 4 =  5.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case, the parameter <code class="docutils literal notranslate"><span class="pre">y</span></code> which is passed into our <code class="docutils literal notranslate"><span class="pre">super().__init__()</span></code> method is interpreted as <code class="docutils literal notranslate"><span class="pre">x</span></code>, since the <code class="docutils literal notranslate"><span class="pre">y</span></code> parameter is already set by default and therefore not required. The Python interpreter assumes that, if only one argument is given, it has to be the parameter <code class="docutils literal notranslate"><span class="pre">x</span></code>. If we want Python to interpret this one parameter as <code class="docutils literal notranslate"><span class="pre">y</span></code>, we have to use a keyword argument:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class ComputeMean(AddNumbers):
+    def __init__(self, x, y):
+        # this time we specificly initialize the parameter y as y
+        super().__init__(y=y)
+        
+    def mean_of_two_numbers(self):
+        return AddNumbers.add_two_numbers(self) / 2
+    
+# compute the mean of 8 and 4
+comp_mean = ComputeMean(x=4, y=8)
+print(&quot;mean of 8 and 4 = &quot;, comp_mean.mean_of_two_numbers())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="k">return</span> <span class="n">AddNumbers</span><span class="o">.</span><span class="n">add_two_numbers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># compute the mean of 8 and 4</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="n">comp_mean</span> <span class="o">=</span> <span class="n">ComputeMean</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean of 8 and 4 = &quot;</span><span class="p">,</span> <span class="n">comp_mean</span><span class="o">.</span><span class="n">mean_of_two_numbers</span><span class="p">())</span>
+
+<span class="nn">Cell In [11], line 4,</span> in <span class="ni">ComputeMean.__init__</span><span class="nt">(self, x, y)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># this time we specificly initialize the parameter y as y</span>
+<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: AddNumbers.__init__() missing 1 required positional argument: &#39;x&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we get the error message again, showing us that we forgot to initialize the <code class="docutils literal notranslate"><span class="pre">x</span></code> parameter.</p>
+</section>
+<section id="decorators">
+<h3>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">#</a></h3>
+<p>Functions are represented as objects in python and can therefore be passed into other functions as arguments or returned by functions. Decorators use this property, by taking function objects as arguments and then modifying its behavior. The following examples where adopted from <a class="reference external" href="https://www.youtube.com/watch?v=r7Dtus7N4pI">Python Decorators in 15 Minutes</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># let&#39;s define a function which only prints its name
+def function1():
+    print(&quot;function 1&quot;)
+    
+# now we define a function taking another function as argument and then calling this function    
+def function2(f):
+    f()
+    
+# now we can execute function1...
+function1()
+
+# ... or we can pass function1 into function2 and execute it within function2:
+function2(function1)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function 1
+function 1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># we can extend this example by adding another function into our function2
+def function3(f):
+    # let&#39;s use this function to execute whatever function is passed into function3
+    def some_wrapper_function():
+        print(&quot;starting function&quot;)
+        f()
+        print(&quot;function ended&quot;)
+
+    return some_wrapper_function
+
+# calling the wrapper function
+print(&quot;calling function3 with function1 as argument:\n&quot;, function3(function1))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>calling function3 with function1 as argument:
+ &lt;function function3.&lt;locals&gt;.some_wrapper_function at 0x7fe30e667ac0&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>As shown in this example, <span class="math notranslate nohighlight">\(function1\)</span> is not executed within the <span class="math notranslate nohighlight">\(some\_wrapper\_function\)</span>. This is because <span class="math notranslate nohighlight">\(function3\)</span> returns <span class="math notranslate nohighlight">\(some\_wrapper\_function\)</span> as an object. In order to execute this object, we need to add parenthesis:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># function3 returns an object, still need to execute the function
+function3(function1)()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>starting function
+function 1
+function ended
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we get the expected output. Using this notation, however, can get quite confusing, especially if more complex functions are involved. To avoid this we can assign the returned function object to another variable:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># we can assign the function call to another object, e.g. x and then call x()
+x = function3(function1)
+
+# now the variable x represents the function3 object called with function1 as argument and we can just execute it
+x()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>starting function
+function 1
+function ended
+</pre></div>
+</div>
+</div>
+</div>
+<p>Instead of assigning the function object to a variable and then execute this object, Python provides a short hand notation called decorators:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># a decorator is a short notation of executing the fnction object
+@function3       # this is equivalent to: x = function3(x)
+def x():
+    print(&quot;executing function x using a decorator&quot;)
+    
+# since x is an object, we need to add parenthesis to execute it
+x()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>starting function
+executing function x using a decorator
+function ended
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="plotting-with-matplotlib">
+<h2>Plotting with Matplotlib<a class="headerlink" href="#plotting-with-matplotlib" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://matplotlib.org/stable/index.html">Matplotlib</a> is a library for creating plots and visualizing data. This section deals with the basic usage of Matplotlib in order to create simple plots. A more thorough introduction can be found in the references.</p>
+<section id="line-plots">
+<h3>Line plots<a class="headerlink" href="#line-plots" title="Permalink to this headline">#</a></h3>
+<p>Simple line plots can be created with the method <code class="docutils literal notranslate"><span class="pre">plot()</span></code> located in <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
+import torch as pt
+
+# create some data
+x = pt.linspace(0, 6, 100)
+y = pt.sin(x)
+y2 = pt.cos(x)
+
+# now let&#39;s plot the data
+plt.plot(x, y, color=&quot;black&quot;, label=&quot;$sin(x)$&quot;)
+
+# we can customize the lines as well
+plt.plot(x, y2, color=&quot;red&quot;, label=&quot;$cos(x)$&quot;, marker=&quot;o&quot;, fillstyle=&quot;none&quot;, linestyle=&quot;None&quot;)
+
+# add axis labels, a legend and a title
+plt.legend()
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.title(&quot;$sin(x)$ vs. $cos(x)$&quot;)
+
+# in order to diplay the plot, we need to call the show() method
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/python_intro_53_0.png" src="../_images/python_intro_53_0.png" />
+</div>
+</div>
+</section>
+<section id="scatter-plots">
+<h3>Scatter plots<a class="headerlink" href="#scatter-plots" title="Permalink to this headline">#</a></h3>
+<p>In the same way, we can create scatter plots using the <code class="docutils literal notranslate"><span class="pre">scatter</span></code> method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># this time, let&#39;s plot the data as scatter plot, s = size of markers
+plt.scatter(x, y, color=&quot;black&quot;, label=&quot;$sin(x)$&quot;, s=5, marker=&quot;s&quot;)
+plt.scatter(x, y2, color=&quot;red&quot;, label=&quot;$cos(x)$&quot;, s=20, marker=&quot;o&quot;, facecolors=&quot;none&quot;)
+
+# zoom in a little bit by setting new x- and y-limits
+plt.xlim(1.75, 5.75)
+plt.ylim(-1.05, 0.5)
+
+# the rest is the same...
+plt.legend()
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.title(&quot;$sin(x)$ vs. $cos(x)$&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/python_intro_55_0.png" src="../_images/python_intro_55_0.png" />
+</div>
+</div>
+</section>
+<section id="contour-and-filled-contour-plots">
+<h3>Contour and filled contour plots<a class="headerlink" href="#contour-and-filled-contour-plots" title="Permalink to this headline">#</a></h3>
+<p>Further, contour plots can be created in order to visualize <span class="math notranslate nohighlight">\(3D-\)</span>data with the <code class="docutils literal notranslate"><span class="pre">contour()</span></code> method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from numpy import meshgrid
+# create 3D-data
+x = pt.linspace(0, 1, 100)
+y = pt.linspace(10, 20, 100)
+
+# in order to get one datapoint for each (x, y) tuple, we create a grid of (x, y) tuples with meshgrid
+x_new, y_new = meshgrid(x, y)
+
+# now we can use the grid to generate a matrix of data in z-direction, so for each (x, y) tuple there exist one z data point
+z = x_new**2 * y_new**2
+
+# now create contour plot, levels = number of isolines in the plot
+plt.contour(x, y, z, levels=30)
+
+# again we can add some labels and a colorbar
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.colorbar()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/python_intro_57_0.png" src="../_images/python_intro_57_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># alternatively, we can use the contourf() method for making 3D-plots:
+plt.contourf(x, y, z)
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+
+# in general, the colorbar can be further customized
+cbar = plt.colorbar()
+cbar.set_label(label=&quot;$z$&quot;, fontsize=12)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/python_intro_58_0.png" src="../_images/python_intro_58_0.png" />
+</div>
+</div>
+</section>
+<section id="sub-plots">
+<h3>Sub-plots<a class="headerlink" href="#sub-plots" title="Permalink to this headline">#</a></h3>
+<p>Instead of only creating one plot at a time, Matplotlib provides a <code class="docutils literal notranslate"><span class="pre">subplots()</span></code> method for creating multiple plots within one figure, which also allows us to customize our plots further. There exists a variety of options, which can be found in the <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html">subfigures</a> documentation. A possible implementation could be:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># use the data we already created when plotting the sin(x) and cos(x), but this time we want them to be in seperate plots
+x = pt.linspace(0, 6, 100)
+y = pt.sin(x)
+y_2 = pt.cos(x)
+
+# now we create a subfigure with 2 columns and one row, but both plots should have the same y-axis, further
+# we want the figure to have a size of 20x4 (width x heigth)
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(20, 4), sharey=True)
+
+# let&#39;s plot the data ax referes to the axis on which we want to plot the data (counting from left -&gt; right)
+ax[0].plot(x, y, color=&quot;black&quot;, label=&quot;$sin(x)$&quot;)
+ax[1].plot(x, y, color=&quot;red&quot;, label=&quot;$cos(x)$&quot;)
+
+# when adding labels, the method is now called with a &#39;set_...&#39; in front of the methods
+ax[0].set_ylabel(&quot;$y$&quot;, usetex=True, fontsize=16)
+
+# we can increase the space between the x-ticks and the axis label using the keyword &#39;labelpad&#39; as well
+ax[0].set_xlabel(&quot;$x$&quot;, usetex=True, fontsize=16, labelpad=25)
+ax[1].set_xlabel(&quot;$x$&quot;, usetex=True, fontsize=16, labelpad=10)
+
+# we can set different subtitles as well
+ax[0].set_title(&quot;$sin(x)$&quot;)
+ax[1].set_title(&quot;$cos(x)$&quot;)
+
+# and also customize the legend
+ax[0].legend(loc=&quot;upper right&quot;, fontsize=14)
+ax[1].legend(loc=&quot;lower left&quot;, fontsize=10)
+
+# and adjust the white space between the subplots, so it looks a little bit nicer
+fig.tight_layout()
+fig.subplots_adjust(wspace=0.05, top=0.9)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/python_intro_60_0.png" src="../_images/python_intro_60_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="pytorch">
+<h2>PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">#</a></h2>
+<section id="working-with-tensors">
+<h3>Working with tensors<a class="headerlink" href="#working-with-tensors" title="Permalink to this headline">#</a></h3>
+<p>The <a class="reference external" href="https://pytorch.org/docs/stable/index.html">PyTorch</a> library provides efficient data structures for operating with large amounts of data, e.g. tensors as well as tools for deep learning and neural networks. The following section gives a brief overview on what tensors are and how to how to operate with them. <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html">Tensors</a> store elements of a certain type, e.g., floating point numbers in a multi-dimensional matrix. In general, tensors need to be initialized for example with zeros before operating with them, similar to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html">numpy arrays</a>. The size of a tensor is defined when initializing the tensor using the keyword argument <code class="docutils literal notranslate"><span class="pre">size</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import torch as pt
+
+# creating a 1x1 tensor filled with zeros, the size argument takes a tuple with (number of rows, number of columns)
+t = pt.zeros(size=(1, 1))
+print(&quot;1x1 tensor:\n&quot;, t)
+
+# similarily, we can create an column vector [x, y, z]^T filled with zeros
+t = pt.zeros(size=(3, 1))
+print(&quot;\n3x1 column vector:\n&quot;, t)
+
+# in the same way, we can also create a 3x3 matrix filled with ones
+t = pt.ones(size=(3, 3))
+print(&quot;\n3x3 matrix:\n&quot;, t)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1x1 tensor:
+ tensor([[0.]])
+
+3x1 column vector:
+ tensor([[0.],
+        [0.],
+        [0.]])
+
+3x3 matrix:
+ tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alternatively, other data types such as lists can be converted to tensors. It is important that the list elements have to be of the same data type.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># creating a list and converting it to a tensor
+a = [1, 2, 3]
+a_tensor = pt.tensor(a)
+print(&quot;original list:\n&quot;, a)
+print(&quot;\nconverted to tensor:\n&quot;, a_tensor)
+
+# this also works for nested lists
+b = [[1, 2], [3, 4]]
+b_tensor = pt.tensor(b)
+print(&quot;\noriginal list:\n&quot;, b)
+print(&quot;\nconverted to tensor:\n&quot;, b_tensor)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original list:
+ [1, 2, 3]
+
+converted to tensor:
+ tensor([1, 2, 3])
+
+original list:
+ [[1, 2], [3, 4]]
+
+converted to tensor:
+ tensor([[1, 2],
+        [3, 4]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>When converting lists to tensors, some problems may occur as shown in the following examples:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># all list elements have to be of the same data type, otherwise an error occurs:
+a = [1, 2, &quot;a&quot;]
+b = pt.tensor(a)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># all list elements have to be of the same data type, otherwise an error occurs:</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">]</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: new(): invalid data type &#39;str&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># also if nested lists are to be converted, the dimensions have to be consistent throughout the list
+a = [[1, 2], [3, 4, 5]]
+
+# this is not working, because 1st element is 2 long and 2nd element has a length of 3
+b = pt.tensor(a)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># this is not working, because 1st element is 2 long and 2nd element has a length of 3</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: expected sequence of length 2 at dim 1 (got 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>When initializing a tensor, the size of the tensor needs to be defined. The general syntax for the <code class="docutils literal notranslate"><span class="pre">size</span></code> argument is <code class="docutils literal notranslate"><span class="pre">size=(dim=0,</span> <span class="pre">dim=1,</span> <span class="pre">dim=2,</span> <span class="pre">...)</span></code>, the first dimension <code class="docutils literal notranslate"><span class="pre">dim=0</span></code> refers to the number of rows and <code class="docutils literal notranslate"><span class="pre">dim=1</span></code> to the number of columns. The <span class="math notranslate nohighlight">\(3^{rd}\)</span> dimension denotes the number of elements within each element of the (dim=0 * dim=1) sized matrix and so on. When operating with tensors, single elements can be accessed as well as complete columns, rows or matrices within the tensor, which will be illustrated by the following examples. A more comprehensive introduction can be found in the <a class="reference external" href="https://pytorch.org/tutorials/beginner/introyt/tensors_deeper_tutorial.html">PyTorch docs</a> for tensors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create a 2x3 tensor filled with random numbers
+random_tensor = pt.randn(size=(3, 3))
+
+# this tensor has 3 rows and 3 columns
+print(&quot;3x3 tensor with random numbers:\n&quot;, random_tensor)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3x3 tensor with random numbers:
+ tensor([[-1.1325,  0.2688, -1.0330],
+        [ 0.3791, -0.8139, -0.2489],
+        [-0.4488, -0.2883,  0.4956]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># now let&#39;s access the 2nd element of the first row (indices start at zero)
+print(&quot;2nd element of 1st row: &quot;, random_tensor[0, 1])
+
+# we can also access the last element of the 1st row by using [-1] as index:
+print(&quot;last element of 1st row:&quot;, random_tensor[0, -1])
+
+# complete rows or columns can be accessed by using [:]
+print(&quot;\nall columns of 1st row:&quot;, random_tensor[0, :])
+print(&quot;all rows of 2nd colunm:&quot;, random_tensor[:, 1])
+
+# now lets get the a 2x2 submatrix of the tensoor containing the rows 1, 2 and columns 1, 2:
+print(&quot;\n2x2 matrix of tensor:\n&quot;, random_tensor[:2, :2])
+
+# similarily, we can get the elements of the last two rows and columns:
+print(&quot;\n2x2 matrix of tensor:\n&quot;, random_tensor[1:, 1:])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2nd element of 1st row:  tensor(0.2688)
+last element of 1st row: tensor(-1.0330)
+
+all columns of 1st row: tensor([-1.1325,  0.2688, -1.0330])
+all rows of 2nd colunm: tensor([ 0.2688, -0.8139, -0.2883])
+
+2x2 matrix of tensor:
+ tensor([[-1.1325,  0.2688],
+        [ 0.3791, -0.8139]])
+
+2x2 matrix of tensor:
+ tensor([[-0.8139, -0.2489],
+        [-0.2883,  0.4956]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># further, we can specify ranges which we want to access
+random_tensor = pt.rand(size=(4, 4))
+print(&quot;original tensor:\n&quot;, random_tensor)
+      
+# get columns 1-3 and rows 2-4
+print(&quot;\nrows 1-3 &amp; columns 2-4:\n&quot;, random_tensor[1:3, 2:4])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original tensor:
+ tensor([[0.9397, 0.2593, 0.8610, 0.0948],
+        [0.3179, 0.1401, 0.5237, 0.4738],
+        [0.0370, 0.2705, 0.0169, 0.9482],
+        [0.4524, 0.7740, 0.4464, 0.3420]])
+
+rows 1-3 &amp; columns 2-4:
+ tensor([[0.5237, 0.4738],
+        [0.0169, 0.9482]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>As can be seen in this example, when using the range <code class="docutils literal notranslate"><span class="pre">[1:3,</span> <span class="pre">2:4]</span></code>, the stop indices <code class="docutils literal notranslate"><span class="pre">3,</span> <span class="pre">4</span></code> are excluded resulting in a 2x2 tensor as output. In general, the size of a tensor can be determined by using the <code class="docutils literal notranslate"><span class="pre">size()</span></code> method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get the size of this tensor
+print(&quot;size of the original tensor: &quot;, random_tensor.size())
+print(&quot;\nsize of the sub-matrix within the tensor: &quot;, random_tensor[1:3, 2:4].size())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>size of the original tensor:  torch.Size([4, 4])
+
+size of the sub-matrix within the tensor:  torch.Size([2, 2])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="common-tensor-operations">
+<h3>Common tensor operations<a class="headerlink" href="#common-tensor-operations" title="Permalink to this headline">#</a></h3>
+<section id="algebraic-operations">
+<h4>Algebraic operations<a class="headerlink" href="#algebraic-operations" title="Permalink to this headline">#</a></h4>
+<p>A great advantage of using tensors is the fact that algebraic operations, such as elements-wise addition, can easily be done using <code class="docutils literal notranslate"><span class="pre">+,</span> <span class="pre">-,</span> <span class="pre">*,</span> <span class="pre">/</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create two tensors
+a = pt.tensor([1, 2, 3])
+b = pt.tensor([1, 1, 1])
+
+# now add them element-wise:
+c = a + b
+print(c)
+
+# of course, this can be extended to higher dimensions:
+x = pt.randint(low=0, high=5, size=(2, 3))
+y = pt.randint(low=0, high=5, size=(2, 3))
+print(&quot;\nx = &quot;, x)
+print(&quot;\ny = &quot;, y)
+print(&quot;\nx + y = &quot;, x + y)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([2, 3, 4])
+
+x =  tensor([[4, 1, 3],
+        [3, 3, 1]])
+
+y =  tensor([[1, 0, 3],
+        [3, 3, 1]])
+
+x + y =  tensor([[5, 1, 6],
+        [6, 6, 2]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># a matrix-vector product can be computed using @
+x = pt.randint(low=0, high=3, size=(2, 3))
+y = pt.randint(low=0, high=3, size=(3, 1))
+print(&quot;x = \n&quot;, x)
+print(&quot;\ny = \n&quot;, y)
+
+# compute the matrix-vector product of x and y
+print(&quot;\nx * y = \n&quot;, x @ y)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x = 
+ tensor([[1, 0, 0],
+        [2, 0, 2]])
+
+y = 
+ tensor([[0],
+        [1],
+        [1]])
+
+x * y = 
+ tensor([[0],
+        [2]])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="flatten">
+<h4>flatten()<a class="headerlink" href="#flatten" title="Permalink to this headline">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">flatten()</span></code> method reshapes an arbitrary <span class="math notranslate nohighlight">\(n\)</span>-dimensional tensor to a one-dimensional tensor:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create tensor
+x = pt.rand(size=(2, 3))
+
+# then flatten the tensor
+y = x.flatten()
+
+print(&quot;original tensor:\n&quot;, x)
+print(&quot;\nflattened tensor:\n&quot;, y)
+print(&quot;\nsize of original tensor:&quot;, x.size())
+print(&quot;size of flattened tensor:&quot;, y.size())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original tensor:
+ tensor([[0.8534, 0.7454, 0.6552],
+        [0.6830, 0.7364, 0.7621]])
+
+flattened tensor:
+ tensor([0.8534, 0.7454, 0.6552, 0.6830, 0.7364, 0.7621])
+
+size of original tensor: torch.Size([2, 3])
+size of flattened tensor: torch.Size([6])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reshape">
+<h4>reshape()<a class="headerlink" href="#reshape" title="Permalink to this headline">#</a></h4>
+<p>In contrast to <code class="docutils literal notranslate"><span class="pre">flatten()</span></code>, <code class="docutils literal notranslate"><span class="pre">reshape()</span></code> can be used to reshape a tensor to specific dimensions instead of reshaping it to a one-dimensional tensor. An important requirement for using the <code class="docutils literal notranslate"><span class="pre">reshape()</span></code> method is that the output tensor has the same number of elements as the input tensor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create tensor with 6 rows and 2 columns
+x = pt.rand(size=(6, 2))
+print(&quot;original tensor:\n&quot;, x)
+
+# reshape it to a row-vector
+y = pt.reshape(x, shape=(1, 12))
+print(&quot;\nreshaped tensor:\n&quot;, y)
+
+# alternatively, reshape it to a matrix with 3 rows and 4 columns
+z = pt.reshape(x, shape=(3, 4))
+print(&quot;\nreshaped tensor:\n&quot;, z)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original tensor:
+ tensor([[0.6319, 0.4387],
+        [0.8049, 0.8187],
+        [0.4356, 0.5494],
+        [0.4285, 0.0310],
+        [0.7303, 0.7181],
+        [0.3153, 0.4595]])
+
+reshaped tensor:
+ tensor([[0.6319, 0.4387, 0.8049, 0.8187, 0.4356, 0.5494, 0.4285, 0.0310, 0.7303,
+         0.7181, 0.3153, 0.4595]])
+
+reshaped tensor:
+ tensor([[0.6319, 0.4387, 0.8049, 0.8187],
+        [0.4356, 0.5494, 0.4285, 0.0310],
+        [0.7303, 0.7181, 0.3153, 0.4595]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>When using <code class="docutils literal notranslate"><span class="pre">reshape()</span></code> the dimensions have to match, meaning the number of elements need to be the same. The following will not work:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create tensor
+x = pt.rand(size=(6, 2))
+
+# this will not work since x has 6*2=12 elements and y would only have 3*3=9 elements
+y = pt.reshape(x, shape=(3, 3))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">34</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">x</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># this will not work since x has 6*2=12 elements and y would only have 3*3=9 elements</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="ne">RuntimeError</span>: shape &#39;[3, 3]&#39; is invalid for input of size 12
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="squeeze-and-unsqueeze">
+<h4>squeeze() and unsqueeze()<a class="headerlink" href="#squeeze-and-unsqueeze" title="Permalink to this headline">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">squeeze()</span></code> method removes dimensions with the size of <span class="math notranslate nohighlight">\(1\)</span> from a tensor. If we have for example a <span class="math notranslate nohighlight">\(3x2x1\)</span>-dimensional tensor, using the <code class="docutils literal notranslate"><span class="pre">squeeze()</span></code> method would lead to a tensor with the dimensions of <span class="math notranslate nohighlight">\(3x2\)</span> by removing the <span class="math notranslate nohighlight">\(3^{rd}\)</span> dimension (since the <span class="math notranslate nohighlight">\(3^{rd}\)</span> dimension is <span class="math notranslate nohighlight">\(1\)</span>). If there exist multiple dimensions with the size of <span class="math notranslate nohighlight">\(1\)</span>, using <code class="docutils literal notranslate"><span class="pre">squeeze()</span></code> removes all of them. A specific dimension which shall be removed can be specified by the keyword argument <code class="docutils literal notranslate"><span class="pre">dim</span></code>, in case this is unwanted. The <code class="docutils literal notranslate"><span class="pre">squeeze()</span></code> method is frequently used, e.g. when passing features into a neural network, as shown in <a class="reference external" href="https://github.com/AndreWeiner/ml-cfd-lecture/blob/main/notebooks/ml_intro.ipynb">lecture 3</a>. Consequently, the <code class="docutils literal notranslate"><span class="pre">unsqueeze()</span></code> method inserts a dimension of the size <span class="math notranslate nohighlight">\(1\)</span> at a specified dimension of the input tensor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># create tensor
+x = pt.rand(size=(3, 1))
+
+# then squeeze the tensor
+y = x.squeeze()
+
+# unsqueeze the tensor in &quot;row&quot;-dimension
+z = y.unsqueeze(dim=0)
+
+# unsqueeze the tensor in &quot;column&quot;-dimension
+z_2 = y.unsqueeze(dim=1)
+
+print(&quot;original tensor:\n&quot;, x)
+print(&quot;\nsqueezed tensor:\n&quot;, y)
+print(&quot;\nunsqueezed tensor (dim=0):\n&quot;, z)
+print(&quot;\nunsqueezed tensor (dim=1):\n&quot;, z_2)
+
+print(&quot;\nsize of original tensor:&quot;, x.size())
+print(&quot;size of squeezed tensor:&quot;, y.size())
+print(&quot;size of unsqueezed tensor (dim=0):&quot;, z.size())
+print(&quot;size of unsqueezed tensor (dim=0):&quot;, z_2.size())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original tensor:
+ tensor([[0.9764],
+        [0.7306],
+        [0.9423]])
+
+squeezed tensor:
+ tensor([0.9764, 0.7306, 0.9423])
+
+unsqueezed tensor (dim=0):
+ tensor([[0.9764, 0.7306, 0.9423]])
+
+unsqueezed tensor (dim=1):
+ tensor([[0.9764],
+        [0.7306],
+        [0.9423]])
+
+size of original tensor: torch.Size([3, 1])
+size of squeezed tensor: torch.Size([3])
+size of unsqueezed tensor (dim=0): torch.Size([1, 3])
+size of unsqueezed tensor (dim=0): torch.Size([3, 1])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># by using the keyword argument &#39;dim&#39;, the dimension to be removed can be specified in case there exist multiple dimensions with the size of 1
+x = pt.rand(size=(1, 3, 1, 2))
+
+# remove all dimesions with the size of 1
+y = x.squeeze()
+
+# only remove the last dimension
+z = x.squeeze(dim=2)
+
+print(&quot;original tensor:\n&quot;, x)
+print(&quot;\nsqueezed tensor:\n&quot;, y)
+print(&quot;\nsqueezed tensor for 3rd dim:\n&quot;, z)
+
+print(&quot;\nsize of original tensor:&quot;, x.size())
+print(&quot;size of squeezed tensor:&quot;, y.size())
+print(&quot;size of squeezed tensor for 3rd dim:&quot;, z.size())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original tensor:
+ tensor([[[[0.0249, 0.6773]],
+
+         [[0.7910, 0.5663]],
+
+         [[0.2787, 0.2979]]]])
+
+squeezed tensor:
+ tensor([[0.0249, 0.6773],
+        [0.7910, 0.5663],
+        [0.2787, 0.2979]])
+
+squeezed tensor for 3rd dim:
+ tensor([[[0.0249, 0.6773],
+         [0.7910, 0.5663],
+         [0.2787, 0.2979]]])
+
+size of original tensor: torch.Size([1, 3, 1, 2])
+size of squeezed tensor: torch.Size([3, 2])
+size of squeezed tensor for 3rd dim: torch.Size([1, 3, 2])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="zeros-vs-zeros-like">
+<h4>zeros() vs. zeros_like()<a class="headerlink" href="#zeros-vs-zeros-like" title="Permalink to this headline">#</a></h4>
+<p>In the previous examples, tensors were always initialized with zeros using the <code class="docutils literal notranslate"><span class="pre">zeros()</span></code> method. The <code class="docutils literal notranslate"><span class="pre">zeros_like()</span></code> method, however, is an efficient way to generate a tensor filled with zeros by using another tensor. For example, consider having a tensor <span class="math notranslate nohighlight">\(x\)</span> filled with some values and we want to create a tensor <span class="math notranslate nohighlight">\(y\)</span>, which has the same size of <span class="math notranslate nohighlight">\(x\)</span> but is filled with zeros. Instead of using <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">pt.zeros(size=x.size())</span></code> we can create <span class="math notranslate nohighlight">\(y\)</span> as <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">pt.zeros_like(x)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># creating a tensor filled with zeros
+x = pt.zeros(size=(2, 2))
+
+# create tensor filled with some random numbers
+y = pt.rand(size=(2, 2))
+
+# use zeros_like() to create tensor of the same shape as y, but filled with zeros
+z = pt.zeros_like(y)
+
+print(&quot;tensor initialized with zeros:\n&quot;, x)
+print(&quot;\ntensor initialized with random numbers:\n&quot;, y)
+print(&quot;\nusing zeros_like() method:\n&quot;, z)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor initialized with zeros:
+ tensor([[0., 0.],
+        [0., 0.]])
+
+tensor initialized with random numbers:
+ tensor([[0.8827, 0.1368],
+        [0.0349, 0.8776]])
+
+using zeros_like() method:
+ tensor([[0., 0.],
+        [0., 0.]])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="min-vs-argmin">
+<h4>min() vs. argmin()<a class="headerlink" href="#min-vs-argmin" title="Permalink to this headline">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">min()</span></code> method in torch returns the minimum of a <span class="math notranslate nohighlight">\(n-\)</span>dimensional tensor. In a lot of cases, additionally the position of the minimum element is required. To get the index of the minimum element, we can use the <code class="docutils literal notranslate"><span class="pre">argmin()</span></code> method of torch. The maximum element and it’s position can analogously be determined by using <code class="docutils literal notranslate"><span class="pre">max()</span></code> and <code class="docutils literal notranslate"><span class="pre">argmax()</span></code> respectively.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># creating tensor filled with random numbers
+x = pt.rand(size=(1, 5))
+
+print(&quot;x = &quot;, x)
+print(f&quot;min(x) = {&#39;{:.4f}&#39;.format(pt.min(x).item())} at position {pt.argmin(x).item()}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x =  tensor([[0.3725, 0.4079, 0.6791, 0.5484, 0.3855]])
+min(x) = 0.3725 at position 0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="combining-tensor-operations">
+<h4>Combining tensor operations<a class="headerlink" href="#combining-tensor-operations" title="Permalink to this headline">#</a></h4>
+<p>We only looked at single tensor operations so far. When programming in Python, however, we can combine these methods in order shorten the code while at the same time making it more efficient. The following example illustrates a possible implementation for calculating the <span class="math notranslate nohighlight">\(L_2-\)</span>norm of a vector:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># let&#39;s define two vectors
+x = pt.rand(size=(3, 1))
+y = pt.rand(size=(3, 1))
+
+# now we want to calculate the L2-norm between the vector elements without combining methods
+l2 = x-y
+l2 = l2.square()
+l2 = l2.mean()
+print(&quot;L2(x, y) = &quot;, l2.item())
+
+# a more clear and efficient way:
+print(&quot;L2(x, y) = &quot;, (x-y).square().mean().item())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>L2(x, y) =  0.026688523590564728
+L2(x, y) =  0.026688523590564728
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="handling-column-like-data-with-pandas">
+<h2>5. Handling column-like data with Pandas<a class="headerlink" href="#handling-column-like-data-with-pandas" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://pandas.pydata.org/">Pandas</a> is a library providing many tools for data analysis. In Pandas so called <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>s are largely used, which is a similar way of structuring data as in the built-in <code class="docutils literal notranslate"><span class="pre">dict()</span></code>. Since Pandas provides a vast amount of tools, within this section only the <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code> method, which is frequently used throughout the lecture and exercise, shall be presented.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code> method can be used to read in <span class="math notranslate nohighlight">\(.csv\)</span> files column-like data. Although the method is named <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code>, other file types can be read in as well, while the data within the files can be separated by any arbitrary separator. This separator has to be specified as keyword argument when calling the function. The following example illustrates a possible use of the <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dummy_str = &quot;&quot;&quot;
+       XFOIL         Version 6.93
+  
+ Calculated polar for: NACA 67-414                                     
+  
+ 1 1 Reynolds number fixed          Mach number fixed         
+  
+ xtrf =   1.000 (top)        1.000 (bottom)  
+ Mach =   0.500     Re =     5.000 e 6     Ncrit =  13.000 13.000
+  
+  alpha     CL        CD       CDp       CM    Top_Xtr Bot_Xtr    CQ       CDq  
+ ------- -------- --------- --------- -------- ------- ------- -------- --------
+   0.000   0.4239 0.0032031 0.0010239  -0.1011  0.7862  0.7914  0.00000  0.00000
+   0.250   0.4581 0.0032021 0.0010260  -0.1015  0.7833  0.7957  0.00000  0.00000
+   0.500   0.4914 0.0032155 0.0010364  -0.1017  0.7799  0.7989  0.00000  0.00000
+   0.750   0.5251 0.0032287 0.0010587  -0.1020  0.7757  0.8017  0.00000  0.00000
+   1.000   0.5594 0.0032471 0.0010826  -0.1024  0.7717  0.8043  0.00000  0.00000
+   1.250   0.5917 0.0032885 0.0011012  -0.1023  0.7661  0.8058  0.00000  0.00000
+   1.500   0.6259 0.0032757 0.0011005  -0.1027  0.7603  0.8069  0.00000  0.00000
+   1.750   0.6575 0.0032830 0.0011012  -0.1025  0.7521  0.8084  0.00000  0.00000
+   2.000   0.6872 0.0033220 0.0011216  -0.1018  0.7399  0.8093  0.00000  0.00000
+&quot;&quot;&quot;
+
+# we wrap the string above in a file-like object
+from io import StringIO
+
+dummy_csv = StringIO(dummy_str)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we want to read in this data using the <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code> method. Firstly, we need to get rid of the header since it contains no relevant data. This can be achieved by using the keyword <code class="docutils literal notranslate"><span class="pre">skiprow=9</span></code>, meaning we want to ignore whatever data is in rows <span class="math notranslate nohighlight">\(0-9\)</span>. Secondly, we have to define the separator as white space <code class="docutils literal notranslate"><span class="pre">sep=r&quot;\s+&quot;</span></code>, because our data is not separated by commas, which is the default value for the <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code> method. Lastly, we want the names of the columns in the file to be the names in the dataframe in order to access them later by name. This can be done using the keyword <code class="docutils literal notranslate"><span class="pre">header=0</span></code>, meaning we want the strings in the <span class="math notranslate nohighlight">\(1^{st}\)</span> row to be set as column names (we neglect the rows <span class="math notranslate nohighlight">\(0...9\)</span>, therefore pandas starts to read in at row <span class="math notranslate nohighlight">\(10\)</span> of the original data file).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from pandas import read_csv
+
+# let&#39;s import this file
+# for a real .csv file, replace dummy_csv with the file path
+data = read_csv(dummy_csv, sep=r&quot;\s+&quot;, skiprows=9, header=0)
+
+# we can print out the first few lines to see if we did everything correcly using data.head():
+print(data.head())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     alpha        CL         CD        CDp        CM  Top_Xtr  Bot_Xtr  \
+0  -------  --------  ---------  ---------  --------  -------  -------   
+1    0.000    0.4239  0.0032031  0.0010239   -0.1011   0.7862   0.7914   
+2    0.250    0.4581  0.0032021  0.0010260   -0.1015   0.7833   0.7957   
+3    0.500    0.4914  0.0032155  0.0010364   -0.1017   0.7799   0.7989   
+4    0.750    0.5251  0.0032287  0.0010587   -0.1020   0.7757   0.8017   
+
+         CQ       CDq  
+0  --------  --------  
+1   0.00000   0.00000  
+2   0.00000   0.00000  
+3   0.00000   0.00000  
+4   0.00000   0.00000  
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alternatively, we can specify which columns we want to read in using the keyword <code class="docutils literal notranslate"><span class="pre">usecols</span></code> and change the names of these columns as well with the keyword <code class="docutils literal notranslate"><span class="pre">names</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># only read in the 1st two columns and give them a different name
+data = read_csv(StringIO(dummy_str), sep=r&quot;\s+&quot;, skiprows=9, header=0, usecols=[0, 1], names=[&quot;aoa&quot;, &quot;cl&quot;])
+print(data.head())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       aoa        cl
+0  -------  --------
+1    0.000    0.4239
+2    0.250    0.4581
+3    0.500    0.4914
+4    0.750    0.5251
+</pre></div>
+</div>
+</div>
+</div>
+<p>The data in the dataframe can now be accessed by the names of the columns, similarly to dicts, e.g., by typing <code class="docutils literal notranslate"><span class="pre">aoa</span> <span class="pre">=</span> <span class="pre">data[&quot;aoa&quot;]</span></code>, we would assign all the data of the <code class="docutils literal notranslate"><span class="pre">aoa</span></code> column to the variable <code class="docutils literal notranslate"><span class="pre">aoa</span></code>.</p>
+</section>
+<section id="dealing-with-error-messages-and-debugging-code">
+<h2>Dealing with error messages and debugging code<a class="headerlink" href="#dealing-with-error-messages-and-debugging-code" title="Permalink to this headline">#</a></h2>
+<p>When writing code, making mistakes is envidable. The following section deals with common mistakes when writing code and how to interpret and solve error messages. However, the here presented suggestions and examples should be understand just as guidance, since everybody follows a slighty different approach when it comes to dealing with bugs.</p>
+<p>In general, the usage of an integrated development environment (IDE) such as <a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a> or <a class="reference external" href="https://www.jetbrains.com/pycharm/">PyCharm</a> is highly recommended. IDE’s provide useful tools for software development, e.g. a debugger, in which the written code can be debugged. The code can here be executed line-by-line while all relevant information is displayed and directly accessible. Further, IDE’s provide useful functionality such as autocomplete and automatically enclosing any open brackets, which makes writing code faster and less prone to errors.</p>
+<p>When encountering an error, the python interpreter displays an error message, as already shown in some of the previous examples. The error message itself consists of the position of the error (line where the error was encountered) and what the error actually is (error message). In more complex code, Python additionally provides a so called <span class="math notranslate nohighlight">\(traceback\)</span> of the error, which represents the complete “path” from the main script (or function) to the line of code where the error was encountered.</p>
+<p>Let’s have a look at some common errors and possible way how to fix them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># 1st example: indentation error
+for i in range(3):
+    if i == 1:
+        print(i)
+    else:
+        print(i+1)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>  <span class="n">File</span> <span class="o">&lt;</span><span class="n">tokenize</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">5</span>
+    <span class="k">else</span><span class="p">:</span>
+    <span class="o">^</span>
+<span class="ne">IndentationError</span>: unindent does not match any outer indentation level
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, the code itself seems to be fine. A look at the end of the error message, however, tells us that there is something wrong with the <code class="docutils literal notranslate"><span class="pre">else</span></code> statement. The <code class="docutils literal notranslate"><span class="pre">IndentationError</span></code> occurs, if the blocks of code are not aligned correctly. We can fix this by adding one space in front of the <code class="docutils literal notranslate"><span class="pre">else</span></code> statement, so that it is aligned with the <code class="docutils literal notranslate"><span class="pre">if</span></code> statement.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># 2nd example: how to deal with tracebacks
+import matplotlib.pyplot as plt
+
+# create some function for plotting data
+def plot_data(x, y):
+    fig, ax = plt.subplot(1, 1)
+    ax.plot(x, y, color=&quot;black&quot;)
+    ax.set_xlabel(&quot;x&quot;)
+    ax.set_ylabel(&quot;y&quot;)
+    plt.show()
+    
+# &#39;if __name__==&quot;__main__&quot;:&#39; means that the following code is only executed when this script is executed as &#39;main&#39;,
+# but if we call the &#39;plot_data&#39; function from another script, this won&#39;t be executed
+if __name__==&quot;__main__&quot;:
+    x = [1, 2, 3]
+    y = [0.5, 0.8, 1.5]
+    plot_data(x, y)
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">53</span><span class="p">],</span> <span class="n">line</span> <span class="mi">17</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]</span>
+<span class="ne">---&gt; </span><span class="mi">17</span> <span class="n">plot_data</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nn">Cell In [53], line 6,</span> in <span class="ni">plot_data</span><span class="nt">(x, y)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">def</span> <span class="nf">plot_data</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="ne">----&gt; </span><span class="mi">6</span>     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~/Development/ml-cfd-lecture/ml-cfd/lib/python3.10/site-packages/matplotlib/pyplot.py:1254,</span> in <span class="ni">subplot</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1251</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">gcf</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1253</span> <span class="c1"># First, search for an existing subplot with a matching spec.</span>
+<span class="ne">-&gt; </span><span class="mi">1254</span> <span class="n">key</span> <span class="o">=</span> <span class="n">SubplotSpec</span><span class="o">.</span><span class="n">_from_subplot_args</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1256</span> <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1257</span>     <span class="c1"># if we found an Axes at the position sort out if we can re-use it</span>
+<span class="g g-Whitespace">   </span><span class="mi">1258</span>     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;get_subplotspec&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_subplotspec</span><span class="p">()</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1259</span>         <span class="c1"># if the user passed no kwargs, re-use</span>
+
+<span class="nn">File ~/Development/ml-cfd-lecture/ml-cfd/lib/python3.10/site-packages/matplotlib/gridspec.py:598,</span> in <span class="ni">SubplotSpec._from_subplot_args</span><span class="nt">(figure, args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">596</span>     <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="n">args</span>
+<span class="g g-Whitespace">    </span><span class="mi">597</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">598</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;subplot() takes 1 or 3 positional arguments but &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">599</span>                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="si">}</span><span class="s2"> were given&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">601</span> <span class="n">gs</span> <span class="o">=</span> <span class="n">GridSpec</span><span class="o">.</span><span class="n">_check_gridspec_exists</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">602</span> <span class="k">if</span> <span class="n">gs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="ne">TypeError</span>: subplot() takes 1 or 3 positional arguments but 2 were given
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 640x480 with 0 Axes&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, the error message looks quite complicated. The last line of the error message tells us that we encountered a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> due to invalid arguments for the method <code class="docutils literal notranslate"><span class="pre">plt.subplot()</span></code>. Whenever getting an error caused by libraries, it is likely that we made a mistake in our code rather than that the library has a bug, since in general libraries are tested and regularly updated. So in this case it makes sense to start at the top of the error message. The first entry tells us that the error has something to do with calling out <code class="docutils literal notranslate"><span class="pre">plot_data()</span></code> function in the main script. Within this function, the statement <code class="docutils literal notranslate"><span class="pre">fig,</span> <span class="pre">ax</span> <span class="pre">=</span> <span class="pre">plt.subplot(1,</span> <span class="pre">1)</span></code> is listed as next in the error message. Something in this line caused matplotlib to raise an <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> as shown by the <span class="math notranslate nohighlight">\(3^{rd}\)</span> entry of the error message. If we take a close look at this error message, we can see that matplotlib prints out the statement <code class="docutils literal notranslate"><span class="pre">&quot;The</span> <span class="pre">subplot</span> <span class="pre">index</span> <span class="pre">argument</span> <span class="pre">to</span> <span class="pre">subplot()</span> <span class="pre">appears</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">boolean.</span> <span class="pre">Did</span> <span class="pre">you</span> <span class="pre">intend</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">subplots()?&quot;</span></code>. By looking again into our <code class="docutils literal notranslate"><span class="pre">plot_data()</span></code> function, we can see that we typed <code class="docutils literal notranslate"><span class="pre">plt.subplot()</span></code> instead of <code class="docutils literal notranslate"><span class="pre">plt.subplots()</span></code> which then lead to this error.</p>
+<p>In a lot of cases the cause of an error is rather simple as shown in the previous examples. Some commonly made mistakes may be:</p>
+<ul class="simple">
+<li><p>forgotten or wrong brackets, e.g. using <code class="docutils literal notranslate"><span class="pre">()</span></code> instead of <code class="docutils literal notranslate"><span class="pre">[]</span></code> when trying to access elements of a list (in contrast to other languages such as Matlab, where <code class="docutils literal notranslate"><span class="pre">()</span></code> is used to access elements)</p></li>
+<li><p>too many brackets, e.g. because some expression was deleted but the closing bracket is still present: <code class="docutils literal notranslate"><span class="pre">call_some_method(parameter))</span></code></p></li>
+<li><p>confusing similar methods, such as <code class="docutils literal notranslate"><span class="pre">plt.xlabel(&quot;...&quot;)</span></code> vs. <code class="docutils literal notranslate"><span class="pre">ax.set_xlabel(&quot;...&quot;)</span></code> methods within the matplotlib.pyplot library</p></li>
+<li><p>using a wrong separator when reading in files, e.g., with the pandas library</p></li>
+<li><p>Python is quite sensitive to indents (in contrast to other languages such as C++), meaning each block of code needs to be aligned</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<section id="python-documentation">
+<h3>Python documentation:<a class="headerlink" href="#python-documentation" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3.3/library/functions.html">python docs</a> for built-in functions</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/tutorial/controlflow.html">python docs</a> for flow control statements</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/tutorial/datastructures.html#looping-techniques">python docs</a> for lists</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/tutorial/classes.html">python docs</a> for classes (especially section 9.3, 9.5)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/glossary.html#term-decorator">python docs</a> for decorators</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3.3/library/functions.html#property">python docs</a> for the &#64;property decorator</p></li>
+<li><p><a class="reference external" href="https://flowmodelingcontrol.github.io/flowtorch-docs/1.1/index.html">flowTorch</a> library</p></li>
+<li><p><a class="reference external" href="https://matplotlib.org/stable/index.html">Matplotlib</a> library</p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">read_csv</a> method in pandas</p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/user_guide/index.html#user-guide">Pandas</a> user guide</p></li>
+<li><p><a class="reference external" href="https://pytorch.org/docs/stable/index.html">PyTorch docs</a> general</p></li>
+<li><p><a class="reference external" href="https://pytorch.org/tutorials/beginner/introyt/tensors_deeper_tutorial.html">PyTorch docs</a> for tensors</p></li>
+</ul>
+</section>
+<section id="other-references">
+<h3>Other references:<a class="headerlink" href="#other-references" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://realpython.com/python-lambda/">lambda expressions</a></p></li>
+<li><p><a class="reference external" href="https://realpython.com/primer-on-python-decorators/">decorators</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=r7Dtus7N4pI">Python Decorators in 15 Minutes</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="cylinder_drl.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Controlling the flow past a cylinder</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="system_setup.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Setting up your system</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

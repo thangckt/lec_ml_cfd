@@ -1,0 +1,778 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Machine learning in computational fluid dynamics &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Course overview and motivation" href="notebooks/ml_cfd_intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks/cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/README.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lectures">
+   Lectures
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercises">
+   Exercises
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prerequisites">
+     Prerequisites
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-sessions">
+     Exercise sessions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#datasets">
+   Datasets
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-and-providing-help-and-feedback">
+   Getting and providing help and feedback
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#glossary">
+   Glossary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references-and-other-resources">
+   References and other resources
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#book-recommendations">
+     Book recommendations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#video-content">
+     Video content
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Machine learning in computational fluid dynamics</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lectures">
+   Lectures
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercises">
+   Exercises
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prerequisites">
+     Prerequisites
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-sessions">
+     Exercise sessions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#datasets">
+   Datasets
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-and-providing-help-and-feedback">
+   Getting and providing help and feedback
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#glossary">
+   Glossary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references-and-other-resources">
+   References and other resources
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#book-recommendations">
+     Book recommendations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#video-content">
+     Video content
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="funding_logo" src="_images/logo_stiftung_hochschullehre.png" /></p>
+<p>This lecture is funded by the <a class="reference external" href="https://stiftung-hochschullehre.de/">foundation for innovation in higher education</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="machine-learning-in-computational-fluid-dynamics">
+<h1>Machine learning in computational fluid dynamics<a class="headerlink" href="#machine-learning-in-computational-fluid-dynamics" title="Permalink to this headline">#</a></h1>
+<p>This repository contains resources accompanying the lecture <a class="reference external" href="https://www.tu-braunschweig.de/en/ism/teaching/courses/fluid-mechanics/translate-to-english-maschinelles-lernen-in-der-numerischen-stroemungsmechanik">machine learning in computational fluid dynamics</a> provided by the Institute of Fluid Mechanics at TU Braunschweig. <strong>Note that slides, notebooks, and other resources will be regularly updated throughout the term.</strong></p>
+<section id="lectures">
+<h2>Lectures<a class="headerlink" href="#lectures" title="Permalink to this headline">#</a></h2>
+<p>If equations in the lecture notebooks do not get rendered properly on Github, download the notebook and open it using <code class="docutils literal notranslate"><span class="pre">jupyter-lab</span></code> (refer to the first exercise session for an overview of dependencies and installation instructions).</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:right head"><p>#</p></th>
+<th class="text-align:left head"><p>topic</p></th>
+<th class="text-align:center head"><p>slides</p></th>
+<th class="text-align:left head"><p>notebook</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:right"><p>1</p></td>
+<td class="text-align:left"><p>Course overview and motivation</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/ml_cfd_intro.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/ml_cfd_intro.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>2+3</p></td>
+<td class="text-align:left"><p>Finite-volume-based simulations in a nutshell</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/cfd_intro.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cfd_intro.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>4+5</p></td>
+<td class="text-align:left"><p>Introduction to machine learning</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/ml_intro.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/ml_intro.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>6</p></td>
+<td class="text-align:left"><p>Surrogate modeling for discrete predictions</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/bubble_path_classification.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/bubble_path_classification.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>7+8</p></td>
+<td class="text-align:left"><p>Surrogate modeling for continuous predictions</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/mass_transfer_regression.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/mass_transfer_regression.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>9</p></td>
+<td class="text-align:left"><p>Approximating flow fields from limited data</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/cylinder_pinn.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_pinn.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>10+11</p></td>
+<td class="text-align:left"><p>Analyzing coherent structures</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/coherent_structures_dim_reduction.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/coherent_structures_dim_reduction.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>12</p></td>
+<td class="text-align:left"><p>Reduced-order modeling of flow fields</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/cylinder_rom.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_rom.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>13</p></td>
+<td class="text-align:left"><p>Optimal open-loop control</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/cylinder_bayesian_opt.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_bayesian_opt.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>14+15</p></td>
+<td class="text-align:left"><p>Closed-loop control using DRL</p></td>
+<td class="text-align:center"><p><a class="reference external" href="https://andreweiner.github.io/ml-cfd-slides/cylinder_drl.html">link</a></p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_drl.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">#</a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">#</a></h3>
+<p>The exercises are designed for native Linux operating systems like Ubuntu (recommended). They may also work on Windows Subsystem for Linux (WSL). To set up your system for the exercises, refer to the notebook accompanying exercise session 1.</p>
+</section>
+<section id="exercise-sessions">
+<h3>Exercise sessions<a class="headerlink" href="#exercise-sessions" title="Permalink to this headline">#</a></h3>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:right head"><p>#</p></th>
+<th class="text-align:left head"><p>topic</p></th>
+<th class="text-align:left head"><p>notebook</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:right"><p>0</p></td>
+<td class="text-align:left"><p>Course-specific Python refresher</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/python_intro.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>1</p></td>
+<td class="text-align:left"><p>Setting up your system</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/system_setup.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>2+3</p></td>
+<td class="text-align:left"><p>End-to-end simulations in OpenFOAM and Basilisk</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cfd_intro_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>4+5</p></td>
+<td class="text-align:left"><p>End-to-end machine learning project in PyTorch</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/ml_intro_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>6</p></td>
+<td class="text-align:left"><p>Building a robust path regime classification model</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/bubble_path_classification_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>7+8</p></td>
+<td class="text-align:left"><p>Computing highly accurate mass transfer at rising bubbles</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/mass_transfer_regression_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>9</p></td>
+<td class="text-align:left"><p>Learning the flow past a cylinder from limited data</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_pinn_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>10+11</p></td>
+<td class="text-align:left"><p>Analyzing coherent structures with POD and DMD</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/coherent_structures_dim_reduction_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>12</p></td>
+<td class="text-align:left"><p>Creating a reduced-order model using CNM</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_rom_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>13</p></td>
+<td class="text-align:left"><p>Optimal open-loop control of the flow past a cylinder</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_bayesian_opt_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>14+15</p></td>
+<td class="text-align:left"><p>Closed-loop control of the flow past a cylinder</p></td>
+<td class="text-align:left"><p><a class="reference internal" href="notebooks/cylinder_drl_exercise.html"><span class="doc std std-doc">view</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="datasets">
+<h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">#</a></h2>
+<p>Both exercises and lectures sometimes require datasets. Usually, there are instructions how to create or extract the data yourself. For convenience, a downloadable snapshot of the <a class="reference external" href="https://cloudstorage.tu-braunschweig.de/getlink/fiYPP9HwVaypRziqMCjZuQVx/datasets_20_Dec_2021.zip">latest data (20. Dec 2021)</a> is provided, too.</p>
+</section>
+<section id="getting-and-providing-help-and-feedback">
+<h2>Getting and providing help and feedback<a class="headerlink" href="#getting-and-providing-help-and-feedback" title="Permalink to this headline">#</a></h2>
+<p>If you</p>
+<ul class="simple">
+<li><p>get stuck solving an exercise problem</p></li>
+<li><p>have technical issues</p></li>
+<li><p>have theoretical questions about math or programming</p></li>
+<li><p>think that some instructions or explanations might need improvement</p></li>
+<li><p>want to report typos or logical errors</p></li>
+<li><p>want to provide feedback and suggestions about the course</p></li>
+</ul>
+<p>the easiest way to get in touch is to open a <a class="reference external" href="https://github.com/AndreWeiner/ml-cfd-lecture/issues/new">new issue</a> in this repository. Before opening a new issue, please use the <strong>search function</strong> to see if a related issue was reported previously. It also helps greatly if you label your issue using one or more of the predefined labels (lecture, exercise, OpenFOAM, …), and if you take some time to state your problem as clearly as possible. <strong>Note that everyone is welcome to participate in discussion and solving issues.</strong></p>
+<p>If you are a student at TU Braunschweig enrolled in the course <em>Machine Learning in Computational Fluid Dynamics</em>, you may also get in touch via the <a class="reference external" href="https://studip.tu-braunschweig.de/dispatch.php/course/overview?cid=f79375e64fd07fe6606d810ab17496e7">studIP</a> platform or via mail. However, the issue-workflow described above is the preferred method.</p>
+</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">#</a></h2>
+<p>The following list of acronyms may help you when exploring notebooks and slides:</p>
+<ul class="simple">
+<li><p><strong>CFD</strong> - computational fluid dynamics</p></li>
+<li><p><strong>CNM</strong> - cluster-based network modeling</p></li>
+<li><p><strong>DL</strong> - deep learning</p></li>
+<li><p><strong>DRL</strong> - deep reinforcement learning</p></li>
+<li><p><strong>GPU</strong> - graphics processing unit</p></li>
+<li><p><strong>IEEE</strong> - Institute of Electrical and Electronics Engineers</p></li>
+<li><p><strong>IEEE 754</strong> - IEEE standard for floating-point arithmetics</p></li>
+<li><p><strong>JIT</strong> - just in time (compiler)</p></li>
+<li><p><strong>LES</strong> - large eddy simulation</p></li>
+<li><p><strong>LHS</strong> - latin hypercube sampling</p></li>
+<li><p><strong>MAE</strong> - mean absolute error</p></li>
+<li><p><strong>ML</strong> - machine learning</p></li>
+<li><p><strong>MPI</strong> - message passing interface</p></li>
+<li><p><strong>MSE</strong> - mean squared error</p></li>
+<li><p><strong>PINN</strong> - physics-informed neural network</p></li>
+<li><p><strong>RANS</strong> - Reynolds-averaged Navier Stokes</p></li>
+<li><p><strong>RL</strong> - reinforcement learning</p></li>
+<li><p><strong>TPU</strong> - tensor processing unit</p></li>
+</ul>
+</section>
+<section id="references-and-other-resources">
+<h2>References and other resources<a class="headerlink" href="#references-and-other-resources" title="Permalink to this headline">#</a></h2>
+<section id="book-recommendations">
+<h3>Book recommendations<a class="headerlink" href="#book-recommendations" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>books for computational fluid dynamics</p>
+<ul>
+<li><p><a class="reference external" href="https://zenodo.org/record/4630596#.YXBgepuxVH4">The OpenFOAM technology primer</a> by T. Marić, J. Höpken, and K. G. Mooney</p></li>
+<li><p><em>The finite volume method in computational fluid dynamics</em> by F. Moukalled, L. Mangani, and M. Darwish</p></li>
+<li><p><em>An introduction to computational fluid dynamics: the finite volume method</em> by H. K. Versteeg and W. Malalasekera</p></li>
+</ul>
+</li>
+<li><p>books for linear algebra</p>
+<ul>
+<li><p><em>Introduction to linear algebra</em> by G. Strang</p></li>
+</ul>
+</li>
+<li><p>books for data-driven modelling and control</p>
+<ul>
+<li><p><em>Data-driven science and engineering: machine learning, dynamical systems, and control</em> by S. L. Brunton and J. N. Kutz</p></li>
+<li><p><em>Dynamic mode decomposition: data-driven modeling of complex systems</em> by J. N. Kutz, S. L. Brunton, B. W. Brunton, and J. L. Proctor</p></li>
+<li><p><em>Grokking deep reinforcement learning</em> by M. Morales</p></li>
+<li><p><em>Deep learning with PyTorch</em> by E. Stevens, L. Antiga, and T. Viehmann</p></li>
+</ul>
+</li>
+<li><p>books for programming</p>
+<ul>
+<li><p><em>Python crash course</em> by E. Matthes</p></li>
+<li><p><em>C++ crash course: a fast-paced introduction</em> by J. Lospinoso</p></li>
+<li><p><a class="reference external" href="https://linuxcommand.org/tlcl.php">The Linux command line</a> by W. Shotts</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="video-content">
+<h3>Video content<a class="headerlink" href="#video-content" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.youtube.com/c/Eigensteve">YouTube channel of Steve Brunton</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/channel/UCjdgpuxuAxH9BqheyE82Vvw">YouTube channel of József Nagy</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/channel/UCcqQi9LT0ETkRoUu8eYaEkg">YouTube channel Fluid Mechanics 101</a></p></li>
+</ul>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='right-next' id="next-link" href="notebooks/ml_cfd_intro.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Course overview and motivation</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

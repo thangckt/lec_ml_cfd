@@ -1,0 +1,1421 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Predicting the stability regime of rising bubbles &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Computing highly accurate mass transfer at rising bubbles" href="mass_transfer_regression.html" />
+    <link rel="prev" title="Introduction to machine learning" href="ml_intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/bubble_path_classification.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#forces-acting-on-a-rising-bubble">
+   Forces acting on a rising bubble
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-inspecting-and-preparing-the-data">
+   Loading, inspecting, and preparing the data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#binary-classification">
+   Binary classification
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#manual-binary-classification">
+     Manual binary classification
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#extension-to-multiple-classes">
+   Extension to multiple classes
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Predicting the stability regime of rising bubbles</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#forces-acting-on-a-rising-bubble">
+   Forces acting on a rising bubble
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-inspecting-and-preparing-the-data">
+   Loading, inspecting, and preparing the data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#binary-classification">
+   Binary classification
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#manual-binary-classification">
+     Manual binary classification
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#extension-to-multiple-classes">
+   Extension to multiple classes
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="predicting-the-stability-regime-of-rising-bubbles">
+<h1>Predicting the stability regime of rising bubbles<a class="headerlink" href="#predicting-the-stability-regime-of-rising-bubbles" title="Permalink to this headline">#</a></h1>
+<p>In this notebook, we cover the following topics:</p>
+<ul class="simple">
+<li><p>Forces acting on a rising bubbles</p></li>
+<li><p>Loading, inspecting, and preparing the data</p></li>
+<li><p>Binary classification</p></li>
+<li><p>Extension to multiple classes</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from typing import List, Tuple
+from os.path import join
+import pandas as pd
+import numpy as np
+import torch as pt
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from lecture_utils import train_model
+
+# make results reproducible
+pt.manual_seed(0)
+
+# increase plot resolution
+plt.rcParams[&quot;figure.dpi&quot;] = 160
+
+# create output directory
+output = &quot;output&quot;
+!mkdir -p $output
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">torch</span> <span class="k">as</span> <span class="nn">pt</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">LinearSegmentedColormap</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="forces-acting-on-a-rising-bubble">
+<h2>Forces acting on a rising bubble<a class="headerlink" href="#forces-acting-on-a-rising-bubble" title="Permalink to this headline">#</a></h2>
+<p><video controls height="800" src="./media/b8_mesh_plic.mp4"></video></p>
+</section>
+<section id="loading-inspecting-and-preparing-the-data">
+<h2>Loading, inspecting, and preparing the data<a class="headerlink" href="#loading-inspecting-and-preparing-the-data" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_path = &quot;../datasets/path_shape_regimes/&quot;
+regimes = [&quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot;]
+raw_data_files = [f&quot;regime_{regime}.csv&quot; for regime in regimes]
+files = [pd.read_csv(data_path + file_name, header=0, names=[&quot;Ga&quot;, &quot;Eo&quot;]) for file_name in raw_data_files]
+for data, regime in zip(files, regimes):
+    data[&quot;regime&quot;] = regime
+data = pd.concat(files, ignore_index=True)
+data.sample(5)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ga</th>
+      <th>Eo</th>
+      <th>regime</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>34</th>
+      <td>71.1780</td>
+      <td>0.49795</td>
+      <td>II</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>7.0927</td>
+      <td>0.48984</td>
+      <td>I</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>513.8100</td>
+      <td>0.50619</td>
+      <td>II</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>6.9759</td>
+      <td>10.04600</td>
+      <td>I</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>101.1280</td>
+      <td>50.20600</td>
+      <td>V</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data.describe()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ga</th>
+      <th>Eo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>103.000000</td>
+      <td>103.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>122.638672</td>
+      <td>37.759512</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>149.717655</td>
+      <td>58.145646</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>6.939000</td>
+      <td>0.099640</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>22.600500</td>
+      <td>1.000500</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>60.116000</td>
+      <td>10.046000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>186.545000</td>
+      <td>48.188500</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>518.290000</td>
+      <td>212.910000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>markers = [&quot;o&quot;, &quot;x&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;*&quot;]
+for regime, marker in zip(regimes, markers):
+    plt.scatter(data[data[&quot;regime&quot;] == regime].Ga, data[data[&quot;regime&quot;] == regime].Eo,
+                marker=marker, label=regime)
+plt.legend(loc=&#39;upper center&#39;, bbox_to_anchor=(0.5, 1.11), ncol=5)
+plt.xlabel(r&quot;$Ga$&quot;)
+plt.ylabel(r&quot;$Eo$&quot;)
+plt.savefig(join(output, &quot;ga_eo_data_raw.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_6_0.png" src="../_images/bubble_path_classification_6_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+ax1.hist(data.Ga, rwidth=0.95)
+ax1.set_xlabel(r&quot;$Ga$&quot;)
+ax1.set_ylabel(r&quot;samples&quot;)
+ax2.hist(data.Eo, rwidth=0.95)
+ax2.set_xlabel(r&quot;$Eo$&quot;)
+plt.savefig(join(output, &quot;ga_eo_raw_histogram.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_7_0.png" src="../_images/bubble_path_classification_7_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>logData = data[[&quot;Ga&quot;, &quot;Eo&quot;]].apply(np.log10)
+logData[&quot;regime&quot;] = data[&quot;regime&quot;].copy()
+min_vals = logData[[&quot;Ga&quot;, &quot;Eo&quot;]].min()
+max_vals = logData[[&quot;Ga&quot;, &quot;Eo&quot;]].max()
+logData[[&quot;Ga&quot;, &quot;Eo&quot;]] = (logData[[&quot;Ga&quot;, &quot;Eo&quot;]] - min_vals) / (max_vals - min_vals)
+logData[[&quot;Ga&quot;, &quot;Eo&quot;]] = logData[[&quot;Ga&quot;, &quot;Eo&quot;]] * 2.0 - 1.0
+
+for regime, marker in zip(regimes, markers):
+    plt.scatter(logData[logData[&quot;regime&quot;] == regime].Ga, logData[logData[&quot;regime&quot;] == regime].Eo,
+                marker=marker, label=regime)
+plt.legend(loc=&#39;upper center&#39;, bbox_to_anchor=(0.5, 1.11), ncol=5)
+plt.xlabel(r&quot;$\tilde{Ga}$&quot;)
+plt.ylabel(r&quot;$\tilde{Eo}$&quot;)
+plt.savefig(join(output, &quot;ga_eo_log.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_8_0.png" src="../_images/bubble_path_classification_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+ax1.hist(logData.Ga, rwidth=0.95)
+ax1.set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+ax1.set_ylabel(r&quot;samples&quot;)
+ax2.hist(logData.Eo, rwidth=0.95)
+ax2.set_xlabel(r&quot;$\tilde{Eo}$&quot;)
+plt.savefig(join(output, &quot;ga_eo_log_histogram.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_9_0.png" src="../_images/bubble_path_classification_9_0.png" />
+</div>
+</div>
+</section>
+<section id="binary-classification">
+<h2>Binary classification<a class="headerlink" href="#binary-classification" title="Permalink to this headline">#</a></h2>
+<section id="manual-binary-classification">
+<h3>Manual binary classification<a class="headerlink" href="#manual-binary-classification" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def weighted_sum(logGa: pt.Tensor, logEo: pt.Tensor, p: pt.Tensor) -&gt; pt.Tensor:
+    &quot;&quot;&quot;Compute the weighted sum of log(Ga), log(Eo), and bias.
+
+    :param logGa: common logarithm of Galilei number
+    :type logGa: pt.Tensor
+    :param logEo: common logarithm of Eötvös number
+    :type logEo: pt.Tensor
+    :param p: weight parameter
+    :type p: pt.Tensor
+    :return: weighted sum of log(Ga), log(Eo), and bias
+    :rtype: pt.Tensor
+    &quot;&quot;&quot;
+    n_samples = logGa.shape[0]
+    features = pt.vstack((logGa, logEo, pt.ones(n_samples))).T
+    return features.mv(p)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def add_markers(ax, regime_ind):
+    for i in regime_ind:
+        ax.scatter(logData[logData[&quot;regime&quot;] == regimes[i]].Ga, logData[logData[&quot;regime&quot;] == regimes[i]].Eo,
+                   marker=markers[i], s=10, lw=1, c=f&quot;C{i}&quot;, alpha=0.8) 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xx, yy = pt.meshgrid(
+    pt.linspace(-1.1, 1.1, 500),
+    pt.linspace(-1.1, 0.8, 500)
+)
+cm = LinearSegmentedColormap.from_list(&quot;blue_to_orange&quot;, [&#39;C0&#39;, &#39;C1&#39;], 20)
+fig, axarr = plt.subplots(1, 4, figsize=(6, 2), sharex=True, sharey=True)
+
+for i, w in enumerate(pt.linspace(1, 4, 4)):
+    weighted_inputs = weighted_sum(xx.flatten(), yy.flatten(), pt.tensor([w, 1.0, 1.0]))
+    axarr[i].contourf(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+    axarr[i].contour(xx, yy, weighted_inputs.reshape(xx.shape), levels=(0,), cmap=cm, linestyles=&quot;--&quot;, )
+    cont = axarr[i].contour(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+    axarr[i].clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=10,  zorder=6, inline=True)
+    axarr[i].set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    axarr[i].set_title(r&quot;$z=\mathbf{&quot; + f&quot;{w:1.1f}&quot; + r&quot;}\tilde{Ga} + 1.0\tilde{Eo} +1.0$&quot;, fontsize=6)
+    add_markers(axarr[i], (0, 1))
+    axarr[i].set_ylim(-1.1, 0.75)
+axarr[0].set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+plt.savefig(join(output, &quot;weighted_sum_ga_var.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_13_0.png" src="../_images/bubble_path_classification_13_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(1, 4, figsize=(6, 2), sharex=True, sharey=True)
+
+for i, w in enumerate(pt.linspace(1.0, 4.0, 4)):
+    weighted_inputs = weighted_sum(xx.flatten(), yy.flatten(), pt.tensor([1.0, w, 1.0]))
+    axarr[i].contourf(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+    axarr[i].contour(xx, yy, weighted_inputs.reshape(xx.shape), levels=(0,), cmap=cm, linestyles=&quot;--&quot;, )
+    cont = axarr[i].contour(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+    axarr[i].clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=20,  zorder=6)
+    axarr[i].set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    axarr[i].set_title(r&quot;$z=1.0\tilde{Ga} + \mathbf{&quot; + f&quot;{w:1.1f}&quot; + r&quot;}\tilde{Eo} + 1.0$&quot;, fontsize=6)
+    add_markers(axarr[i], (0, 1))
+    axarr[i].set_ylim(-1.1, 0.75)
+axarr[0].set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+plt.savefig(join(output, &quot;weighted_sum_eo_var.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_14_0.png" src="../_images/bubble_path_classification_14_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(1, 4, figsize=(6, 2), sharex=True, sharey=True)
+
+for i, w in enumerate(pt.linspace(0, 3, 4)):
+    weighted_inputs = weighted_sum(xx.flatten(), yy.flatten(), pt.tensor([3.0, 1.0, w]))
+    axarr[i].contourf(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+    axarr[i].contour(xx, yy, weighted_inputs.reshape(xx.shape), levels=(0,), cmap=cm, linestyles=&quot;--&quot;, )
+    cont = axarr[i].contour(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+    axarr[i].clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=20,  zorder=6)
+    axarr[i].set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    axarr[i].set_title(r&quot;$z=3.0\tilde{Ga} + 1.0\tilde{Eo} + \mathbf{&quot; + f&quot;{w:1.1f}&quot; + r&quot;}$&quot;, fontsize=6)
+    add_markers(axarr[i], (0, 1))
+    axarr[i].set_ylim(-1.1, 0.75)
+axarr[0].set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+plt.savefig(join(output, &quot;weighted_sum_bias_var.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_15_0.png" src="../_images/bubble_path_classification_15_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(1, 4, figsize=(6, 2), sharex=True, sharey=True)
+
+for i, w in enumerate(pt.linspace(0, 3, 4)):
+    weighted_inputs = weighted_sum(xx.flatten(), yy.flatten(), pt.tensor([3.0, 1.0, w]))
+    prediction = pt.heaviside(weighted_inputs, pt.tensor(0.0))
+    axarr[i].contourf(xx, yy, prediction.reshape(xx.shape), cmap=ListedColormap([&#39;C0&#39;, &#39;C1&#39;]), alpha=0.5)
+    axarr[i].set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    axarr[i].set_title(r&quot;$z=3.0 \tilde{Ga} + 1.0\tilde{Eo} + \mathbf{&quot; + f&quot;{w:1.1f}&quot; + &quot;}$&quot;, fontsize=6)
+    add_markers(axarr[i], (0, 1))
+    axarr[i].set_ylim(-1.1, 0.75)
+axarr[0].set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+plt.savefig(join(output, &quot;heaviside_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_16_0.png" src="../_images/bubble_path_classification_16_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Perceptron(object):
+    &quot;&quot;&quot;Implements perceptron algorithm and learning rule.
+    &quot;&quot;&quot;
+    def __init__(self, n_weights: int):
+        &quot;&quot;&quot;Initialize perceptron instance.
+
+        :param n_weights: number of free parameters; must be
+            equal to the number of features
+        :type n_weights: int
+        &quot;&quot;&quot;
+        self._p = pt.rand(n_weights)*2.0 - 1.0
+
+    def _loss(self, X: pt.Tensor, y: pt.Tensor) -&gt; pt.Tensor:
+        return 0.5 * pt.sum((y - self.predict(X))**2)
+
+    def _loss_gradient(self, X: pt.Tensor, y: pt.Tensor) -&gt; pt.Tensor:
+        delta = y - self.predict(X)
+        return -pt.cat((X, pt.ones(X.shape[0]).unsqueeze(-1)), dim=-1).T.mv(delta)
+
+    def train(self, X: pt.Tensor, y: pt.Tensor, epochs: int=500,
+              lr: float=0.01, tol: float=1.0e-6) -&gt; List[float]:
+        loss = []
+        for e in range(epochs):
+            self._p -= lr*self._loss_gradient(X, y)
+            loss.append(self._loss(X, y).item())
+            if loss[-1] &lt; tol:
+                print(f&quot;Converged after {e+1} epochs.&quot;)
+                return loss
+        print(f&quot;Training did not converge within {epochs} epochs&quot;)
+        print(f&quot;Final loss: {loss[-1]:2.3f}&quot;)
+        return loss
+
+    def predict(self, X: pt.Tensor):
+        &quot;&quot;&quot;Make binary prediction.
+
+        :param X: feature tensor; the first dimension is assumed
+            to be the batch dimension
+        :type X: pt.Tensor
+        &quot;&quot;&quot;
+        weighted_sum = X.mv(self._p[:-1]) + self._p[-1]
+        return pt.heaviside(weighted_sum, pt.tensor(0.0))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>one_two = (logData.regime == &quot;I&quot;) | (logData.regime == &quot;II&quot;)
+features = pt.tensor(logData[one_two][[&quot;Ga&quot;, &quot;Eo&quot;]].values).type(pt.float32)
+logData[&quot;ordinal&quot;] = 0.0
+for i, r in enumerate(regimes):
+    logData.ordinal.mask(logData.regime == r, float(i), inplace=True)
+label = pt.tensor(logData.ordinal[one_two].values).type(pt.float32)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>perceptron = Perceptron(3)
+loss = perceptron.train(features, label)
+p = perceptron._p
+print(f&quot;Final equations: z={p[0]:2.3f}Ga{p[1]:+2.3f}Eo{p[2]:+2.3f}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 30 epochs.
+Final equations: z=0.288Ga+0.059Eo+0.117
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(range(1, len(loss)+1), loss)
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;miss-classified points&quot;)
+plt.xlim(1.0, len(loss)+1)
+plt.axhline(0.0, 0.0, 1.0, ls=&quot;:&quot;, c=&quot;k&quot;)
+plt.yticks(pt.linspace(0.0, 17, 18))
+plt.savefig(join(output, &quot;perceptron_loss.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_20_0.png" src="../_images/bubble_path_classification_20_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 3), sharex=True, sharey=True)
+
+weighted_inputs = weighted_sum(xx.flatten(), yy.flatten(), perceptron._p)
+prediction = perceptron.predict(pt.stack((xx.flatten(), yy.flatten())).T)
+ax1.contourf(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+cont = ax1.contour(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+ax1.clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=5,  zorder=6)
+ax2.contourf(xx, yy, prediction.reshape(xx.shape), cmap=ListedColormap([&#39;C0&#39;, &#39;C1&#39;]), alpha=0.5)
+for ax in (ax1, ax2):
+    ax.set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    add_markers(ax, (0, 1))
+ax1.set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+p = perceptron._p
+ax1.set_title(r&quot;$z=&quot; + f&quot;{p[0]:1.2f}&quot; + r&quot;\tilde{Ga}&quot; + f&quot;{p[1]:+1.2f}&quot; + r&quot;\tilde{Eo}&quot; + f&quot;{p[2]:+1.2f}&quot; + r&quot;$&quot;)
+ax2.set_title(r&quot;$H(z(\tilde{Ga} , \tilde{Eo}))$&quot;)
+plt.savefig(join(output, &quot;perceptron_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_21_0.png" src="../_images/bubble_path_classification_21_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>z = pt.linspace(-5, 5, 100)
+plt.plot(z, pt.sigmoid(z))
+plt.scatter([0.0], [0.5], marker=&quot;o&quot;, alpha=0.5)
+plt.vlines(0.0, 0.0, 0.5, &quot;C0&quot;, &quot;--&quot;, alpha=0.5)
+plt.hlines([0.0, 0.5, 1.0], [-5, -5, -5], [5, 0, 5], &quot;C0&quot;, &quot;--&quot;, alpha=0.5)
+plt.xlim(-5, 5)
+plt.ylim(-0.05, 1.05)
+plt.xlabel(r&quot;$z$&quot;)
+plt.ylabel(r&quot;$\sigma (z)$&quot;)
+plt.savefig(join(output, &quot;sigmoid_prob.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_22_0.png" src="../_images/bubble_path_classification_22_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 4), sharex=True, sharey=True)
+
+weighted_inputs = weighted_sum(xx.flatten(), yy.flatten(), perceptron._p)
+probs = pt.sigmoid(weighted_inputs)
+ax1.contourf(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+cont = ax1.contour(xx, yy, weighted_inputs.reshape(xx.shape), cmap=cm, alpha=0.5)
+ax1.clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=5,  zorder=6)
+ax2.contourf(xx, yy, probs.reshape(xx.shape), cmap=cm, alpha=0.5)
+cont = ax2.contour(xx, yy, probs.reshape(xx.shape), cmap=cm, alpha=0.5)
+ax2.clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=5,  zorder=6)
+for ax in (ax1, ax2):
+    ax.set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    add_markers(ax, (0, 1))
+ax1.set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+p = perceptron._p
+ax1.set_title(r&quot;$z=&quot; + f&quot;{p[0]:1.2f}&quot; + r&quot;\tilde{Ga}&quot; + f&quot;{p[1]:+1.2f}&quot; +  r&quot;\tilde{Eo}&quot; + f&quot;{p[2]:+1.2f}&quot; + r&quot;$&quot;)
+ax2.set_title(r&quot;$\sigma(z(\tilde{Ga} , \tilde{Eo}))$&quot;)
+plt.savefig(join(output, &quot;binary_probabilities.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_23_0.png" src="../_images/bubble_path_classification_23_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class LogisticRegression(object):
+    &quot;&quot;&quot;Implementation of logistic regresion.
+    &quot;&quot;&quot;
+    def __init__(self, n_weights):
+        self._p = pt.rand(n_weights)*2.0 - 1.0
+
+    def _joint_probability(self, X: pt.Tensor, y: pt.Tensor) -&gt; pt.Tensor:
+        probs = self.probability(X)
+        joint = pt.pow(probs, y) * pt.pow(1.0-probs, 1-y)
+        return pt.prod(joint)
+
+    def _loss(self, X: pt.Tensor, y: pt.Tensor) -&gt; pt.Tensor:
+        probs = self.probability(X)
+        entropy = y*pt.log(probs+1.0e-6) + (1-y)*pt.log(1.0-probs+1.0e-6)
+        return -entropy.mean()
+
+    def _loss_gradient(self, X: pt.Tensor, y: pt.Tensor) -&gt; pt.Tensor:
+        delta = y - self.probability(X)
+        grad = pt.cat((X, pt.ones(X.shape[0]).unsqueeze(-1)), dim=-1) * delta.unsqueeze(-1)
+        return -grad.mean(dim=0)
+
+    def train(self, X: pt.Tensor, y: pt.Tensor, epochs: int=10000,
+              lr: float=1.0, tol: float=0.1) -&gt; List[float]:
+        loss = []
+        for e in range(epochs):
+            self._p -= lr*self._loss_gradient(X, y)
+            loss.append(self._loss(X, y).item())
+            if loss[-1] &lt; tol:
+                print(f&quot;Converged after {e+1} epochs.&quot;)
+                return loss
+        print(f&quot;Training did not converge within {epochs} epochs&quot;)
+        print(f&quot;Final loss: {loss[-1]:2.3f}&quot;)
+        return loss
+
+    def probability(self, X: pt.Tensor) -&gt; pt.Tensor:
+        weighted_sum = X.mv(self._p[:-1]) + self._p[-1]
+        return pt.sigmoid(weighted_sum)
+
+    def predict(self, X: pt.Tensor) -&gt; pt.Tensor:
+        return pt.heaviside(self.probability(X)-0.5, pt.tensor(0.0))
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>log_regressor = LogisticRegression(3)
+loss = log_regressor.train(features, label, lr=0.5)
+p = log_regressor._p
+print(f&quot;Weighted sum: z={p[0]:2.3f}Ga{p[1]:+2.3f}Eo{p[2]:+2.3f}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 1883 epochs.
+Weighted sum: z=13.473Ga+2.037Eo+4.854
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(range(1, len(loss)+1), loss)
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;binary cross entropy&quot;)
+plt.xlim(1.0, len(loss)+1)
+plt.axhline(0.1, 0.0, 1.0, ls=&quot;:&quot;, c=&quot;k&quot;)
+plt.savefig(join(output, &quot;log_regression_loss.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_26_0.png" src="../_images/bubble_path_classification_26_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 4), sharex=True, sharey=True)
+
+probs = log_regressor.probability(pt.stack((xx.flatten(), yy.flatten())).T)
+prediction = log_regressor.predict(pt.stack((xx.flatten(), yy.flatten())).T)
+ax1.contourf(xx, yy, probs.reshape(xx.shape), cmap=cm, alpha=0.5)
+cont = ax1.contour(xx, yy, probs.reshape(xx.shape), cmap=cm, alpha=0.5)
+ax1.clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=5,  zorder=6)
+ax2.contourf(xx, yy, prediction.reshape(xx.shape), cmap=ListedColormap([&#39;C0&#39;, &#39;C1&#39;]), alpha=0.5)
+for ax in (ax1, ax2):
+    ax.set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    add_markers(ax, (0, 1))
+ax1.set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+ax1.set_title(r&quot;$p_1=\sigma (&quot; + f&quot;{p[0]:1.2f}&quot; + r&quot;\tilde{Ga}&quot; + f&quot;{p[1]:+1.2f}&quot; + r&quot;\tilde{Eo}&quot; + f&quot;{p[2]:+1.2f}&quot; + r&quot;)$&quot;, fontsize=8)
+ax2.set_title(r&quot;$H(p(\tilde{Ga} , \tilde{Eo})-0.5)$&quot;, fontsize=8)
+plt.savefig(join(output, &quot;log_regression_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_27_0.png" src="../_images/bubble_path_classification_27_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>weights = log_regressor._p
+Nw = 100
+w1 = pt.linspace(weights[0]-4.0, weights[0]+8, Nw)
+w2 = pt.linspace(weights[1]-6.0, weights[1]+6, Nw)
+w11, w22 = pt.meshgrid(w1, w2)
+entropy = pt.zeros_like(w11)
+joint_p = pt.zeros_like(w11)
+model = LogisticRegression(3)
+model._p[2] = weights[2]
+for i in range(Nw):
+    for j in range(Nw):
+        model._p[:-1] = pt.tensor([w11[i, j], w22[i, j]])
+        entropy[i, j] = model._loss(features, label)
+        joint_p[i, j] = model._joint_probability(features, label)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 4), sharex=True, sharey=True)
+
+cont1 = ax1.contourf(w11, w22, entropy, levels=pt.linspace(0.0, 0.7, 20))
+cont2 = ax2.contourf(w11, w22, joint_p, levels=pt.linspace(0.0, 0.014, 20))
+cbar = plt.colorbar(cont1, ax=ax1, orientation=&quot;horizontal&quot;)
+cbar.set_ticks([0.0, 0.35, 0.7])
+cbar = plt.colorbar(cont2, ax=ax2, orientation=&quot;horizontal&quot;)
+cbar.set_ticks([0.0, 0.007, 0.014])
+for ax in (ax1, ax2):
+    ax.set_xlabel(r&quot;$w_1$&quot;)
+    ax.set_aspect(&quot;equal&quot;)
+ax1.set_ylabel(r&quot;$w_2$&quot;)
+ax1.set_title(&quot;binary cross entropy&quot;)
+ax2.set_title(&quot;joint probability&quot;)
+plt.savefig(join(output, &quot;entropy_loss_landscape.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_29_0.png" src="../_images/bubble_path_classification_29_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>one_three = (logData.regime == &quot;I&quot;) | (logData.regime == &quot;III&quot;)
+features_I_II = pt.tensor(logData[one_two][[&quot;Ga&quot;, &quot;Eo&quot;]].values).type(pt.float32)
+features_I_III = pt.tensor(logData[one_three][[&quot;Ga&quot;, &quot;Eo&quot;]].values).type(pt.float32)
+label_I_II = pt.tensor(logData.ordinal[one_two].values).type(pt.float32)
+label_I_III = pt.tensor(logData.ordinal[one_three].values).type(pt.float32)
+label_I_III.clamp_(0.0, 1.0)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+        0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model_I_II = LogisticRegression(3)
+model_I_III = LogisticRegression(3)
+_ = model_I_II.train(features_I_II, label_I_II)
+_ = model_I_III.train(features_I_III, label_I_III)
+print(&quot;Weights model I-II: &quot;, model_I_II._p)
+print(&quot;Weights model I-III: &quot;, model_I_III._p)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 937 epochs.
+Converged after 424 epochs.
+Weights model I-II:  tensor([13.4738,  2.0377,  4.8539])
+Weights model I-III:  tensor([ 3.0062,  9.8874, -1.5003])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xx, yy = pt.meshgrid(
+    pt.linspace(-1.1, 1.1, 500),
+    pt.linspace(-1.1, 1.1, 500)
+)
+fig, axarr = plt.subplots(1, 2, figsize=(6, 4), sharex=True, sharey=True)
+
+for i, model in enumerate((model_I_II, model_I_III)):
+    prediction = model.predict(pt.stack((xx.flatten(), yy.flatten())).T)
+    axarr[i].contourf(xx, yy, prediction.reshape(xx.shape), cmap=ListedColormap([&quot;C0&quot;, f&quot;C{i+1}&quot;]), alpha=0.5)
+    axarr[i].set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    add_markers(axarr[i], (0, i+1))
+axarr[0].set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+p1, p2 = model_I_II._p, model_I_III._p
+axarr[0].set_title(r&quot;$H(\sigma(&quot; + f&quot;{p1[0]:1.2f}&quot; + r&quot;\tilde{Ga}&quot; + f&quot;{p1[1]:+1.2f}&quot; + r&quot;\tilde{Eo}&quot; f&quot;{p1[2]:+1.2f}&quot; + r&quot;) - 0.5)$&quot;, fontsize=8)
+axarr[1].set_title(r&quot;$H(\sigma(&quot; + f&quot;{p2[0]:1.2f}&quot; + r&quot;\tilde{Ga}&quot; + f&quot;{p2[1]:+1.2f}&quot; + r&quot;\tilde{Eo}&quot; f&quot;{p2[2]:+1.2f}&quot; + r&quot;) - 0.5)$&quot;, fontsize=8)
+plt.savefig(join(output, &quot;log_regression_I_II_II.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_32_0.png" src="../_images/bubble_path_classification_32_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>combined_prob = pt.sigmoid(
+    0.9*model_I_II.probability(pt.stack((xx.flatten(), yy.flatten())).T)
+  + 0.9*model_I_III.probability(pt.stack((xx.flatten(), yy.flatten())).T)
+  - 0.5
+)
+combined_prediction = pt.heaviside(combined_prob - 0.5, pt.tensor(0.0))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 4), sharex=True, sharey=True)
+
+ax1.contourf(xx, yy, combined_prob.reshape(xx.shape), cmap=cm, alpha=0.5)
+cont = ax1.contour(xx, yy, combined_prob.reshape(xx.shape), cmap=cm, alpha=0.5)
+ax1.clabel(cont, fontsize=8, colors=&quot;k&quot;, fmt=lambda x: f&quot;{x:2.2f}&quot;, inline_spacing=5,  zorder=6)
+ax2.contourf(xx, yy, combined_prediction.reshape(xx.shape), cmap=ListedColormap([&#39;C0&#39;, &#39;C1&#39;]), alpha=0.5)
+for ax in (ax1, ax2):
+    ax.set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+    add_markers(ax, (0, 1, 2))
+ax1.set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+ax1.set_title(r&quot;$p(II\vee III | \tilde{Ga}, \tilde{Eo})=\sigma(0.9p_{II}+0.9p_{III}-0.5)$&quot;, fontsize=8)
+ax2.set_title(r&quot;$H(p(II\vee III | \tilde{Ga}, \tilde{Eo})-0.5)$&quot;, fontsize=8)
+plt.savefig(join(output, &quot;log_combined_prob.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_34_0.png" src="../_images/bubble_path_classification_34_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="extension-to-multiple-classes">
+<h2>Extension to multiple classes<a class="headerlink" href="#extension-to-multiple-classes" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>n_features, n_classes, n_neurons = 2, 5, 50
+regime_model = pt.nn.Sequential(
+    pt.nn.Linear(n_features, n_neurons),
+    pt.nn.Tanh(),
+    pt.nn.Linear(n_neurons, n_neurons),
+    pt.nn.Tanh(),
+    pt.nn.Linear(n_neurons, n_classes)
+)
+optimizer = pt.optim.AdamW(regime_model.parameters(), lr=0.001)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset = pt.utils.data.TensorDataset(
+    pt.tensor(logData[[&quot;Ga&quot;, &quot;Eo&quot;]].values, dtype=pt.float32),
+    pt.tensor(logData.ordinal.values, dtype=pt.int64)
+)
+train_size = int(0.9*len(dataset))
+val_size = len(dataset) - train_size
+train_dataset, val_dataset = pt.utils.data.random_split(dataset, (train_size, val_size))
+train_loader = pt.utils.data.DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=True)
+val_loader = pt.utils.data.DataLoader(val_dataset, batch_size=len(val_dataset))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>results = train_model(regime_model, pt.nn.CrossEntropyLoss(), train_loader, val_loader,
+                      epochs=1000, optimizer=optimizer)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Epoch  999/999 - Training loss: 1.163685e-01; Validation loss: 1.146673e-02
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(results[&quot;epoch&quot;], results[&quot;train_loss&quot;], label=&quot;training&quot;)
+plt.plot(results[&quot;epoch&quot;], results[&quot;val_loss&quot;], label=&quot;validation&quot;)
+
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;categorical cross entropy&quot;)
+plt.legend()
+plt.xlim(0, 1000)
+plt.savefig(join(output, &quot;network_classification_loss.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_39_0.png" src="../_images/bubble_path_classification_39_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xx, yy = pt.meshgrid(
+    pt.linspace(-1.1, 1.1, 500),
+    pt.linspace(-1.1, 1.1, 500)
+)
+X = pt.stack((xx.flatten(), yy.flatten())).T
+prob = pt.nn.functional.softmax(regime_model(X), dim=1)
+prediction = pt.argmax(prob, dim=1) + 0.01
+
+fig, ax = plt.subplots()
+cmap = ListedColormap([f&quot;C{i}&quot; for i in range(5)])
+ax.contourf(xx, yy, prediction.reshape(xx.shape), cmap=cmap, alpha=0.5)
+for regime, marker in zip(regimes, markers):
+    ax.scatter(logData[logData[&quot;regime&quot;] == regime].Ga, logData[logData[&quot;regime&quot;] == regime].Eo,
+               marker=marker, s=10, label=&quot;regime {}&quot;.format(regime))
+ax.set_xlabel(r&quot;$\tilde{Ga}$&quot;)
+ax.set_ylabel(r&quot;$\tilde{Eo}$&quot;)
+ax.legend(loc=&#39;upper center&#39;, bbox_to_anchor=(0.5, 1.1), ncol=5, fontsize=8)
+plt.savefig(join(output, &quot;network_multiclass_prediction.svg&quot;), bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bubble_path_classification_40_0.png" src="../_images/bubble_path_classification_40_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ml_intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Introduction to machine learning</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="mass_transfer_regression.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Computing highly accurate mass transfer at rising bubbles</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

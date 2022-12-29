@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Computing highly accurate mass transfer at rising bubbles &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Approximating the flow past a cylinder with limited data" href="cylinder_pinn_exercise.html" />
+    <link rel="prev" title="Predicting the stability regime of rising bubbles" href="bubble_path_classification_exercise.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/mass_transfer_regression_exercise.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-i-two-phase-flow-simulation-and-data-processing">
+   Part I - two-phase flow simulation and data processing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-the-two-phase-flow-simulation-optional">
+     Performing the two-phase flow simulation (optional)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#loading-and-processing-velocity-and-shape-information">
+     Loading and processing velocity and shape information
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#log-file-data">
+       Log file data
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#interface-data">
+       Interface data
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-ii-feature-creation-model-training-and-single-phase-simulation">
+   Part II - feature creation, model training, and single-phase simulation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-extraction-and-model-creation">
+     Feature extraction and model creation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-the-single-phase-simulation">
+     Performing the single-phase simulation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#post-processing">
+     Post-processing
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Computing highly accurate mass transfer at rising bubbles</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-i-two-phase-flow-simulation-and-data-processing">
+   Part I - two-phase flow simulation and data processing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-the-two-phase-flow-simulation-optional">
+     Performing the two-phase flow simulation (optional)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#loading-and-processing-velocity-and-shape-information">
+     Loading and processing velocity and shape information
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#log-file-data">
+       Log file data
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#interface-data">
+       Interface data
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-ii-feature-creation-model-training-and-single-phase-simulation">
+   Part II - feature creation, model training, and single-phase simulation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-extraction-and-model-creation">
+     Feature extraction and model creation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-the-single-phase-simulation">
+     Performing the single-phase simulation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#post-processing">
+     Post-processing
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="computing-highly-accurate-mass-transfer-at-rising-bubbles">
+<h1>Computing highly accurate mass transfer at rising bubbles<a class="headerlink" href="#computing-highly-accurate-mass-transfer-at-rising-bubbles" title="Permalink to this headline">#</a></h1>
+<p>This exercise consists of two parts, which are meant to be solved in two individual exercise sessions. In the first part, we perform the two-phase flow simulation of a rising bubble and process the relevant data. In the second part, we create features, train ML models for velocity and shape, and deploy these models in a single-phase simulation.</p>
+<section id="part-i-two-phase-flow-simulation-and-data-processing">
+<h2>Part I - two-phase flow simulation and data processing<a class="headerlink" href="#part-i-two-phase-flow-simulation-and-data-processing" title="Permalink to this headline">#</a></h2>
+<section id="performing-the-two-phase-flow-simulation-optional">
+<h3>Performing the two-phase flow simulation (optional)<a class="headerlink" href="#performing-the-two-phase-flow-simulation-optional" title="Permalink to this headline">#</a></h3>
+<p>For this application, the solver used in exercise 2 has been modified to output the interface velocity and orientation at regular intervals. Similar to exercise 2, the following commands compile the updated solver and perform the simulation of a rising bubble with ellipsoidal shape:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># start the Basilisk container located at the repository&#39;s top level</span>
+<span class="n">apptainer</span> <span class="n">shell</span> <span class="n">basilisk</span><span class="o">.</span><span class="n">sif</span>
+<span class="c1"># copy the updated solver to the exercise folder</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">basilisk_solver</span><span class="o">/</span> <span class="n">exercises</span><span class="o">/</span>
+<span class="c1"># navigate to the source files and compile the solver</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">basilisk_solver</span><span class="o">/</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">make</span> <span class="n">clean</span> <span class="o">&amp;&amp;</span> <span class="n">make</span>
+<span class="c1"># create a new folder and run the simulation</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="n">ellipsoidal_bubble</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">ellipsoidal_bubble</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">4</span> <span class="o">../</span><span class="n">bubble</span> <span class="mi">14</span> <span class="mi">15</span> <span class="mf">0.4361</span> <span class="mf">238.2</span> <span class="o">&amp;&gt;</span> <span class="n">log</span><span class="o">.</span><span class="n">solver</span>
+</pre></div>
+</div>
+<p>With the above settings, the simulation may take up to two hours to complete depending on your system. You can also modify the Eötvös and Galilei numbers to change the bubble’s behavior. However, keep in mind that the shape should become stable and convex with respect to the center of mass as the bubble reaches a steady state. Alteratively, you can download the latest <em>datasets</em> archive from the lecture’s <a class="reference external" href="https://github.com/AndreWeiner/ml-cfd-lecture">repository</a> and continue with the pre-computed simulation data.</p>
+</section>
+<section id="loading-and-processing-velocity-and-shape-information">
+<h3>Loading and processing velocity and shape information<a class="headerlink" href="#loading-and-processing-velocity-and-shape-information" title="Permalink to this headline">#</a></h3>
+<p>The relevant data are distributed across two types of files:</p>
+<ul class="simple">
+<li><p>the log file <em>log.solver</em> contains the rise velocity and center of mass at every numerical time step</p></li>
+<li><p>the <em>plic</em> folder contains the position, normal, and velocity vectors at time intervals of <span class="math notranslate nohighlight">\(\Delta \tilde{t}=0.15\)</span></p></li>
+</ul>
+<section id="log-file-data">
+<h4>Log file data<a class="headerlink" href="#log-file-data" title="Permalink to this headline">#</a></h4>
+<p>The log file is a simple text-encoded file with table-like data. There is one row for each numerical time step and the meaning of the 9 columns is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># time, volume, CoM x, CoM y, CoM z, CoMV x, CoMV y, CoMV z, area</span>
+</pre></div>
+</div>
+<p>The abbreviations above stand for <em>Center of Mass</em> (CoM) and <em>Center of Mass Velocity</em> (CoMV). Of these columns, we need only <em>time</em>, <em>CoM x</em> and <em>CoMV x</em>. Loading the log file data is complicated due to spurious rows contained in the log file. For example, there are several warning messages right at the beginning of the file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># print the first 15 rows to the terminal</span>
+<span class="n">head</span> <span class="o">-</span><span class="n">n</span> <span class="mi">15</span> <span class="n">log</span><span class="o">.</span><span class="n">solver</span>
+<span class="c1"># output</span>
+<span class="p">[[</span><span class="mi">30921</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">]:</span> <span class="n">A</span> <span class="n">high</span><span class="o">-</span><span class="n">performance</span> <span class="n">Open</span> <span class="n">MPI</span> <span class="n">point</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">point</span> <span class="n">messaging</span> <span class="n">module</span>
+<span class="n">was</span> <span class="n">unable</span> <span class="n">to</span> <span class="n">find</span> <span class="nb">any</span> <span class="n">relevant</span> <span class="n">network</span> <span class="n">interfaces</span><span class="p">:</span>
+
+<span class="n">Module</span><span class="p">:</span> <span class="n">OpenFabrics</span> <span class="p">(</span><span class="n">openib</span><span class="p">)</span>
+  <span class="n">Host</span><span class="p">:</span> <span class="n">andre</span><span class="o">-</span><span class="n">XP1511</span>
+
+<span class="n">Another</span> <span class="n">transport</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span> <span class="n">instead</span><span class="p">,</span> <span class="n">although</span> <span class="n">this</span> <span class="n">may</span> <span class="n">result</span> <span class="ow">in</span>
+<span class="n">lower</span> <span class="n">performance</span><span class="o">.</span>
+<span class="o">--------------------------------------------------------------------------</span>
+<span class="mf">0.00000000</span> <span class="mf">0.08331549</span> <span class="mf">3.50000000</span> <span class="mf">0.29449718</span> <span class="mf">0.00000000</span> <span class="mf">0.00000000</span> <span class="mf">0.00000000</span> <span class="mf">0.00000000</span> <span class="mf">1.57065375</span> 
+<span class="mf">0.00104471</span> <span class="mf">0.08330800</span> <span class="mf">3.50001092</span> <span class="mf">0.29247771</span> <span class="mf">0.00000000</span> <span class="mf">0.00298628</span> <span class="mf">0.00011339</span> <span class="mf">0.00000000</span> <span class="mf">1.57210201</span> 
+<span class="n">sh</span><span class="p">:</span> <span class="mi">1</span><span class="p">:</span> <span class="n">gnuplot</span><span class="p">:</span> <span class="ow">not</span> <span class="n">found</span>
+<span class="mf">0.00247720</span> <span class="mf">0.08330640</span> <span class="mf">3.50000837</span> <span class="mf">0.29245794</span> <span class="mf">0.00000000</span> <span class="mf">0.00511770</span> <span class="o">-</span><span class="mf">0.00010853</span> <span class="mf">0.00000000</span> <span class="mf">1.57182925</span> 
+<span class="mf">0.00404440</span> <span class="mf">0.08330699</span> <span class="mf">3.50001471</span> <span class="mf">0.29215884</span> <span class="mf">0.00000000</span> <span class="mf">0.00856596</span> <span class="o">-</span><span class="mf">0.00001476</span> <span class="mf">0.00000000</span> <span class="mf">1.57162112</span> 
+</pre></div>
+</div>
+<p>The first task is to load and clean the log file. Please do not try to clean the file manually using a text editor, since automated data processing is an essential skill both in CFD and ML. At the end, you should have a data structure containing only three columns. The following links may provide some useful functions of the Pandas library, but it is completely up to you to choose different libraries or to use only standard Python.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a>; pay attention to the options <em>sep</em>, <em>header</em>, <em>names</em>, and <em>on_bad_lines</em></p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html">pandas.dropna</a></p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.to_numeric.html">pandas.to_numeric</a>; use <em>errors=coerce</em></p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.isnull.html">pandas.isnull</a></p></li>
+</ul>
+<p>You can plot center of mass and rise velocity over time to check if the extraction was successful. The plots should look similar to the ones below.</p>
+<img alt="position" src="../_images/bubble_position.svg" /><img alt="velocity" src="../_images/bubble_speed.svg" /></section>
+<section id="interface-data">
+<h4>Interface data<a class="headerlink" href="#interface-data" title="Permalink to this headline">#</a></h4>
+<p>There are 100 snapshots of the interface data located in the <em>plic</em> folder. However, each snapshot is distributed over several files, because each MPI process writes its own output. The snapshot number and the process id are encoded in the filename as <em>points_#######_n###.txt</em>, where the first 6 digits contain the snapshot number with leading zeros and the second 3 digits stand for the process id. For example, the file <em>points_000010_n000.txt</em> contains the data of the 11th snapshot written by process zero.</p>
+<p>Each file contains the x and y components of position, normal, and velocity vectors of discrete locations representing the gas-liquid interface.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># x, y, normal x, normal y, velocity x, velocity y</span>
+</pre></div>
+</div>
+<p>This time, there is no spurious information in the data, but the files contain empty lines, which have to be removed. Moreover, all files belonging to one snapshot have to be parsed individually and concatenated. The order in which the processor files are parsed and concatenated is not important. You may want to use the following two functions as abstractions for loading individual processor files and concatenating them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse_processor_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pt</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># parse lines </span>
+    <span class="k">return</span> <span class="n">pt</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">load_interface_snapshot</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pt</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="n">p_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="p">):</span>
+        <span class="n">p_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">parse_processor_file</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;points_</span><span class="si">{</span><span class="n">iteration</span><span class="si">:</span><span class="s2">06d</span><span class="si">}</span><span class="s2">_n</span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="n">p_data</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">p_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p_data</span><span class="p">[</span><span class="n">p_data</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>To parse the lines, you may find the string manipulation methods <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.strip">strip</a> and <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.split">split</a> helpful. The <a class="reference external" href="https://docs.python.org/3/library/functions.html#map">map</a> function is useful to apply a function to all elements in a list (an iterable) without explicitly writing loops.</p>
+</section>
+</section>
+</section>
+<section id="part-ii-feature-creation-model-training-and-single-phase-simulation">
+<h2>Part II - feature creation, model training, and single-phase simulation<a class="headerlink" href="#part-ii-feature-creation-model-training-and-single-phase-simulation" title="Permalink to this headline">#</a></h2>
+<section id="feature-extraction-and-model-creation">
+<h3>Feature extraction and model creation<a class="headerlink" href="#feature-extraction-and-model-creation" title="Permalink to this headline">#</a></h3>
+<p>The raw output of the two-phase flow simulation contains points giving the approximate interface position and the velocity vector in these points. Both position and velocity vectors are given in Cartesian coordinates. Based on the raw data, it would be difficult to define a functional relationship approximating the evolution of shape and interface velocity. Instead, it is much more convenient to work with a parametrization tailored to the bubble’s ellipsoidal shape. Therefore, we:</p>
+<ul class="simple">
+<li><p>transform interfacial points into a polar coordinate system <span class="math notranslate nohighlight">\((r,\vartheta)\)</span></p></li>
+<li><p>split the interface velocity into one component tangential to the surface and one component normal to the surface</p></li>
+</ul>
+<p>The center of mass velocity is already given in a useful form. Note that we only need to approximate the component in rise direction. Execute the lecture notebook to train and export all three models. In the <em>notebooks/output/</em> folder, there should be three new <em>.pt</em> files:</p>
+<ul class="simple">
+<li><p><em>rad_model.pt</em> - model for the radius</p></li>
+<li><p><em>rv_model.pt</em> - model for the rise velocity</p></li>
+<li><p><em>tv_model.pt</em> - model for the tangential interface velocity</p></li>
+</ul>
+<p><strong>Note:</strong> in case you decide to implement the model training in a separate notebook or script, don’t forget to set the default PyTorch <code class="docutils literal notranslate"><span class="pre">dtype</span></code> to <code class="docutils literal notranslate"><span class="pre">torch.float64</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># add these lines to the global scope, e.g., after the imports</span>
+<span class="kn">import</span> <span class="nn">torch</span> <span class="k">as</span> <span class="nn">pt</span>
+<span class="n">pt</span><span class="o">.</span><span class="n">set_default_dtype</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="performing-the-single-phase-simulation">
+<h3>Performing the single-phase simulation<a class="headerlink" href="#performing-the-single-phase-simulation" title="Permalink to this headline">#</a></h3>
+<p>First, boundary conditions, flow solver, and utilities for post-processing need to be compiled. Then the simulation can be executed. These steps are partially automated, such that it is only necessary to execute the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># starting from the repository&#39;s top-level</span>
+<span class="c1"># if necessary, update the repository</span>
+<span class="n">git</span> <span class="n">pull</span>
+<span class="n">apptainer</span> <span class="n">shell</span> <span class="n">of2206</span><span class="o">-</span><span class="n">py1</span><span class="mf">.12.1</span><span class="o">-</span><span class="n">cpu</span><span class="o">.</span><span class="n">sif</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">source</span> <span class="n">setup</span><span class="o">-</span><span class="n">env</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">openfoam</span><span class="o">/</span><span class="n">openfoam2206</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">bashrc</span> 
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">single_phase_approach</span><span class="o">/</span> <span class="n">exercises</span><span class="o">/</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">single_phase_approach</span><span class="o">/</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="o">./</span><span class="nb">compile</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">simulation</span>
+<span class="n">Apptainer</span><span class="o">&gt;</span> <span class="o">./</span><span class="n">Allrun</span>
+</pre></div>
+</div>
+<p>The simulation takes about 4h to complete.</p>
+</section>
+<section id="post-processing">
+<h3>Post-processing<a class="headerlink" href="#post-processing" title="Permalink to this headline">#</a></h3>
+<p>We focus only on the post-processing of mass transfer properties. As a first step, open the simulation in ParaView and visualize the three species concentration fields (s1, s2, s3) side by side. To follow the temporal evolution, click the play button or save an animation (a framerate of 10fps works well). Describe the differences you observe in the fields. What differences in the species transport do you observe?</p>
+<p>The files <em>globalSh_s{1-3}.csv</em> contain the global Sherwood number at time intervals of <span class="math notranslate nohighlight">\(\Delta \tilde{t} = 0.01\)</span>. Load the files and plot all three global Sherwood numbers over time. Can you explain the observed trends? Recall that the Sherwood number is a dimensionless form the species’ integral normal derivative at the surface/interface. Also, revisit the plot showing the bubble’s rise velocity over time.</p>
+<p><strong>Congratulations! This completes the seventh and eights exercise session.</strong></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="bubble_path_classification_exercise.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Predicting the stability regime of rising bubbles</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="cylinder_pinn_exercise.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Approximating the flow past a cylinder with limited data</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>End-to-end ML project with OpenFOAM and PyTorch &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Predicting the stability regime of rising bubbles" href="bubble_path_classification_exercise.html" />
+    <link rel="prev" title="End-to-end simulations in OpenFOAM and Basilisk" href="cfd_intro_exercise.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/ml_intro_exercise.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-i-creating-a-parameter-study">
+   Part I: creating a parameter study
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspecting-and-running-the-base-simulation">
+     Inspecting and running the base simulation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#performing-the-parameter-variation">
+   Performing the parameter variation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-ii-creating-a-model-for-the-streamwise-velocity">
+   Part II: creating a model for the streamwise velocity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#direct-learning-approach">
+   Direct learning approach
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hyperparameter-tuning">
+   Hyperparameter tuning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#leveraging-spaldings-function">
+   Leveraging Spalding’s function
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>End-to-end ML project with OpenFOAM and PyTorch</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-i-creating-a-parameter-study">
+   Part I: creating a parameter study
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspecting-and-running-the-base-simulation">
+     Inspecting and running the base simulation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#performing-the-parameter-variation">
+   Performing the parameter variation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#part-ii-creating-a-model-for-the-streamwise-velocity">
+   Part II: creating a model for the streamwise velocity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#direct-learning-approach">
+   Direct learning approach
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hyperparameter-tuning">
+   Hyperparameter tuning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#leveraging-spaldings-function">
+   Leveraging Spalding’s function
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="end-to-end-ml-project-with-openfoam-and-pytorch">
+<h1>End-to-end ML project with OpenFOAM and PyTorch<a class="headerlink" href="#end-to-end-ml-project-with-openfoam-and-pytorch" title="Permalink to this headline">#</a></h1>
+<section id="part-i-creating-a-parameter-study">
+<h2>Part I: creating a parameter study<a class="headerlink" href="#part-i-creating-a-parameter-study" title="Permalink to this headline">#</a></h2>
+<section id="inspecting-and-running-the-base-simulation">
+<h3>Inspecting and running the base simulation<a class="headerlink" href="#inspecting-and-running-the-base-simulation" title="Permalink to this headline">#</a></h3>
+<p>The base simulation for data generation is a 1D channel flow. The simulation folder is located at <em>test_cases/boundary_layer_1D</em>. Create a copy of the test case in the exercise folder and run the simulation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># starting from the repository&#39;s top level</span>
+<span class="n">source</span> <span class="n">setup</span><span class="o">-</span><span class="n">env</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">boundary_layer_1D</span><span class="o">/</span> <span class="n">exercises</span><span class="o">/</span>
+<span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">boundary_layer_1D</span>
+<span class="o">./</span><span class="n">Allrun</span>
+</pre></div>
+</div>
+<p>The simulation completes within a few minutes. In the meantime, try answering the following questions about the setup:</p>
+<ul class="simple">
+<li><p>How many cells does the mesh consist of? Tip: use <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">$ML_CFD_BASE/RunFunctions</span></code> and <code class="docutils literal notranslate"><span class="pre">runApplication</span> <span class="pre">checkMesh</span></code>.</p></li>
+<li><p>What are the boundary conditions for <span class="math notranslate nohighlight">\(U\)</span>?</p></li>
+<li><p>What is the driving force for this flow? Tip: check the dictionary <em>system/fvOptions</em> and consult the <a class="reference external" href="https://www.openfoam.com/documentation/guides/v2112/doc/index.html">documentation</a>.</p></li>
+</ul>
+<p>Once the simulation is finished, open the case in ParaView and complete the following tasks:</p>
+<ul class="simple">
+<li><p>load the final flow state and visualize the velocity profile using the <em>Glyph</em> filter</p></li>
+<li><p>visualize individual patches by unselecting the <em>internalMesh</em> and selecting only individual patches under <em>Mesh Regions</em> in the left properties panel; check again the boundary condition defined for each patch in <em>0/U</em></p></li>
+</ul>
+<p>Close ParaView and reset the simulation by running <code class="docutils literal notranslate"><span class="pre">./Allclean</span></code>. The next goal is to perform the same simulation with increased Reynolds number. The following steps guide you to the modified setup:</p>
+<ul class="simple">
+<li><p>double the Reynolds number by doubling the mean velocity along the channel</p></li>
+<li><p>in <em>system/controlDict</em>, adjust the time step such that the Courant number remains roughly constant</p></li>
+<li><p>considering a dimensionless time of <span class="math notranslate nohighlight">\(\tilde{t} = t\bar{U}/(2\delta)\)</span>, where <span class="math notranslate nohighlight">\(\bar{U}\)</span> is the mean velocity along the channel and <span class="math notranslate nohighlight">\(2\delta\)</span> is the channel height, modify the end time in <em>system/controlDict</em> such that the same amount of dimensionless time units as before is simulated</p></li>
+<li><p>re-run the simulation and inspect the results in ParaView</p></li>
+</ul>
+</section>
+</section>
+<section id="performing-the-parameter-variation">
+<h2>Performing the parameter variation<a class="headerlink" href="#performing-the-parameter-variation" title="Permalink to this headline">#</a></h2>
+<p>The script <em>parameter_variation_1d.py</em> in <em>test_cases</em> automates the manual modifications of the simulation setup conducted in the previous step. To perform the parameter variation, make a copy of the script in the exercise folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assuming you are at the repository&#39;s top level</span>
+<span class="n">source</span> <span class="n">setup</span><span class="o">-</span><span class="n">env</span>
+<span class="n">cp</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">parameter_variation_1d</span><span class="o">.</span><span class="n">py</span> <span class="n">exercises</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>Now open the script and inspect the implemented functions. Try answering the following questions:</p>
+<ul class="simple">
+<li><p>How many simulations are performed in total?</p></li>
+<li><p>How many simulations are performed at the same time?</p></li>
+<li><p>Which parameter(s) in which file(s) of the base setup is/are modified?</p></li>
+<li><p>Where are the modified simulations stored?</p></li>
+</ul>
+<p>Your workstation or laptop might be equipped with fewer compute cores than the script assumes. Running multiple simulations at the same time on shared resources slows down the computations unnecessarily. To determine the number of CPU cores available on your machine, run the command <code class="docutils literal notranslate"><span class="pre">lscpu</span></code> and search for the line <em>Core(s) per socket …</em> in the output. You should not run more simulations simultaneously than cores are available (each simulation runs only on a single core). Modify the script accordingly, and divide the parameter space into 10 to 30 sections (this number determines how many simulations are performed). To start the parameter study, start the Python environment, make sure the script is executable, and run the script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assuming you are at the repository&#39;s top level</span>
+<span class="n">source</span> <span class="n">ml</span><span class="o">-</span><span class="n">cfd</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="n">cd</span> <span class="n">exercises</span>
+<span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">parameter_variation_1d</span><span class="o">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">parameter_variation_1d</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Depending on the available resources and the overall number of simulations, this computation should take about 10-30min. Once all simulations are complete, open a Jupyter notebook and use the following code snippet to load and visualize the velocity profiles:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+<span class="kn">import</span> <span class="nn">torch</span> <span class="k">as</span> <span class="nn">pt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">flowtorch.data</span> <span class="kn">import</span> <span class="n">FOAMDataloader</span>
+
+<span class="c1">#</span>
+<span class="c1"># adjust the path if necessary</span>
+<span class="c1">#</span>
+<span class="n">cases</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;./boundary_layer_1D_variation/Ub_*&quot;</span><span class="p">)</span>
+
+<span class="n">cases</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cases</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">case</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">FOAMDataloader</span><span class="p">(</span><span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">u_x</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">cases</span><span class="p">)))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">case</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cases</span><span class="p">):</span>
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">FOAMDataloader</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+    <span class="n">u_x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_snapshot</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">write_times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">Ubar</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of data matrix: &quot;</span><span class="p">,</span> <span class="n">u_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># creating a plot</span>
+<span class="n">delta</span><span class="p">,</span> <span class="n">nu</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0e-5</span>
+<span class="n">Re</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">Ub</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">delta</span><span class="o">/</span><span class="n">nu</span> <span class="k">for</span> <span class="n">Ub</span> <span class="ow">in</span> <span class="n">Ubar</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ub</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ubar</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$Re=</span><span class="si">{:1.0f}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">Re</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$u_x$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$y$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper center&quot;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="part-ii-creating-a-model-for-the-streamwise-velocity">
+<h2>Part II: creating a model for the streamwise velocity<a class="headerlink" href="#part-ii-creating-a-model-for-the-streamwise-velocity" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="direct-learning-approach">
+<h2>Direct learning approach<a class="headerlink" href="#direct-learning-approach" title="Permalink to this headline">#</a></h2>
+<p>Following the lecture notebook:</p>
+<ul class="simple">
+<li><p>compare the velocity profiles against Spalding’s function</p></li>
+<li><p>split, reshape, and normalize the data</p></li>
+<li><p>train a baseline model and visualize the <span class="math notranslate nohighlight">\(L_2\)</span> norm computed on training, validation and testing data; tip: start with a rather simple model and training routine for the baseline model and only add more complex techniques or architectures once the simple workflow is established</p></li>
+<li><p>plot the predictions against the original data</p></li>
+</ul>
+</section>
+<section id="hyperparameter-tuning">
+<h2>Hyperparameter tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permalink to this headline">#</a></h2>
+<p>In the next step, we try to tune the ML model. Vary the following hyperparameters and try to minimize the prediction error:</p>
+<ul class="simple">
+<li><p>number of neurons per layer</p></li>
+<li><p>number of hidden layers</p></li>
+</ul>
+<p>Take the best model you found, compare the prediction against the original data.</p>
+</section>
+<section id="leveraging-spaldings-function">
+<h2>Leveraging Spalding’s function<a class="headerlink" href="#leveraging-spaldings-function" title="Permalink to this headline">#</a></h2>
+<p>The good agreement of our data with Spalding’s function might have triggered already the idea that we should be able to use this relation to simplify the modeling. The following steps guide you through the approach:</p>
+<ul class="simple">
+<li><p>for each Reynolds number, extract the friction velocity <span class="math notranslate nohighlight">\(u_\tau\)</span> and plot <span class="math notranslate nohighlight">\(\tilde{u}_\tau = u_\tau/\bar{U}\)</span> against <span class="math notranslate nohighlight">\(Re\)</span>; compare the simulation results against the empirical formula <span class="math notranslate nohighlight">\(\tilde{u}_\tau = \frac{0.169}{Re^{0.115}}\)</span></p></li>
+<li><p>transform the original data using the <span class="math notranslate nohighlight">\(\tilde{u}_\tau\)</span> formula above as follows:</p>
+<ul>
+<li><p>transform <span class="math notranslate nohighlight">\(u_x\)</span> to <span class="math notranslate nohighlight">\(u^+\)</span></p></li>
+<li><p>transform the distance <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(\tilde{y} = \mathrm{log}(y^+)\)</span></p></li>
+<li><p>select profiles for training, validation, and testing</p></li>
+<li><p>reshape and normalize the data</p></li>
+</ul>
+</li>
+</ul>
+<p>Since the new model has one feature less, the modified reshape function should look as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reshape_data</span><span class="p">(</span><span class="n">u_plus</span><span class="p">,</span> <span class="n">y_plus</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">u_plus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">u_plus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">u_plus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">u_plus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">u_plus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_plus</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_plus</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>PyTorch models expect the input to have at least two dimensions. Therefore, both the feature and label tensors should have the shape <span class="math notranslate nohighlight">\(N_s\times 1\)</span> rather than <span class="math notranslate nohighlight">\(N_s\)</span> (<span class="math notranslate nohighlight">\(N_s\)</span> is the number of samples). This additional reshaping is easily done with <code class="docutils literal notranslate"><span class="pre">Tensor.unsqueeze(-1)</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TensorDataset</span><span class="p">(</span>
+    <span class="n">feature_scaler</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">train_tensor</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">label_scaler</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">train_tensor</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we are ready to train and evaluate the new model:</p>
+<ul class="simple">
+<li><p>create and train a model <span class="math notranslate nohighlight">\(u^+ = f_{\mathbf{\theta}}(\tilde{y})\)</span></p></li>
+<li><p>make predictions for all Reynolds numbers:</p>
+<ul>
+<li><p>compute <span class="math notranslate nohighlight">\(u_\tau\)</span> based on <span class="math notranslate nohighlight">\(Re\)</span> and <span class="math notranslate nohighlight">\(\bar{U}\)</span></p></li>
+<li><p>compute <span class="math notranslate nohighlight">\(\tilde{y}\)</span> and scale</p></li>
+<li><p>make a prediction for the scaled <span class="math notranslate nohighlight">\(u^+\)</span>, re-scale, and multiply by <span class="math notranslate nohighlight">\(u_\tau\)</span></p></li>
+</ul>
+</li>
+<li><p>compare the predictions against the true velocity profiles</p></li>
+</ul>
+<p>The additional transformations and scaling increase the inference complexity. To avoid prediction errors resulting from missing scaling or normalization, it is possible to hide these steps in a top-level model. The following exercises will demonstrate how such composite models are created.</p>
+<p><strong>Congratulations! This completes the fourth and fifth exercise sessions.</strong></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="cfd_intro_exercise.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">End-to-end simulations in OpenFOAM and Basilisk</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="bubble_path_classification_exercise.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Predicting the stability regime of rising bubbles</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

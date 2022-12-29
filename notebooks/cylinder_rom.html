@@ -1,0 +1,1494 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Reduced-order modeling of the flow past a cylinder &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimizing parameters for open-loop flow control" href="cylinder_bayesian_opt.html" />
+    <link rel="prev" title="Analyzing coherent structures in flows displaying transonic buffets" href="coherent_structures_dim_reduction.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/cylinder_rom.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#grouping-similar-data-points">
+   Grouping similar data points
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#k-means-clustering">
+     K-means clustering
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#problem-of-bad-centroid-initialization">
+     Problem of bad centroid initialization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     K-means++ clustering
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling-the-transition-between-clusters">
+   Modeling the transition between clusters
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dealing-with-high-dimensional-data">
+   Dealing with high-dimensional data
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Reduced-order modeling of the flow past a cylinder</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#grouping-similar-data-points">
+   Grouping similar data points
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#k-means-clustering">
+     K-means clustering
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#problem-of-bad-centroid-initialization">
+     Problem of bad centroid initialization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     K-means++ clustering
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling-the-transition-between-clusters">
+   Modeling the transition between clusters
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dealing-with-high-dimensional-data">
+   Dealing with high-dimensional data
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="reduced-order-modeling-of-the-flow-past-a-cylinder">
+<h1>Reduced-order modeling of the flow past a cylinder<a class="headerlink" href="#reduced-order-modeling-of-the-flow-past-a-cylinder" title="Permalink to this headline">#</a></h1>
+<p>In this notebook, we cover the following topics:</p>
+<ol class="simple">
+<li><p>Reduced-order models of dynamical systems</p></li>
+<li><p>Motivation for cluster-based models</p></li>
+<li><p>Grouping similar data points</p></li>
+<li><p>Modeling the transition between clusters</p></li>
+<li><p>Measuring the model’s performance</p></li>
+<li><p>Dealing with high-dimensional data</p></li>
+</ol>
+<section id="grouping-similar-data-points">
+<h2>Grouping similar data points<a class="headerlink" href="#grouping-similar-data-points" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from typing import Tuple, Dict
+from itertools import groupby
+from collections import defaultdict
+import torch as pt
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from flowtorch import DATASETS
+from flowtorch.data import FOAMDataloader, mask_box
+
+# increase plot resolution
+plt.rcParams[&quot;figure.dpi&quot;] = 160
+
+# make results reproducible
+pt.manual_seed(0)
+
+# create output directory
+output = &quot;output&quot;
+!mkdir -p $output
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def create_normal_cluster(center: Tuple[float], stdev: Tuple[float],
+                          n_points: int) -&gt; pt.Tensor:
+    &quot;&quot;&quot;Create cluster of normally distributed points.
+    &quot;&quot;&quot;
+    assert len(center) == len(stdev)
+    n_dim = len(center)
+    cluster = pt.zeros((n_points, n_dim))
+    for i, (mean, std) in enumerate(zip(center, stdev)):
+        cluster[:, i] = pt.normal(mean, std, size=(n_points,))
+    return cluster
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cluster_1 = create_normal_cluster((1.0, 1.0), (1.0, 1.0), 100)
+cluster_2 = create_normal_cluster((4.0, 1.0), (0.5, 1.0), 50)
+cluster_3 = create_normal_cluster((1.0, 5.0), (1.0, 0.5), 25)
+plt.scatter(cluster_1[:, 0], cluster_1[:, 1], marker=&quot;o&quot;, label=&quot;cluster 1&quot;)
+plt.scatter(cluster_2[:, 0], cluster_2[:, 1], marker=&quot;x&quot;, label=&quot;cluster 2&quot;)
+plt.scatter(cluster_3[:, 0], cluster_3[:, 1], marker=&quot;+&quot;, label=&quot;cluster 3&quot;)
+plt.scatter((1.0, 4.0, 1.0), (1.0, 1.0, 5.0), marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;centroids&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/clustering_test_data.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_4_0.png" src="../_images/cylinder_rom_4_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data = pt.cat((cluster_1, cluster_2, cluster_3))
+rows_shuffled = pt.randperm(data.shape[0])
+data = data[rows_shuffled]
+
+plt.scatter(data[:, 0], data[:, 1], marker=&quot;o&quot;, label=&quot;raw data&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/clustering_test_data_no_labels.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_5_0.png" src="../_images/cylinder_rom_5_0.png" />
+</div>
+</div>
+<section id="k-means-clustering">
+<h3>K-means clustering<a class="headerlink" href="#k-means-clustering" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def initialize_centroids_randomly(k: int, data: pt.Tensor) -&gt; pt.Tensor:
+    &quot;&quot;&quot;Randomly select data points as initial centroids.
+    &quot;&quot;&quot;
+    n_points = data.shape[0]
+    probs = pt.ones(n_points) / n_points
+    rows = pt.multinomial(probs, k)
+    return data[rows]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>centroids = initialize_centroids_randomly(3, data)
+
+plt.scatter(data[:, 0], data[:, 1], marker=&quot;o&quot;, label=&quot;raw data&quot;)
+plt.scatter(centroids[:, 0], centroids[:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;initial centroids&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/random_initial_centroids.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_8_0.png" src="../_images/cylinder_rom_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def find_nearest_centroid(centroids: pt.Tensor, data: pt.Tensor) -&gt; pt.Tensor:
+    &quot;&quot;&quot;Find the id of the nearest centroid for each data point.
+    &quot;&quot;&quot;
+    n_points = data.shape[0]
+    n_centroids = centroids.shape[0]
+    labels = pt.zeros(n_points, dtype=pt.int64)
+    distance = pt.zeros((n_points, n_centroids))
+    for i in range(n_centroids):
+        distance[:, i] = pt.linalg.norm(data - centroids[i], dim=1)
+    return pt.argmin(distance, dim=1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initial_labels = find_nearest_centroid(centroids, data)
+cl_1 = data[initial_labels == 0]
+cl_2 = data[initial_labels == 1]
+cl_3 = data[initial_labels == 2]
+plt.scatter(cl_1[:, 0], cl_1[:, 1], marker=&quot;o&quot;, label=&quot;initial cluster 1&quot;)
+plt.scatter(cl_2[:, 0], cl_2[:, 1], marker=&quot;x&quot;, label=&quot;initial cluster 2&quot;)
+plt.scatter(cl_3[:, 0], cl_3[:, 1], marker=&quot;+&quot;, label=&quot;initial cluster 3&quot;)
+plt.scatter(centroids[:, 0], centroids[:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;initial centroids&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/intial_cluster_labels.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_10_0.png" src="../_images/cylinder_rom_10_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def update_centroids(centroids: pt.Tensor, data: pt.Tensor) -&gt; pt.Tensor:
+    &quot;&quot;&quot;Update centroid position based on cluster mean value.
+    &quot;&quot;&quot;
+    n_centroids = centroids.shape[0]
+    new_centroids = pt.zeros_like(centroids)
+    cluster_ids = find_nearest_centroid(centroids, data)
+    for i in range(n_centroids):
+        new_centroids[i] = data[cluster_ids == i].mean(dim=0)
+    return new_centroids
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_centroids = update_centroids(centroids, data)
+new_labels = find_nearest_centroid(new_centroids, data)
+cl_1 = data[new_labels == 0]
+cl_2 = data[new_labels == 1]
+cl_3 = data[new_labels == 2]
+plt.scatter(cl_1[:, 0], cl_1[:, 1], marker=&quot;o&quot;, label=&quot;new cluster 1&quot;)
+plt.scatter(cl_2[:, 0], cl_2[:, 1], marker=&quot;x&quot;, label=&quot;new cluster 2&quot;)
+plt.scatter(cl_3[:, 0], cl_3[:, 1], marker=&quot;+&quot;, label=&quot;new cluster 3&quot;)
+plt.scatter(centroids[:, 0], centroids[:, 1], marker=&quot;*&quot;, edgecolors=&quot;C3&quot;, s=100, facecolors=&quot;none&quot;, label=&quot;initial centroids&quot;)
+plt.scatter(new_centroids[:, 0], new_centroids[:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;updated centroids&quot;)
+for i in range(centroids.shape[0]):
+    plt.annotate(&quot;&quot;, xy=new_centroids[i], xytext=centroids[i], arrowprops=dict(arrowstyle=&quot;-&gt;&quot;))
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/updated_cluster_labels.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_12_0.png" src="../_images/cylinder_rom_12_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_iter = 10
+tol = 1.0e-4
+
+centroids_hist = []
+centroids_hist.append(initialize_centroids_randomly(3, data))
+for it in range(max_iter):
+    centroids_hist.append(update_centroids(centroids_hist[-1], data))
+    mean_diff = pt.linalg.norm(centroids_hist[-1]-centroids_hist[-2], dim=1).mean()
+    if mean_diff &lt; tol:
+        print(f&quot;Clustering converged after {it+1} iterations.&quot;)
+        break
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clustering converged after 6 iterations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(1, 4, figsize=(8, 3), sharex=True, sharey=True)
+
+for i, ct in enumerate(centroids_hist[:4]):
+    labels = find_nearest_centroid(centroids_hist[i], data)
+    cl_1 = data[labels == 0]
+    cl_2 = data[labels == 1]
+    cl_3 = data[labels == 2]
+    axarr[i].scatter(cl_1[:, 0], cl_1[:, 1], marker=&quot;o&quot;)
+    axarr[i].scatter(cl_2[:, 0], cl_2[:, 1], marker=&quot;x&quot;)
+    axarr[i].scatter(cl_3[:, 0], cl_3[:, 1], marker=&quot;+&quot;)
+    axarr[i].scatter(ct[:, 0], ct[:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100)
+    if i &gt; 0:
+        axarr[i].scatter(centroids_hist[i-1][:, 0], centroids_hist[i-1][:, 1], marker=&quot;*&quot;, edgecolors=&quot;C3&quot;, facecolors=&quot;none&quot;, s=100)
+        for j in range(centroids_hist[-1].shape[0]):
+            axarr[i].annotate(&quot;&quot;, xy=centroids_hist[i][j], xytext=centroids_hist[i-1][j], arrowprops=dict(arrowstyle=&quot;-&gt;&quot;))
+    axarr[i].set_xlabel(r&quot;$x_1$&quot;)
+    axarr[i].set_title(f&quot;iteration {i}&quot;)
+axarr[0].set_ylabel(r&quot;$x_2$&quot;)
+
+plt.savefig(f&quot;{output}/kmeans_iterations.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_14_0.png" src="../_images/cylinder_rom_14_0.png" />
+</div>
+</div>
+</section>
+<section id="problem-of-bad-centroid-initialization">
+<h3>Problem of bad centroid initialization<a class="headerlink" href="#problem-of-bad-centroid-initialization" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>bad_centroids = pt.tensor([[2.5, 1.0], [1.0, 5.0], [2.0, 5.0]])
+initial_labels = find_nearest_centroid(bad_centroids, data)
+cl_1 = data[initial_labels == 0]
+cl_2 = data[initial_labels == 1]
+cl_3 = data[initial_labels == 2]
+plt.scatter(cl_1[:, 0], cl_1[:, 1], marker=&quot;o&quot;, label=&quot;initial cluster 1&quot;)
+plt.scatter(cl_2[:, 0], cl_2[:, 1], marker=&quot;x&quot;, label=&quot;initial cluster 2&quot;)
+plt.scatter(cl_3[:, 0], cl_3[:, 1], marker=&quot;+&quot;, label=&quot;initial cluster 3&quot;)
+plt.scatter(bad_centroids[:, 0], bad_centroids[:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;initial centroids&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/bad_intial_centroids.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_16_0.png" src="../_images/cylinder_rom_16_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_iter = 10
+tol = 1.0e-4
+
+bad_centroids_hist = []
+bad_centroids_hist.append(bad_centroids)
+for it in range(max_iter):
+    bad_centroids_hist.append(update_centroids(bad_centroids_hist[-1], data))
+    mean_diff = pt.linalg.norm(bad_centroids_hist[-1]-bad_centroids_hist[-2], dim=1).mean()
+    if mean_diff &lt; tol:
+        print(f&quot;Clustering converged after {it+1} iterations.&quot;)
+        break
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clustering converged after 3 iterations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>final_labels = find_nearest_centroid(bad_centroids_hist[-1], data)
+cl_1 = data[final_labels == 0]
+cl_2 = data[final_labels == 1]
+cl_3 = data[final_labels == 2]
+plt.scatter(cl_1[:, 0], cl_1[:, 1], marker=&quot;o&quot;, label=&quot;final cluster 1&quot;)
+plt.scatter(cl_2[:, 0], cl_2[:, 1], marker=&quot;x&quot;, label=&quot;final cluster 2&quot;)
+plt.scatter(cl_3[:, 0], cl_3[:, 1], marker=&quot;+&quot;, label=&quot;final cluster 3&quot;)
+plt.scatter(bad_centroids_hist[-1][:, 0], bad_centroids_hist[-1][:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;final centroids&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/bad_intial_centroids_final.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_18_0.png" src="../_images/cylinder_rom_18_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def compute_cluster_inertia(centroids: pt.Tensor, data: pt.Tensor) -&gt; float:
+    &quot;&quot;&quot;Compute sum of squared distances over all clusters.
+    &quot;&quot;&quot;
+    labels = find_nearest_centroid(centroids, data)
+    inertia = 0.0
+    for i in range(data.shape[1]):
+        inertia += pt.linalg.norm(data[labels==i]-centroids[i], dim=1).square().sum()
+    return inertia
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(&quot;Inertia for random initialization: {:2.4f}&quot;.format(compute_cluster_inertia(centroids_hist[-1], data)))
+print(&quot;Inertia for bad initialization: {:2.4f}&quot;.format(compute_cluster_inertia(bad_centroids_hist[-1], data)))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Inertia for random initialization: 110.1418
+Inertia for bad initialization: 540.7017
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>K-means++ clustering<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def initialize_centroids_improved(k: int, data: pt.Tensor) -&gt; pt.Tensor:
+    &quot;&quot;&quot;Randomly select data points as initial centroids.
+    &quot;&quot;&quot;
+    n_points = data.shape[0]
+    probs = pt.ones(n_points) / n_points
+    rows = pt.zeros(k, dtype=pt.int64)
+    rows[0] = pt.multinomial(probs, 1)
+    distance = pt.zeros((n_points, k-1))
+    for i in range(1, k):
+        distance[:, i-1] = pt.linalg.norm(data-data[rows[i-1]], dim=1).square()
+        min_dist = distance[:, :i].min(dim=1).values
+        probs = min_dist / min_dist.sum()
+        rows[i] = pt.multinomial(probs, 1)
+    return data[rows]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>centroids = initialize_centroids_improved(3, data)
+
+plt.scatter(data[:, 0], data[:, 1], marker=&quot;o&quot;, label=&quot;raw data&quot;)
+plt.scatter(centroids[:, 0], centroids[:, 1], marker=&quot;*&quot;, c=&quot;C3&quot;, s=100, label=&quot;initial centroids&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/improved_initial_centroids.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_23_0.png" src="../_images/cylinder_rom_23_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initialization_methods = {
+    &quot;random&quot; : initialize_centroids_randomly,
+    &quot;kmeans++&quot; : initialize_centroids_improved
+}
+
+def find_centroids(k: int, data: pt.Tensor, max_iter: int=100,
+                   tol: float=1.0e-6, init: str=&quot;random&quot;, verbose=False) -&gt; Tuple[pt.Tensor, int]:
+    centroids = initialization_methods[init](k, data)
+    for i in range(max_iter):
+        old_centroids = centroids[:]
+        centroids = update_centroids(centroids, data)
+        mean_diff = pt.linalg.norm(centroids-old_centroids, dim=1).mean()
+        if mean_diff &lt; tol:
+            if verbose:
+                print(f&quot;Clustering converged after {i+1} iterations.&quot;)
+            break
+    return centroids, i+1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>repeat = 100
+inertia_random, inertia_improved = [], []
+iter_random, iter_improved = [], []
+
+for _ in range(repeat):
+    centroids, it = find_centroids(3, data, init=&quot;random&quot;)
+    inertia_random.append(compute_cluster_inertia(centroids, data).item())
+    iter_random.append(it)
+    centroids, it = find_centroids(3, data, init=&quot;kmeans++&quot;)
+    inertia_improved.append(compute_cluster_inertia(centroids, data).item())
+    iter_improved.append(it)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1, 2)
+ax1.boxplot((inertia_random, inertia_improved), labels=(&quot;random&quot;, &quot;k-means++&quot;))
+ax2.boxplot((iter_random, iter_improved), labels=(&quot;random&quot;, &quot;k-means++&quot;))
+ax1.set_ylabel(&quot;inertia&quot;)
+ax2.set_ylabel(&quot;iterations&quot;)
+plt.subplots_adjust(wspace=0.3)
+plt.savefig(f&quot;{output}/random_vs_improved.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_26_0.png" src="../_images/cylinder_rom_26_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="modeling-the-transition-between-clusters">
+<h2>Modeling the transition between clusters<a class="headerlink" href="#modeling-the-transition-between-clusters" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t = pt.linspace(0.0, 2.0*np.pi, 100)
+data = pt.zeros((100, 2))
+data[:, 0] = pt.sin(t) + pt.normal(0.0, 0.05, (100,))
+data[:, 1] = pt.cos(t) + pt.normal(0.0, 0.05, (100,))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.scatter(t, data[:, 0], label=r&quot;$x_1$&quot;)
+plt.scatter(t, data[:, 1], label=r&quot;$x_2$&quot;)
+plt.xlabel(r&quot;$t$&quot;)
+plt.legend()
+plt.xlim(0.0, 2.0*np.pi)
+plt.savefig(f&quot;{output}/periodic_dataset_raw_time.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_29_0.png" src="../_images/cylinder_rom_29_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>clustering = KMeans(n_clusters=10, random_state=2)
+clustering.fit(data.numpy())
+cluster_ids = clustering.predict(data.numpy())
+centroids = clustering.cluster_centers_
+
+plt.scatter(data[:, 0], data[:, 1], c=cluster_ids, marker=&quot;x&quot;, cmap=&quot;jet&quot;, label=&quot;raw data&quot;)
+plt.scatter(centroids[:, 0], centroids[:, 1], c=range(10), marker=&quot;o&quot;, s=100, cmap=&quot;jet&quot;, label=&quot;centroids&quot;)
+for i, c in enumerate(centroids):
+    plt.text(c[0], c[1]+0.05, f&quot;{i}&quot;)
+plt.gca().set_aspect(&quot;equal&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/periodic_dataset_clustering.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_30_0.png" src="../_images/cylinder_rom_30_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def remove_sequential_duplicates(sequence: np.ndarray) -&gt; np.ndarray:
+    &quot;&quot;&quot;Get sequence of integers without sequential duplicates.
+    &quot;&quot;&quot;
+    is_different = np.diff(sequence).astype(np.bool)
+    return sequence[np.insert(is_different, 0, True)]
+
+def compute_transition_time(cluster_sequence: np.ndarray,
+                            dt: float, verbose=False) -&gt; Dict[str, float]:
+    &quot;&quot;&quot;Compute transition time between cluster centroids.
+    &quot;&quot;&quot;
+    if verbose:
+        print(&quot;sequence: &quot;, cluster_sequence)
+    centroid_sequence = remove_sequential_duplicates(cluster_sequence)
+    if verbose:
+        print(&quot;centroid sequence: &quot;, centroid_sequence)
+    seq_duplicates = np.array(
+            [sum(1 for _ in group)
+             for _, group in groupby(cluster_sequence)]
+    )
+    if verbose:
+        print(&quot;sequential duplicates: &quot;, seq_duplicates)
+    transition = defaultdict(list)
+    for i in range(len(centroid_sequence)-1):
+        key = &quot;,&quot;.join(map(str, centroid_sequence[i:i+2]))
+        transition[key].append(
+            0.5 * dt *
+            np.sum(seq_duplicates[i:i+2])
+        )
+    return {key: np.mean(value) for key, value in transition.items()}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>transition_times = compute_transition_time(cluster_ids, 2.0*np.pi/100, True)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sequence:  [5 5 2 2 2 2 2 2 2 2 2 4 4 4 4 4 4 4 4 4 4 8 8 8 8 8 8 8 8 0 0 0 0 0 0 0 0
+ 0 9 9 9 9 9 9 9 9 9 7 7 7 7 7 7 7 7 7 7 3 3 3 3 3 3 3 3 3 3 6 6 6 6 6 6 6
+ 6 6 6 6 1 1 1 1 1 1 1 1 1 1 1 5 5 5 5 5 5 5 5 5 5 5]
+centroid sequence:  [5 2 4 8 0 9 7 3 6 1 5]
+sequential duplicates:  [ 2  9 10  8  9  9 10 10 11 11 11]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>transition_times
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;5,2&#39;: 0.3455751918948773,
+ &#39;2,4&#39;: 0.5969026041820608,
+ &#39;4,8&#39;: 0.5654866776461628,
+ &#39;8,0&#39;: 0.5340707511102649,
+ &#39;0,9&#39;: 0.5654866776461628,
+ &#39;9,7&#39;: 0.5969026041820608,
+ &#39;7,3&#39;: 0.6283185307179586,
+ &#39;3,6&#39;: 0.6597344572538566,
+ &#39;6,1&#39;: 0.6911503837897546,
+ &#39;1,5&#39;: 0.6911503837897546}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_next_cluster(current: int, transitions: list) -&gt; int:
+    for t in transitions:
+        if t.startswith(str(current)):
+            return int(t[-1:])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def simulate(centroids: np.ndarray, transition_times: Dict[str, float],
+             start_id: int, end_time) -&gt; Tuple[np.ndarray, np.ndarray]:
+    visited_centroids, time = [start_id], [0.0]
+    while time[-1] &lt; end_time:
+        visited_centroids.append(get_next_cluster(visited_centroids[-1], transition_times.keys()))
+        transition = &quot;{:d},{:d}&quot;.format(*visited_centroids[-2:])
+        time.append(time[-1] + transition_times[transition])
+        if time[-1] &gt; end_time:
+            break
+    visited = np.zeros((len(time), centroids.shape[1]))
+    for i, ci in enumerate(visited_centroids):
+        visited[i] = centroids[ci]
+    return visited, np.array(time)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>prediction, times = simulate(centroids, transition_times, clustering.labels_[0], 4*np.pi)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(times, prediction[:, 0], label=r&quot;$\hat{x}_1$&quot;)
+plt.plot(times, prediction[:, 1], label=r&quot;$\hat{x}_2$&quot;)
+plt.scatter(t, data[:, 0], label=r&quot;$x_1$&quot;)
+plt.scatter(t, data[:, 1], label=r&quot;$x_2$&quot;)
+plt.xlabel(r&quot;$t$&quot;)
+plt.legend()
+plt.xlim(0.0, 4.0*np.pi)
+plt.savefig(f&quot;{output}/periodic_dataset_simulated.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_37_0.png" src="../_images/cylinder_rom_37_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>clustering = KMeans(n_clusters=20, random_state=0)
+clustering.fit(data.numpy())
+cluster_ids = clustering.predict(data.numpy())
+centroids = clustering.cluster_centers_
+
+plt.scatter(data[:, 0], data[:, 1], c=cluster_ids, marker=&quot;x&quot;, cmap=&quot;jet&quot;, label=&quot;raw data&quot;)
+plt.scatter(centroids[:, 0], centroids[:, 1], c=range(20), marker=&quot;o&quot;, s=100, cmap=&quot;jet&quot;, label=&quot;centroids&quot;)
+for i, c in enumerate(centroids):
+    plt.text(c[0], c[1]+0.05, f&quot;{i}&quot;)
+plt.gca().set_aspect(&quot;equal&quot;)
+plt.xlabel(r&quot;$x_1$&quot;)
+plt.ylabel(r&quot;$x_2$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/periodic_dataset_clustering_refined.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_38_0.png" src="../_images/cylinder_rom_38_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>transition_times = compute_transition_time(cluster_ids, 2.0*np.pi/100)
+transition_times
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;18,13&#39;: 0.25132741228718347,
+ &#39;13,2&#39;: 0.3455751918948773,
+ &#39;2,9&#39;: 0.3455751918948773,
+ &#39;9,11&#39;: 0.3141592653589793,
+ &#39;11,6&#39;: 0.3141592653589793,
+ &#39;6,0&#39;: 0.3769911184307752,
+ &#39;0,16&#39;: 0.4084070449666731,
+ &#39;16,5&#39;: 0.3455751918948773,
+ &#39;5,19&#39;: 0.3141592653589793,
+ &#39;19,3&#39;: 0.3141592653589793,
+ &#39;3,12&#39;: 0.2827433388230814,
+ &#39;12,14&#39;: 0.25132741228718347,
+ &#39;14,7&#39;: 0.21991148575128555,
+ &#39;7,17&#39;: 0.2827433388230814,
+ &#39;17,1&#39;: 0.3141592653589793,
+ &#39;1,15&#39;: 0.2827433388230814,
+ &#39;15,4&#39;: 0.2827433388230814,
+ &#39;4,10&#39;: 0.15707963267948966,
+ &#39;10,4&#39;: 0.06283185307179587,
+ &#39;10,8&#39;: 0.3141592653589793,
+ &#39;8,18&#39;: 0.21991148575128555}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def compute_transition_probabilities(centroid_sequence: np.ndarray,
+                                   verbose: bool=False) -&gt; Dict[str, np.ndarray]:
+    &quot;&quot;&quot;Compute transition probability between pairs of clusters.
+    &quot;&quot;&quot;
+    prob = defaultdict(list)
+    for i in range(len(centroid_sequence)-1):
+        prob[str(centroid_sequence[i])].append(centroid_sequence[i+1])
+    if verbose:
+        print(&quot;Possible next clusters: &quot;, prob)
+    for key, next_clusters in prob.items():
+        unique, counts = np.unique(next_clusters, return_counts=True)
+        prob[key] = np.stack((unique, counts/counts.sum())).T
+    return prob
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>centroid_sequence = remove_sequential_duplicates(clustering.labels_)
+transition_probs = compute_transition_probabilities(centroid_sequence, verbose=True)
+transition_probs
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Possible next clusters:  defaultdict(&lt;class &#39;list&#39;&gt;, {&#39;18&#39;: [13], &#39;13&#39;: [2], &#39;2&#39;: [9], &#39;9&#39;: [11], &#39;11&#39;: [6], &#39;6&#39;: [0], &#39;0&#39;: [16], &#39;16&#39;: [5], &#39;5&#39;: [19], &#39;19&#39;: [3], &#39;3&#39;: [12], &#39;12&#39;: [14], &#39;14&#39;: [7], &#39;7&#39;: [17], &#39;17&#39;: [1], &#39;1&#39;: [15], &#39;15&#39;: [4], &#39;4&#39;: [10, 10], &#39;10&#39;: [4, 8], &#39;8&#39;: [18]})
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>defaultdict(list,
+            {&#39;18&#39;: array([[13.,  1.]]),
+             &#39;13&#39;: array([[2., 1.]]),
+             &#39;2&#39;: array([[9., 1.]]),
+             &#39;9&#39;: array([[11.,  1.]]),
+             &#39;11&#39;: array([[6., 1.]]),
+             &#39;6&#39;: array([[0., 1.]]),
+             &#39;0&#39;: array([[16.,  1.]]),
+             &#39;16&#39;: array([[5., 1.]]),
+             &#39;5&#39;: array([[19.,  1.]]),
+             &#39;19&#39;: array([[3., 1.]]),
+             &#39;3&#39;: array([[12.,  1.]]),
+             &#39;12&#39;: array([[14.,  1.]]),
+             &#39;14&#39;: array([[7., 1.]]),
+             &#39;7&#39;: array([[17.,  1.]]),
+             &#39;17&#39;: array([[1., 1.]]),
+             &#39;1&#39;: array([[15.,  1.]]),
+             &#39;15&#39;: array([[4., 1.]]),
+             &#39;4&#39;: array([[10.,  1.]]),
+             &#39;10&#39;: array([[4. , 0.5],
+                    [8. , 0.5]]),
+             &#39;8&#39;: array([[18.,  1.]])})
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def sample_next_cluster(current: int, transition_probs) -&gt; int:
+    &quot;&quot;&quot;Sample the next cluster probabilisticly.
+    &quot;&quot;&quot;
+    key = str(current)
+    return int(np.random.choice(
+        transition_probs[key][:, 0], p=transition_probs[key][:, 1])
+    )
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for _ in range(10):
+    print(sample_next_cluster(10, transition_probs))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4
+4
+8
+8
+4
+4
+4
+8
+8
+4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def simulate_probablisticly(centroids: np.ndarray,
+                            transition_probs: Dict[str, np.ndarray],
+                            transition_times: Dict[str, float],
+                            start_id: int,
+                            end_time: float) -&gt; Tuple[np.ndarray, np.ndarray]:
+    visited_centroids, time = [start_id], [0.0]
+    while time[-1] &lt; end_time:
+        visited_centroids.append(sample_next_cluster(visited_centroids[-1], transition_probs))
+        transition = &quot;{:d},{:d}&quot;.format(*visited_centroids[-2:])
+        time.append(time[-1] + transition_times[transition])
+        if time[-1] &gt; end_time:
+            break
+    visited = np.zeros((len(time), centroids.shape[1]))
+    for i, ci in enumerate(visited_centroids):
+        visited[i] = centroids[ci]
+    return visited, np.array(time)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>prediction, times = simulate_probablisticly(centroids, transition_probs, transition_times, clustering.labels_[0], 4*np.pi)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(times, prediction[:, 0], label=r&quot;$\hat{x}_1$&quot;)
+plt.plot(times, prediction[:, 1], label=r&quot;$\hat{x}_2$&quot;)
+plt.scatter(t, data[:, 0], label=r&quot;$x_1$&quot;)
+plt.scatter(t, data[:, 1], label=r&quot;$x_2$&quot;)
+plt.xlabel(r&quot;$t$&quot;)
+plt.legend()
+plt.xlim(0.0, 4.0*np.pi)
+plt.savefig(f&quot;{output}/periodic_dataset_simulated_refined.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_46_0.png" src="../_images/cylinder_rom_46_0.png" />
+</div>
+</div>
+</section>
+<section id="dealing-with-high-dimensional-data">
+<h2>Dealing with high-dimensional data<a class="headerlink" href="#dealing-with-high-dimensional-data" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>path = DATASETS[&quot;of_cylinder2D_binary&quot;]
+loader = FOAMDataloader(path)
+times = loader.write_times
+window_times = [time for time in times if float(time) &gt;= 4.0]
+
+# load vertices, discard z-coordinate, and create a mask
+vertices = loader.vertices[:, :2]
+mask = mask_box(vertices, lower=[0.1, -1], upper=[0.75, 1])
+
+# assemble data matrix
+data_matrix = pt.zeros((mask.sum().item(), len(window_times)), dtype=pt.float32)
+for i, time in enumerate(window_times):
+    # load the vorticity vector field, take the z-component [:, 2], and apply the mask
+    data_matrix[:, i] = pt.masked_select(loader.load_snapshot(&quot;vorticity&quot;, time)[:, 2], mask)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Could not find precomputed cell centers and volumes.
+Computing cell geometry from scratch (slow, not recommended for large meshes).
+To compute cell centers and volumes in OpenFOAM, run:
+
+postProcess -func &quot;writeCellCentres&quot; -constant -time none
+postProcess -func &quot;writeCellVolumes&quot; -constant -time none
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def encode(data_matrix: pt.Tensor, rank: int) -&gt; Tuple[pt.Tensor, pt.Tensor]:
+    U, s, VH = pt.linalg.svd(data_matrix, full_matrices=False)
+    return U[:, :rank], pt.diag(s[:rank]) @ VH[:rank, :]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>modes, coeff = encode(data_matrix, rank=20)
+print(&quot;Mode matrix shape: &quot;, modes.shape)
+print(&quot;Coeff. matrix shape: &quot;, coeff.shape)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mode matrix shape:  torch.Size([7190, 20])
+Coeff. matrix shape:  torch.Size([20, 241])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>clustering = KMeans(n_clusters=40, random_state=0)
+clustering.fit(coeff.T.numpy())
+centroids = clustering.cluster_centers_
+# transition times
+times_num = np.array([float(t) for t in window_times])
+dt = times_num[1] - times_num[0]
+transition_times = compute_transition_time(clustering.labels_, dt)
+# transition probabilities
+centroid_sequence = remove_sequential_duplicates(clustering.labels_)
+transition_probs = compute_transition_probabilities(centroid_sequence)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>prediction, times_sim = simulate_probablisticly(centroids, transition_probs, transition_times, clustering.labels_[0], 10)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(2, sharex=True)
+ax1.plot(times_num-times_num[0], coeff[0, :], label=r&quot;$a_1$&quot;)
+ax2.plot(times_num-times_num[0], coeff[1, :], label=r&quot;$a_2$&quot;)
+ax1.plot(times_sim, prediction[:, 0], ls=&quot;--&quot;, label=r&quot;$\hat{a}_1$&quot;)
+ax2.plot(times_sim, prediction[:, 1], ls=&quot;--&quot;, label=r&quot;$\hat{a}_2$&quot;)
+ax2.set_xlabel(r&quot;$t$ in $s$&quot;)
+ax2.set_xlim(0, 10)
+ax1.legend(ncol=2)
+ax2.legend(ncol=2)
+plt.savefig(f&quot;{output}/cylinder_coeff_prediction_cnm.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_53_0.png" src="../_images/cylinder_rom_53_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def decode(modes: pt.Tensor, coeff: pt.Tensor) -&gt; pt.Tensor:
+    return modes @ coeff
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reconstruction = decode(modes, pt.from_numpy(prediction).T.type(pt.float32))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def add_mode(ax, mode, title, every=4):
+    ax.tricontourf(x[::every], y[::every], mode[::every], levels=15, cmap=&quot;jet&quot;)
+    ax.tricontour(x[::every], y[::every], mode[::every], levels=15, linewidths=0.1, colors=&#39;k&#39;)
+    ax.add_patch(plt.Circle((0.2, 0.2), 0.05, color=&#39;k&#39;))
+    ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+    ax.set_title(title)
+
+x = pt.masked_select(vertices[:, 0], mask)
+y = pt.masked_select(vertices[:, 1], mask)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(2, 2, figsize=(6, 4), sharex=True, sharey=True)
+count = 0
+for row in range(2):
+    add_mode(axarr[row, 0], reconstruction[:, count], f&quot;t={times_sim[count]:2.2f}s&quot;)
+    count += 10
+    add_mode(axarr[row, 1], reconstruction[:, count], f&quot;t={times_sim[count]:2.2f}s&quot;)
+    count += 10
+plt.savefig(f&quot;{output}/cylinder_full_prediction_cnm.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cylinder_rom_57_0.png" src="../_images/cylinder_rom_57_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="coherent_structures_dim_reduction.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Analyzing coherent structures in flows displaying transonic buffets</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="cylinder_bayesian_opt.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Optimizing parameters for open-loop flow control</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

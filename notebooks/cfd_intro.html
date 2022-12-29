@@ -1,0 +1,1738 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Finite-volume-based CFD in a nutshell &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to machine learning" href="ml_intro.html" />
+    <link rel="prev" title="Course overview and motivation" href="ml_cfd_intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/cfd_intro.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fvm-fundamentals">
+   FVM fundamentals
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mathematical-problem">
+     Mathematical problem
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#domain-discretization-meshing">
+     Domain discretization (meshing)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#equation-discretization-part-i-diffusion">
+     Equation discretization part I - diffusion
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#iterative-solution">
+     Iterative solution
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#jacobi-and-gauss-seidel-methods">
+       Jacobi and Gauss-Seidel methods
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sparse-versus-dense-matrices">
+       Sparse versus dense matrices
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#equation-discretization-part-ii-convection">
+     Equation discretization part II - convection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fvm-in-openfoam">
+   FVM in OpenFOAM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fvm-in-basilisk">
+   FVM in Basilisk
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Finite-volume-based CFD in a nutshell</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fvm-fundamentals">
+   FVM fundamentals
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mathematical-problem">
+     Mathematical problem
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#domain-discretization-meshing">
+     Domain discretization (meshing)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#equation-discretization-part-i-diffusion">
+     Equation discretization part I - diffusion
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#iterative-solution">
+     Iterative solution
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#jacobi-and-gauss-seidel-methods">
+       Jacobi and Gauss-Seidel methods
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sparse-versus-dense-matrices">
+       Sparse versus dense matrices
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#equation-discretization-part-ii-convection">
+     Equation discretization part II - convection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fvm-in-openfoam">
+   FVM in OpenFOAM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fvm-in-basilisk">
+   FVM in Basilisk
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="finite-volume-based-cfd-in-a-nutshell">
+<h1>Finite-volume-based CFD in a nutshell<a class="headerlink" href="#finite-volume-based-cfd-in-a-nutshell" title="Permalink to this headline">#</a></h1>
+<ul class="simple">
+<li><p>FVM fundamentals</p>
+<ul>
+<li><p>Mathematical problem</p></li>
+<li><p>Domain discretization (meshing)</p></li>
+<li><p>Equation discretization part I - diffusion</p></li>
+<li><p>Iterative solution</p></li>
+<li><p>Equation discretization part II - convection</p></li>
+</ul>
+</li>
+<li><p>FVM in OpenFOAM</p></li>
+<li><p>FVM in Basilisk</p></li>
+</ul>
+<section id="fvm-fundamentals">
+<h2>FVM fundamentals<a class="headerlink" href="#fvm-fundamentals" title="Permalink to this headline">#</a></h2>
+<section id="mathematical-problem">
+<h3>Mathematical problem<a class="headerlink" href="#mathematical-problem" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from os.path import join
+import matplotlib.pyplot as plt
+import torch as pt
+
+# increase plot resolution
+plt.rcParams[&quot;figure.dpi&quot;] = 160
+
+# create output directory
+output = &quot;output&quot;
+!mkdir -p $output
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots()
+ax.set_title(&quot;mathematical model&quot;)
+ax.set_xlabel(r&quot;$x$&quot;)
+ax.set_ylabel(r&quot;$y$&quot;)
+ax.text(0.5, 0.95, r&quot;$T=\mathrm{const.}$&quot;, ha=&quot;center&quot;)
+ax.text(0.5, 0.05, r&quot;$\frac{\partial T}{\partial y} = \mathrm{const.}$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;)
+ax.text(0.05, 0.5, r&quot;$T= \mathrm{const.}$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, rotation=90)
+ax.text(0.95, 0.5, r&quot;$\frac{\partial T}{\partial x} = \mathrm{const.}$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, rotation=90)
+dt_T = r&quot;\frac{\partial T}{\partial t}&quot;
+div_T = r&quot;\nabla\cdot\left(\mathbf{u}T\right)&quot;
+laplace_T = r&quot;\nabla\cdot\left(\lambda \nabla T\right)&quot;
+ax.text(0.25, 0.575, r&quot;${:s} + {:s} = {:s}$&quot;.format(dt_T, div_T, laplace_T), ha=&quot;left&quot;)
+ax.text(0.25, 0.5, r&quot;$T(x,y, t=0) = T_{in}$&quot;, ha=&quot;left&quot;)
+ax.text(0.25, 0.425, r&quot;$\mathbf{u} = \left(u_x, u_y\right)^T$&quot;, ha=&quot;left&quot;)
+ax.text(0.25, 0.35, r&quot;$\lambda = \mathrm{const.}$&quot;, ha=&quot;left&quot;)
+ax.set_aspect(&quot;equal&quot;)
+ax.grid(ls=&quot;--&quot;)
+plt.savefig(join(output, &quot;fvm_mathematical_model.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_2_0.png" src="../_images/cfd_intro_2_0.png" />
+</div>
+</div>
+</section>
+<section id="domain-discretization-meshing">
+<h3>Domain discretization (meshing)<a class="headerlink" href="#domain-discretization-meshing" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Mesh(object):
+    def __init__(self, L_x, L_y, N_x, N_y, grad_x, grad_y):
+        self.L_x = L_x
+        self.L_y = L_y
+        self.N_x = N_x
+        self.N_y = N_y
+        self.dx = self._compute_cell_width(L_x, N_x, grad_x)
+        self.dy = self._compute_cell_width(L_y, N_y, grad_y)
+        self.x = pt.cumsum(self.dx, 0) - self.dx * 0.5
+        self.y = pt.cumsum(self.dy, 0) - self.dy * 0.5
+        xf = self.x - self.dx * 0.5
+        self.xf = pt.cat((xf, pt.tensor([xf[-1]+self.dx[-1]])))
+        yf = self.y - self.dy * 0.5
+        self.yf = pt.cat((yf, pt.tensor([yf[-1]+self.dy[-1]])))
+
+    def _compute_cell_width(self, L, N, grad):
+        if grad == 1.0:
+            delta = L / N
+            return pt.ones(N) * delta
+        else:
+            cell_widths = pt.linspace(1.0, grad, N)
+            width_0 = L / cell_widths.sum()
+            return cell_widths * width_0
+
+    def cell_id(self, i, j) -&gt; int:
+        return self.N_x * j + i
+
+    def visualize(self, show_ids=True):
+        fig, ax = plt.subplots()
+        xx, yy = pt.meshgrid(self.x, self.y, indexing=&quot;ij&quot;)
+        ax.scatter(xx, yy, s=5, c=&quot;k&quot;, zorder=6)
+        for xf_i, yf_i in zip(self.xf, self.yf):
+            ax.axvline(xf_i, 0.0, self.L_x, ls=&quot;--&quot;, c=&quot;k&quot;, alpha=0.3)
+            ax.axhline(yf_i, 0.0, self.L_y, ls=&quot;--&quot;, c=&quot;k&quot;, alpha=0.3)
+        fontsize = int(10*5/self.N_x)
+        if show_ids:
+            for i in range(self.N_x):
+                for j in range(self.N_y):
+                    ax.text(self.x[i], self.y[j]+0.2*self.dy[j], f&quot;({i},{j})&quot;,
+                            ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=fontsize)
+                    ax.text(self.x[i], self.y[j]-0.2*self.dy[j], f&quot;{self.cell_id(i, j)}&quot;,
+                            ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=fontsize)
+        ax.set_xlim(-0.01, self.L_x+0.01)
+        ax.set_ylim(-0.01, self.L_y+0.01)
+        ax.set_xlabel(r&quot;$x$&quot;)
+        ax.set_ylabel(r&quot;$y$&quot;)
+        ax.set_aspect(&quot;equal&quot;)
+        ax.set(frame_on=False)
+        return fig, ax
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 5, 5, 1.0, 1.0)
+assert pt.allclose(mesh.xf, pt.linspace(0.0, 1.0, 6))
+assert pt.allclose(mesh.x, pt.linspace(0.1, 0.9, 5))
+mesh = Mesh(1.0, 1.0, 5, 5, 2.0, 1.0)
+assert pt.isclose(2.0*mesh.dx[0], mesh.dx[-1])
+fig, ax = mesh.visualize()
+plt.savefig(join(output, &quot;5x5_mesh.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_5_0.png" src="../_images/cfd_intro_5_0.png" />
+</div>
+</div>
+</section>
+<section id="equation-discretization-part-i-diffusion">
+<h3>Equation discretization part I - diffusion<a class="headerlink" href="#equation-discretization-part-i-diffusion" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class VolScalarField(object):
+    def __init__(self, mesh, name, value, bc):
+        self.mesh = mesh
+        self.name = name
+        self.internal_field = pt.ones((mesh.N_x, mesh.N_y))
+        self.internal_field *= value
+        self.bc = bc
+
+    def visualize(self):
+        fig, ax = self.mesh.visualize(False)
+        ax.set_title(f&quot;internal field {self.name}&quot;)
+        pc = ax.pcolormesh(self.mesh.xf, self.mesh.yf, self.internal_field, label=f&quot;{self.name}&quot;)
+        plt.colorbar(pc, ax=ax)
+        return fig, ax
+
+    def __equal__(self, other):
+        return self is other
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>T1 = VolScalarField(mesh, &quot;T&quot;, 0.0, None)
+T2 = VolScalarField(mesh, &quot;T&quot;, 0.0, None)
+assert T1 == T1
+assert not T1 == T2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(2.5, 2.5), frameon=False)
+ax = fig.add_axes((0.2, 0.2, 0.8, 0.8))
+ax.set_xticks((0.8, 1.8))
+ax.set_yticks((0.8, 1.8))
+ax.set_xlim(0.0, 3.0)
+ax.set_ylim(0.0, 3.0)
+ax.set_xticklabels(())
+ax.set_yticklabels(())
+ax.grid(ls=&quot;--&quot;, color=&quot;k&quot;)
+xi = (0.4, 1.3, 1.3, 1.3, 2.4)
+yi = (1.3, 0.4, 1.3, 2.4, 1.3)
+xyi = (&quot;(i-1, j)&quot;, &quot;(i, j-1)&quot;, &quot;(i, j)&quot;, &quot;(i, j+1)&quot;, &quot;(i+1, j)&quot;)
+ax.scatter(xi, yi, c=&quot;k&quot;, marker=&quot;o&quot;, s=5)
+for xi_i, yi_i, xyi_i in zip(xi, yi, xyi):
+    ax.text(xi_i, yi_i, f&quot;${xyi_i}$&quot;, fontsize=8, ha=&quot;center&quot;, va=&quot;bottom&quot;)
+ax.annotate(&quot;&quot;, (0.0, -0.1), (0.8, -0.1), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.annotate(&quot;&quot;, (0.8, -0.1), (1.8, -0.1), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.annotate(&quot;&quot;, (1.8, -0.1), (3.0, -0.1), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.text(0.4, -0.4, r&quot;$\Delta x_{i-1}$&quot;, ha=&quot;center&quot;, fontsize=8)
+ax.text(1.3, -0.4, r&quot;$\Delta x_{i}$&quot;, ha=&quot;center&quot;, fontsize=8)
+ax.text(2.4, -0.4, r&quot;$\Delta x_{i+1}$&quot;, ha=&quot;center&quot;, fontsize=8)
+ax.annotate(&quot;&quot;, (-0.1, 0.0), (-0.1, 0.8), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.annotate(&quot;&quot;, (-0.1, 0.8), (-0.1, 1.8), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.annotate(&quot;&quot;, (-0.1, 1.8), (-0.1, 3.0), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.text(-0.4, 0.4, r&quot;$\Delta y_{j-1}$&quot;, va=&quot;center&quot;, fontsize=8, rotation=90)
+ax.text(-0.4, 1.3, r&quot;$\Delta y_{j}$&quot;, va=&quot;center&quot;, fontsize=8, rotation=90)
+ax.text(-0.4, 2.4, r&quot;$\Delta y_{j+1}$&quot;, va=&quot;center&quot;, fontsize=8, rotation=90)
+ax.text(0.9, 1.3, r&quot;$w$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(1.7, 1.3, r&quot;$e$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(1.3, 0.9, r&quot;$s$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(1.3, 1.7, r&quot;$n$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(1.3, 1.15, r&quot;$p$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+plt.savefig(join(output, &quot;stencil_internal.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_9_0.png" src="../_images/cfd_intro_9_0.png" />
+</div>
+</div>
+<p>The normal vectors are <span class="math notranslate nohighlight">\(\mathbf{n}_n = \left(0, 1\right)^T\)</span>, <span class="math notranslate nohighlight">\(\mathbf{n}_s = \left(0, -1\right)^T\)</span>, <span class="math notranslate nohighlight">\(\mathbf{n}_e = \left(1, 0\right)^T\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{n}_w = \left(-1, 0\right)^T\)</span>.</p>
+<p>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-96a2448b-717c-4ecb-8964-43f18020c4ea">
+<span class="eqno">(3)<a class="headerlink" href="#equation-96a2448b-717c-4ecb-8964-43f18020c4ea" title="Permalink to this equation">#</a></span>\[\begin{align}
+\int\limits_{V} \nabla \cdot \lambda \nabla T \mathrm{d}v &amp;= 
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2}\int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \left[
+  \partial_x \lambda \partial_x T + \partial_y \lambda \partial_y T
+  \right] \mathrm{d}x\mathrm{d}y\\
+  \int\limits_{\partial V} \lambda \nabla T \cdot \mathbf{n}\mathrm{d}o &amp;= \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \lambda \left[0\cdot\partial_x T|_n + 0\cdot\partial_x T|_s + 1\cdot\partial_y T|_n - 1\cdot\partial_y T|_s\right]\mathrm{d}x\\
+  &amp;+ \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \lambda \left[1\cdot\partial_x T|_e - 1\cdot\partial_x T|_w + 0\cdot\partial_y T|_e + 0\cdot\partial_y T|_w\right]\mathrm{d}y\\
+  &amp;=\int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \lambda \left[\partial_y T|_n - \partial_y T|_s\right]\mathrm{d}x +
+    \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \lambda \left[\partial_x T|_e - \partial_x T|_w\right]\mathrm{d}y
+\end{align}\]</div>
+<p>$</p>
+<p>Now we have to approximate the derivatives at the cell faces based on the cell-centered values. The most common approach in the FV method assumes a linear profile between the two neighboring cell-centered values. Consequently, the derivative is the constant slope of this linear profile.
+$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c00b862a-98ce-442b-98fe-e31337a3ff5c">
+<span class="eqno">(4)<a class="headerlink" href="#equation-c00b862a-98ce-442b-98fe-e31337a3ff5c" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \lambda \partial_y T|_n \mathrm{d}x &amp;\approx \lambda\Delta x_i
+  \frac{T_{i, j+1} - T_{i, j}}{0.5\left(\Delta y_j + \Delta y_{j+1}\right)}\\
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \lambda \partial_y T|_s \mathrm{d}x &amp;\approx \lambda\Delta x_i
+  \frac{T_{i, j} - T_{i, j-1}}{0.5\left(\Delta y_j + \Delta y_{j-1}\right)}\\
+  \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \lambda \partial_x T|_e \mathrm{d}y &amp;\approx \lambda\Delta y_i
+  \frac{T_{i+1, j} - T_{i, j}}{0.5\left(\Delta x_i + \Delta x_{i+1}\right)}\\
+  \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \lambda \partial_x T|_w \mathrm{d}y &amp;\approx \lambda\Delta y_i
+  \frac{T_{i, j} - T_{i-1, j}}{0.5\left(\Delta x_i + \Delta x_{i-1}\right)}
+\end{align}\]</div>
+<p>$</p>
+<div class="math notranslate nohighlight">
+\[
+\int\limits_{\partial V} \lambda \nabla T \cdot \mathbf{n}\mathrm{d}o \approx
+\lambda \Delta x_i \left(
+    \frac{T_{i, j+1} - T_{i, j}}{0.5\left(\Delta y_j + \Delta y_{j+1}\right)} - \frac{T_{i, j} - T_{i, j-1}}{0.5\left(\Delta y_j + \Delta y_{j-1}\right)}
+\right) +
+\lambda \Delta y_j \left(
+    \frac{T_{i+1, j} - T_{i, j}}{0.5\left(\Delta x_i + \Delta x_{i+1}\right)} - \frac{T_{i, j} - T_{i-1, j}}{0.5\left(\Delta x_i + \Delta x_{i-1}\right)}
+\right)
+\]</div>
+<p>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-81aa472d-7202-424d-801d-b477bd2ab5fb">
+<span class="eqno">(5)<a class="headerlink" href="#equation-81aa472d-7202-424d-801d-b477bd2ab5fb" title="Permalink to this equation">#</a></span>\[\begin{align}
+a_n &amp;= \frac{\lambda \Delta x_i}{0.5\left(\Delta y_j + \Delta y_{j+1}\right)} \\
+a_s &amp;= \frac{\lambda \Delta x_i}{0.5\left(\Delta y_j + \Delta y_{j-1}\right)} \\
+a_e &amp;= \frac{\lambda \Delta y_j}{0.5\left(\Delta x_i + \Delta x_{i+1}\right)} \\
+a_w &amp;= \frac{\lambda \Delta y_j}{0.5\left(\Delta x_i + \Delta x_{i-1}\right)}
+\end{align}\]</div>
+<p>$</p>
+<div class="math notranslate nohighlight">
+\[
+\int\limits_{\partial V} \lambda \nabla T \cdot \mathbf{n}\mathrm{d}o \approx
+a_n T_{i, j+1} - a_n T_{i, j} - a_s T_{i, j} + a_s T_{i, j-1} + a_e T_{i+1, j} - a_e T_{i, j} - a_w T_{i, j} + a_w T_{i-1, j}
+\]</div>
+<p>With <span class="math notranslate nohighlight">\(a_p = - (a_n + a_s + a_e + a_w)\)</span> we get:
+$<span class="math notranslate nohighlight">\(
+\int\limits_{\partial V} \lambda \nabla T \cdot \mathbf{n}\mathrm{d}o \approx
+a_n T_{i, j+1} + a_s T_{i, j-1} + a_e T_{i+1, j} + a_w T_{i-1, j} + a_p T_{i, j}
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(2.5, 2.5), frameon=False)
+ax = fig.add_axes((0.2, 0.2, 0.8, 0.8))
+ax.set_xticks((0.8, 1.8))
+ax.set_yticks((0.8, 1.8))
+ax.set_xlim(0.0, 3.0)
+ax.set_ylim(0.0, 3.0)
+ax.set_xticklabels(())
+ax.set_yticklabels(())
+ax.grid(ls=&quot;--&quot;, color=&quot;k&quot;)
+xi = (0.4, 0.4, 1.3)
+yi = (0.4, 1.3, 0.4)
+xyi = (&quot;(i, j)&quot;, &quot;(i, j+1)&quot;, &quot;(i+1, j)&quot;)
+ax.scatter(xi, yi, c=&quot;k&quot;, marker=&quot;o&quot;, s=5)
+for xi_i, yi_i, xyi_i in zip(xi, yi, xyi):
+    ax.text(xi_i, yi_i, f&quot;${xyi_i}$&quot;, fontsize=8, ha=&quot;center&quot;, va=&quot;bottom&quot;)
+ax.annotate(&quot;&quot;, (0.0, -0.1), (0.8, -0.1), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.annotate(&quot;&quot;, (0.8, -0.1), (1.8, -0.1), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.text(0.4, -0.4, r&quot;$\Delta x_{i}$&quot;, ha=&quot;center&quot;, fontsize=8)
+ax.text(1.3, -0.4, r&quot;$\Delta x_{i+1}$&quot;, ha=&quot;center&quot;, fontsize=8)
+ax.annotate(&quot;&quot;, (-0.1, 0.0), (-0.1, 0.8), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.annotate(&quot;&quot;, (-0.1, 0.8), (-0.1, 1.8), arrowprops=dict(arrowstyle=&quot;&lt;-&gt;&quot;, shrinkA=0.0, shrinkB=0.0), annotation_clip=False)
+ax.text(-0.4, 0.4, r&quot;$\Delta y_{j}$&quot;, va=&quot;center&quot;, fontsize=8, rotation=90)
+ax.text(-0.4, 1.3, r&quot;$\Delta y_{j+1}$&quot;, va=&quot;center&quot;, fontsize=8, rotation=90)
+ax.text(0.1, 0.4, r&quot;$w$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(0.7, 0.4, r&quot;$e$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(0.4, 0.1, r&quot;$s$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(0.4, 0.7, r&quot;$n$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.text(0.4, 0.25, r&quot;$p$&quot;, ha=&quot;center&quot;, va=&quot;center&quot;, fontsize=8, color=&quot;C0&quot;)
+ax.axhline(0.0, 0.0, 1.0, c=&quot;C1&quot;, lw=2, zorder=8)
+ax.axvline(0.0, 0.0, 1.0, c=&quot;C2&quot;, lw=2, zorder=8)
+ax.text(2.4, -0.2, r&quot;$\partial_y T = g_{y, s}$&quot;, ha=&quot;center&quot;, fontsize=8, c=&quot;C1&quot;)
+ax.text(-0.2, 2.4, r&quot;$T_w$&quot;, va=&quot;center&quot;, fontsize=8, c=&quot;C2&quot;, rotation=90)
+plt.savefig(join(output, &quot;stencil_boundary.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_12_0.png" src="../_images/cfd_intro_12_0.png" />
+</div>
+</div>
+<p>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-8c278aea-e74f-4c51-b6e7-de7ac703496c">
+<span class="eqno">(6)<a class="headerlink" href="#equation-8c278aea-e74f-4c51-b6e7-de7ac703496c" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \lambda \partial_y T|_n \mathrm{d}x &amp;\approx \lambda\Delta x_i
+  \frac{T_{i, j+1} - T_{i, j}}{0.5\left(\Delta y_j + \Delta y_{j+1}\right)}\\
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \lambda \partial_y T|_s \mathrm{d}x &amp;\approx \lambda\Delta x_i
+  g_{y,s}\\
+  \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \lambda \partial_x T|_e \mathrm{d}y &amp;\approx \lambda\Delta y_i
+  \frac{T_{i+1, j} - T_{i, j}}{0.5\left(\Delta x_i + \Delta x_{i+1}\right)}\\
+  \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \lambda \partial_x T|_w \mathrm{d}y &amp;\approx \lambda\Delta y_i
+  \frac{T_{i, j} - T_{w}}{0.5\Delta x_i}
+\end{align}\]</div>
+<p>$</p>
+<div class="math notranslate nohighlight">
+\[
+\int\limits_{\partial V} \lambda \nabla T \cdot \mathbf{n}\mathrm{d}o \approx
+\lambda \Delta x_i \left(
+    \frac{T_{i, j+1} - T_{i, j}}{0.5\left(\Delta y_j + \Delta y_{j+1}\right)} - g_{y,s}
+\right) +
+\lambda \Delta y_j \left(
+    \frac{T_{i+1, j} - T_{i, j}}{0.5\left(\Delta x_i + \Delta x_{i+1}\right)} - \frac{T_{i, j} - T_w}{0.5\Delta x_i}
+\right)
+\]</div>
+<p>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-d45947aa-00a7-4438-8b1e-0f33fbd2dc3e">
+<span class="eqno">(7)<a class="headerlink" href="#equation-d45947aa-00a7-4438-8b1e-0f33fbd2dc3e" title="Permalink to this equation">#</a></span>\[\begin{align}
+a_n &amp;= \frac{\lambda \Delta x_i}{0.5\left(\Delta y_j + \Delta y_{j+1}\right)} \\
+a_s &amp;= 0 \\
+a_e &amp;= \frac{\lambda \Delta y_j}{0.5\left(\Delta x_i + \Delta x_{i+1}\right)} \\
+a_w &amp;= \frac{\lambda \Delta y_j}{0.5\Delta x_i} \\
+b &amp;= -\lambda \Delta x_i g_{y,s} + a_w T_w
+\end{align}\]</div>
+<p>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class FVMatrix(object):
+    def __init__(self, matrix, source, field):
+        self.matrix = matrix
+        self.source = source
+        self.field = field
+
+    def __add__(self, other):
+        assert self.field == other.field
+        return FVMatrix(self.matrix + other.matrix,
+                        self.source + other.source,
+                        self.field)
+
+    def __sub__(self, other):
+        assert self.field == other.field
+        return FVMatrix(self.matrix - other.matrix,
+                        self.source - other.source,
+                        self.field)
+    
+    def visualize(self, scale=10):
+        fig, ax = plt.subplots()
+        elements = self.field.mesh.N_x*self.field.mesh.N_y
+        ax.set_xticks(range(elements))
+        ax.set_yticks(range(elements))
+        i, j = self.matrix._indices()
+        colors = []
+        for c in range(i.shape[0]):
+            if self.matrix._values()[c] &lt; 0.0:
+                colors.append(&quot;C0&quot;)
+            else:
+                colors.append(&quot;C1&quot;)
+        ax.scatter(i, j, s=self.matrix._values().abs()*scale, c=colors, zorder=6)
+        colors = []
+        for c in range(self.source.shape[0]):
+            if self.source[c] &lt; 0.0:
+                colors.append(&quot;C0&quot;)
+            else:
+                colors.append(&quot;C1&quot;)
+        ax.scatter(pt.ones(elements)*(elements+1), range(elements),  s=self.source.abs()*scale, c=colors, zorder=6)
+        ax.axvline(elements, 0, 1, ls=&quot;-&quot;, c=&quot;k&quot;)
+        ax.tick_params(axis=&#39;both&#39;, which=&#39;major&#39;, labelsize=6)
+        ax.grid(True, ls=&quot;--&quot;)
+        ax.set_aspect(True)
+        ax.set_xlim(-1, elements+2)
+        ax.set_ylim(-1, elements)
+        ax.invert_yaxis()
+        ax.xaxis.set_ticks_position(&#39;top&#39;)
+        return fig, ax
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>indices = [[3, 6, 9, 12, 15, 18], [12, 15, 18, 21, 24, 24]]
+values = [1, 2, 3, -1, -2, -3]
+test_matrix = pt.sparse_coo_tensor(indices, values)
+test_source = pt.linspace(1, 3, 25)
+A1 = FVMatrix(test_matrix, test_source, T1)
+A2 = FVMatrix(test_matrix, test_source, T1)
+A3 = FVMatrix(test_matrix, test_source, T2)
+assert pt.allclose((A1 + A2).matrix.to_dense(), 2*test_matrix.to_dense())
+try:
+    A1 + A3
+except:
+    print(&quot;Could not add matrices due to field miss-match.&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Could not add matrices due to field miss-match.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_ = A1.visualize()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_18_0.png" src="../_images/cfd_intro_18_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def fvm_laplace(diffusivity: float, field: VolScalarField) -&gt; FVMatrix:
+    
+    row, col, val = [], [], []
+    dx, dy = field.mesh.dx, field.mesh.dy
+    source = pt.zeros(field.mesh.N_x*field.mesh.N_y)
+
+    def add_east(i, j):
+        fac = 2.0*diffusivity*dy[j]
+        if i &lt; field.mesh.N_x-1:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i+1, j))
+            a_e, b_e = fac / (dx[i+1]+dx[i]), 0.0
+            val.append(a_e)
+        else: # east face is boundary
+            type_e, val_e = field.bc[&quot;right&quot;]
+            if type_e == &quot;fixedValue&quot;:
+                a_e, b_e = fac / dx[i], -fac / dx[i] * val_e
+            else:
+                a_e, b_e = 0.0, -diffusivity * dy[j] * val_e
+        return a_e, b_e
+
+    def add_west(i, j):
+        fac = 2.0*diffusivity*dy[j]
+        if i &gt; 0:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i-1, j))
+            a_w, b_w = fac / (dx[i]+dx[i-1]), 0.0
+            val.append(a_w)
+        else: # west face is boundary
+            type_w, val_w = field.bc[&quot;left&quot;]
+            if type_w == &quot;fixedValue&quot;:
+                a_w, b_w = fac / dx[i], -fac / dx[i] * val_w
+            else:
+                a_w, b_w = 0.0, diffusivity * dy[j] * val_w
+        return a_w, b_w
+
+    def add_north(i, j):
+        fac = 2.0*diffusivity*dx[i]
+        if j &lt; field.mesh.N_y-1:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i, j+1))
+            a_n, b_n = fac / (dy[j+1]+dy[j]), 0.0
+            val.append(a_n)
+        else: # north face is boundary
+            type_n, val_n = field.bc[&quot;top&quot;]
+            if type_n == &quot;fixedValue&quot;:
+                a_n, b_n = fac / dy[j], -fac / dy[j] * val_n
+            else:
+                a_n, b_n = 0.0, -diffusivity * dx[i] * val_n
+        return a_n, b_n
+
+    def add_south(i, j):
+        fac = 2.0*diffusivity*dx[i]
+        if j &gt; 0:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i, j-1))
+            a_s, b_s = fac / (dy[j]+dy[j-1]), 0.0
+            val.append(a_s)
+        else: # south face is boundary
+            type_s, val_s = field.bc[&quot;bottom&quot;]
+            if type_s == &quot;fixedValue&quot;:
+                a_s, b_s = fac / dy[j], -fac / dy[j] * val_s
+            else:
+                a_s, b_s = 0.0, diffusivity * dx[i] * val_s
+        return a_s, b_s
+
+    def add_center(i, j, coeffs):
+        row.append(field.mesh.cell_id(i, j))
+        col.append(field.mesh.cell_id(i, j))
+        val.append(-sum(coeffs))
+
+    def add_source(i, j, sources):
+        internal = 0 &lt; i &lt; field.mesh.N_x-1 and 0 &lt; j &lt; field.mesh.N_y-1
+        if not internal:
+            source[field.mesh.cell_id(i, j)] = sum(sources)
+
+    for i in range(field.mesh.N_x):
+        for j in range(field.mesh.N_y):
+            a_e, b_e = add_east(i, j)
+            a_w, b_w = add_west(i, j)
+            a_n, b_n = add_north(i, j)
+            a_s, b_s = add_south(i, j)
+            add_center(i, j, (a_e, a_w, a_n, a_s))
+            add_source(i, j, (b_e, b_w, b_n, b_s))
+        
+    return FVMatrix(pt.sparse_coo_tensor([row, col], val),
+                    source, field)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 5, 5, 1.0, 1.0)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 0.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+matrix = fvm_laplace(1.0, T)
+fig, ax = matrix.visualize(scale=4)
+plt.savefig(join(output, &quot;diff_fv_matrix.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_20_0.png" src="../_images/cfd_intro_20_0.png" />
+</div>
+</div>
+</section>
+<section id="iterative-solution">
+<h3>Iterative solution<a class="headerlink" href="#iterative-solution" title="Permalink to this headline">#</a></h3>
+<section id="jacobi-and-gauss-seidel-methods">
+<h4>Jacobi and Gauss-Seidel methods<a class="headerlink" href="#jacobi-and-gauss-seidel-methods" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x, y = 0, 0
+x_true, y_true = -8, 3
+TOL = 1e-3
+res_jacobi = []
+for i in range(50):
+    x_new = (2 + 2*y) / (-1)
+    y_new = (-5 + 2*x) / (-7)
+    x, y = x_new, y_new
+    res_jacobi.append(abs(x-x_true) + abs(y-y_true))
+    if res_jacobi[-1] &lt; TOL:
+        print(f&quot;Converged after {i+1} iterations.&quot;)
+        break
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 34 iterations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x, y = 0, 0
+res_gauss_seidel = []
+for i in range(50):
+    x = (2 + 2*y) / (-1)
+    y = (-5 + 2*x) / (-7)
+    res_gauss_seidel.append(abs(x-x_true) + abs(y-y_true))
+    if res_gauss_seidel[-1] &lt; TOL:
+        print(f&quot;Converged after {i+1} iterations.&quot;)
+        break
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 17 iterations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(range(1, len(res_jacobi)+1), res_jacobi, ls=&quot;-&quot;, label=&quot;Jacobi method&quot;)
+plt.plot(range(1, len(res_gauss_seidel)+1), res_gauss_seidel, ls=&quot;--&quot;, label=&quot;Gauss-Seidel method&quot;)
+plt.hlines(TOL, 1, len(res_jacobi), colors=&quot;k&quot;, ls=&quot;:&quot;)
+plt.xlabel(&quot;iteration&quot;)
+plt.ylabel(&quot;residual&quot;)
+plt.xlim(1, len(res_jacobi))
+plt.yscale(&quot;log&quot;)
+plt.legend()
+plt.savefig(join(output, &quot;jacobi_vs_gauss_seidel.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_24_0.png" src="../_images/cfd_intro_24_0.png" />
+</div>
+</div>
+</section>
+<section id="sparse-versus-dense-matrices">
+<h4>Sparse versus dense matrices<a class="headerlink" href="#sparse-versus-dense-matrices" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def compute_n_elements_dense(Nx: int, Ny: int) -&gt; int:
+    return (Nx*Ny)**2
+
+def compute_n_elements_sparse(Nx: int, Ny: int) -&gt; int:
+    four_nb = (Nx-2) * (Ny-2)
+    three_nb = 2*(Nx-2) + 2*(Ny-2)
+    two_nb = 4
+    return (four_nb*5 + three_nb*4 + two_nb*3) * 3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>N_cells = range(3, 11)
+N_float_dense = [compute_n_elements_dense(n, n) for n in N_cells]
+N_float_sparse = [compute_n_elements_sparse(n, n) for n in N_cells]
+
+plt.plot(N_cells, N_float_dense, label=&quot;dense matrix&quot;)
+plt.plot(N_cells, N_float_sparse, label=&quot;sparse matrix&quot;)
+plt.xlabel(r&quot;$N_x$, $N_y$&quot;)
+plt.ylabel(&quot;elements to store&quot;)
+plt.legend()
+plt.xlim(3, 10)
+plt.ylim(0, 1e4)
+plt.grid(ls=&quot;--&quot;)
+plt.savefig(join(output, &quot;dense_vs_sparse.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_27_0.png" src="../_images/cfd_intro_27_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def gauss_seidel(A, b, x, tol=1.0e-6, max_iter=1000):
+    res_iter = []
+    for it in range(max_iter):
+        for i in range(x.shape[0]):
+            row_sum = 0.0
+            for row, col in zip(*A._indices()):
+                if row == i and col != i:
+                    row_sum += (A[row, col] * x[col]).item()
+            x[i] = (b[i] - row_sum) / A[i, i]
+        res_iter.append(pt.linalg.norm(b - A.mv(x)).item())
+        if res_iter[-1] &lt; tol:
+            print(f&quot;Linear solver converged in {it+1} iterations.&quot;)
+            print(&quot;Final residual: {:2.2e}&quot;.format(res_iter[-1]))
+            return x, res_iter
+    print(f&quot;Linear solver did not converge after {it+1} iterations.&quot;)
+    print(&quot;Final residual: {:2.2e}&quot;.format(res_iter[-1]))
+    return x, res_iter
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 5, 5, 1.0, 1.0)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 0.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+matrix = fvm_laplace(0.1, T)
+
+Tsol, res_coarse = gauss_seidel(matrix.matrix, matrix.source, matrix.field.internal_field.flatten(), tol=1.0e-2)
+T = VolScalarField(mesh, &quot;T&quot;, Tsol.reshape(5, 5), bc)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear solver converged in 23 iterations.
+Final residual: 9.02e-03
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = T.visualize()
+plt.savefig(join(output, &quot;5x5_solution.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_30_0.png" src="../_images/cfd_intro_30_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 10, 10, 1.0, 1.0)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 0.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+matrix = fvm_laplace(0.1, T)
+
+Tsol, res_fine = gauss_seidel(matrix.matrix, matrix.source, matrix.field.internal_field.flatten(), tol=1.0e-2)
+T = VolScalarField(mesh, &quot;T&quot;, Tsol.reshape(10, 10), bc)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear solver converged in 74 iterations.
+Final residual: 9.89e-03
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = T.visualize()
+plt.savefig(join(output, &quot;10x10_solution.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_32_0.png" src="../_images/cfd_intro_32_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(range(len(res_coarse)), res_coarse, label=&quot;coarse&quot;)
+plt.plot(range(len(res_fine)), res_fine, label=&quot;fine&quot;)
+plt.gca().axhline(1e-2, 0, 1, ls=&quot;--&quot;, c=&quot;k&quot;)
+plt.xlabel(&quot;iteration&quot;)
+plt.ylabel(&quot;residual&quot;)
+plt.xlim(0, max(len(res_coarse), len(res_fine)))
+plt.legend()
+plt.savefig(join(output, &quot;res_coarse_fine.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_33_0.png" src="../_images/cfd_intro_33_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="equation-discretization-part-ii-convection">
+<h3>Equation discretization part II - convection<a class="headerlink" href="#equation-discretization-part-ii-convection" title="Permalink to this headline">#</a></h3>
+<p>The velocity vector is defined as <span class="math notranslate nohighlight">\(\mathbf{u} = \left(u_x, u_y \right)^T\)</span>.
+$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-99f865af-50e3-471b-b25c-f2c2757bf150">
+<span class="eqno">(8)<a class="headerlink" href="#equation-99f865af-50e3-471b-b25c-f2c2757bf150" title="Permalink to this equation">#</a></span>\[\begin{align}
+\int\limits_{V} \nabla \cdot \mathbf{u}T \mathrm{d}v &amp;= 
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2}\int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \left[
+  \partial_x u_x T + \partial_y u_x T
+  \right] \mathrm{d}x\mathrm{d}y\\
+  \int\limits_{\partial V} \mathbf{u} T \cdot \mathbf{n}\mathrm{d}o &amp;= \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \left[0\cdot u_xT|_n + 0\cdot u_xT|_s + 1\cdot u_yT|_n - 1\cdot u_y T|_s\right]\mathrm{d}x\\
+  &amp;+ \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \left[1\cdot u_x T|_e - 1\cdot u_x T|_w + 0\cdot u_y T|_e + 0\cdot u_y T|_w\right]\mathrm{d}y\\
+  &amp;=\int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} \left[u_y T|_n - u_y T|_s\right]\mathrm{d}x +
+    \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} \left[u_x T|_e - u_x T|_w\right]\mathrm{d}y
+\end{align}\]</div>
+<p>$</p>
+<p>Now we have to approximate the value of <span class="math notranslate nohighlight">\(T\)</span> at the cell faces based on the cell-centered values. A typical choice for convection-diffusion-equations is linear interpolation. As the diffusion terms becomes smaller, we may have to resort to interpolation schemes that account for the sign of the velocity on the face.
+$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-652375cd-b1ed-41b6-9514-56b8cbb50e42">
+<span class="eqno">(9)<a class="headerlink" href="#equation-652375cd-b1ed-41b6-9514-56b8cbb50e42" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} u_y T|_n \mathrm{d}x &amp;\approx u_{y,j+1} \Delta x_i
+  \left( T_{i,j} + \frac{\Delta y_j}{\Delta y_j + \Delta y_{j+1}} \left(T_{i,j+1} - T_{i,j} \right)\right)\\
+  \int\limits_{x_i-\Delta x_i/2}^{x_i+\Delta x_i/2} u_y T|_s \mathrm{d}x &amp;\approx u_{y,j}\Delta x_i
+  \left( T_{i,j} + \frac{\Delta y_j}{\Delta y_j + \Delta y_{j-1}} \left( T_{i,j-1} - T_{i,j} \right)\right)\\
+  \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} u_x T|_e \mathrm{d}y &amp;\approx u_{x,i+1}\Delta y_j
+  \left( T_{i,j} + \frac{\Delta x_i}{\Delta x_i + \Delta x_{i+1}} \left( T_{i+1,j} - T_{i,j} \right) \right)\\
+  \int\limits_{y_j-\Delta y_j/2}^{y_j+\Delta y_j/2} u_x T|_w \mathrm{d}y &amp;\approx u_{x,i}\Delta y_j
+  \left( T_{i,j} + \frac{\Delta x_i}{\Delta x_i + \Delta x_{i-1}} \left( T_{i-1,j} - T_{i,j} \right) \right)
+\end{align}\]</div>
+<p>$</p>
+<p>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-561a2dfd-b156-4975-8c5f-202c2b827109">
+<span class="eqno">(10)<a class="headerlink" href="#equation-561a2dfd-b156-4975-8c5f-202c2b827109" title="Permalink to this equation">#</a></span>\[\begin{align}
+\varphi_n &amp;= u_{y,j+1}\Delta x_i,\quad &amp;a_n &amp;= \frac{\Delta y_j}{\Delta y_j + \Delta y_{j+1}} \\
+\varphi_s &amp;= u_{y,j}\Delta x_i,\quad &amp;a_s &amp;= \frac{\Delta y_j}{\Delta y_j + \Delta y_{j-1}} \\
+\varphi_e &amp;= u_{x,i+1}\Delta y_j,\quad &amp;a_e&amp; = \frac{\Delta x_i}{\Delta x_i + \Delta x_{i+1}} \\
+\varphi_w &amp;= u_{x,i}\Delta y_j,\quad &amp;a_w&amp; = \frac{\Delta x_i}{\Delta x_i + \Delta x_{i-1}}
+\end{align}\]</div>
+<p>$</p>
+<p>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-777de8a8-2767-4439-8e6c-0a40d152e061">
+<span class="eqno">(11)<a class="headerlink" href="#equation-777de8a8-2767-4439-8e6c-0a40d152e061" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \int\limits_{\partial V} \mathbf{u} T \cdot \mathbf{n}\mathrm{d}o &amp;=
+   \varphi_n \left[ T_{i,j} + a_n \left( T_{i,j+1}-T_{i,j} \right) \right]
+  -\varphi_s \left[ T_{i,j} + a_s \left( T_{i,j-1}-T_{i,j} \right) \right]
+  +\varphi_e \left[ T_{i,j} + a_e \left( T_{i+1,j}-T_{i,j} \right) \right]
+  -\varphi_w \left[ T_{i,j} + a_w \left( T_{i-1,j}-T_{i,j} \right) \right]\\
+  &amp;= \varphi_n a_n T_{i,j+1} - \varphi_s a_s T_{i,j-1} + \varphi_e a_e T_{i+1,j} - \varphi_w a_w T_{i-1,j} + a_p T_{i,j}
+\end{align}\]</div>
+<p>$</p>
+<p>with
+$<span class="math notranslate nohighlight">\(
+a_p = \varphi_n (1-a_n) - \varphi_s (1-a_s) + \varphi_e (1-a_e) - \varphi_w (1-a_w)
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def stream_function(x, y, A):
+    return 2*A*x*y
+
+def velocity_field(x, y, A):
+    u_x = 2*A*x
+    u_y = -2*A*y
+    return u_x, u_y
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots()
+
+A = 1
+N = 20
+x = pt.linspace(0, 1, N)
+y = pt.linspace(0, 1, N)
+xx, yy = pt.meshgrid(x, y, indexing=&quot;ij&quot;)
+psi = stream_function(xx, yy, A)
+u_x, u_y = velocity_field(xx, yy, A)
+ax.contourf(xx, yy, psi, levels=30)
+ax.quiver(xx, yy, u_x, u_y, zorder=6)
+ax.set_xlabel(r&quot;$x$&quot;)
+ax.set_ylabel(r&quot;$y$&quot;)
+ax.set_aspect(&quot;equal&quot;)
+ax.set_title(&quot;velocity field and stream function iso-contours&quot;, fontsize=8)
+plt.savefig(f&quot;{output}/2D_velocity_field.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_41_0.png" src="../_images/cfd_intro_41_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class SurfaceVectorField(object):
+    def __init__(self, mesh, name, value_x, value_y):
+        self.mesh = mesh
+        self.name = name
+        self.surface_field_x = pt.ones((mesh.N_x + 1, mesh.N_y)) * value_x
+        self.surface_field_y = pt.ones((mesh.N_x, mesh.N_y + 1)) * value_y
+
+    def x(self):
+        return self.surface_field_x
+
+    def y(self):
+        return self.surface_field_y
+
+    def visualize(self, scale):
+        fig, ax = self.mesh.visualize(False)
+        ax.set_title(f&quot;internal field {self.name}&quot;)
+        xx, yy = pt.meshgrid(mesh.x, mesh.y, indexing=&quot;ij&quot;)
+        ax.quiver(xx, yy, 0.5*(self.x()[:-1, :] + self.x()[1:, :]), 0.5*(self.y()[:, :-1] + self.y()[:, 1:]), zorder=6, scale=1.0/scale)
+        xx, yy = pt.meshgrid(mesh.xf, mesh.y, indexing=&quot;ij&quot;)
+        ax.quiver(xx, yy, self.x(), pt.zeros_like(self.x()), zorder=6, alpha=0.3, scale=1.0/scale)
+        xx, yy = pt.meshgrid(mesh.x, mesh.yf, indexing=&quot;ij&quot;)
+        ax.quiver(xx, yy, pt.zeros_like(self.y()), self.y(), zorder=6, alpha=0.3, scale=1.0/scale)
+        return fig, ax
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def create_surface_velocity_field(mesh: Mesh, A: float) -&gt; SurfaceVectorField:
+    xx, yy = pt.meshgrid(mesh.xf, mesh.y, indexing=&quot;ij&quot;)
+    u_x, _ = velocity_field(xx, yy, A)
+    xx, yy = pt.meshgrid(mesh.x, mesh.yf, indexing=&quot;ij&quot;)
+    _, u_y = velocity_field(xx, yy, A)
+    return SurfaceVectorField(mesh, &quot;U&quot;, u_x, u_y)
+
+mesh = Mesh(1.0, 1.0, 10, 10, 1.0, 1.0)
+fig, ax = create_surface_velocity_field(mesh, 0.05).visualize(scale=0.5)
+plt.savefig(join(output, &quot;surface_velocity_corner_flow.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_43_0.png" src="../_images/cfd_intro_43_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def fvm_div(vel: SurfaceVectorField, field: VolScalarField) -&gt; FVMatrix:
+    
+    row, col, val = [], [], []
+    dx, dy = field.mesh.dx, field.mesh.dy
+    source = pt.zeros(field.mesh.N_x*field.mesh.N_y)
+
+    def add_east(i, j):
+        phi_e = vel.x()[i+1, j] * dy[j]
+        if i &lt; field.mesh.N_x-1:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i+1, j))
+            a_e, b_e = dx[i] / (dx[i+1]+dx[i]), 0.0
+            val.append(phi_e*a_e)
+        else: # east face is boundary
+            type_e, val_e = field.bc[&quot;right&quot;]
+            if type_e == &quot;fixedValue&quot;:
+                a_e, b_e = 1.0, -phi_e*val_e
+            else:
+                a_e, b_e = 0.0, -phi_e*dx[i]*val_e*0.5
+        return a_e, b_e, phi_e
+
+    def add_west(i, j):
+        phi_w = vel.x()[i, j] * dy[j]
+        if i &gt; 0:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i-1, j))
+            a_w, b_w = dx[i] / (dx[i-1]+dx[i]), 0.0
+            val.append(-phi_w*a_w)
+        else: # west face is boundary
+            type_w, val_w = field.bc[&quot;left&quot;]
+            if type_w == &quot;fixedValue&quot;:
+                a_w, b_w = 1.0, phi_w*val_w
+            else:
+                a_w, b_w = 0.0, -phi_w*dx[i]*val_w*0.5
+        return a_w, b_w, phi_w
+
+    def add_north(i, j):
+        phi_n = vel.y()[i, j+1] * dx[i]
+        if j &lt; field.mesh.N_y-1:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i, j+1))
+            a_n, b_n = dy[j] / (dy[j+1]+dy[j]), 0.0
+            val.append(phi_n*a_n)
+        else: # north face is boundary
+            type_n, val_n = field.bc[&quot;top&quot;]
+            if type_n == &quot;fixedValue&quot;:
+                a_n, b_n = 1.0, -phi_n*val_n
+            else:
+                a_n, b_n = 0.0, -phi_n*dy[j]*val_n*0.5
+        return a_n, b_n, phi_n
+
+    def add_south(i, j):
+        phi_s = vel.y()[i, j] * dx[i]
+        if j &gt; 0:
+            row.append(field.mesh.cell_id(i, j))
+            col.append(field.mesh.cell_id(i, j-1))
+            a_s, b_s = dy[j] / (dy[j]+dy[j-1]), 0.0
+            val.append(-phi_s*a_s)
+        else: # south face is boundary
+            type_s, val_s = field.bc[&quot;bottom&quot;]
+            if type_s == &quot;fixedValue&quot;:
+                a_s, b_s = 1.0, phi_s*val_s
+            else:
+                a_s, b_s = 0.0, -phi_s*dy[j]*val_s*0.5
+        return a_s, b_s, phi_s
+
+    def add_center(i, j, coeffs):
+        row.append(field.mesh.cell_id(i, j))
+        col.append(field.mesh.cell_id(i, j))
+        val.append(sum(coeffs))
+
+    def add_source(i, j, sources):
+        internal = 0 &lt; i &lt; field.mesh.N_x-1 and 0 &lt; j &lt; field.mesh.N_y-1
+        if not internal:
+            source[field.mesh.cell_id(i, j)] = sum(sources)
+
+    for i in range(field.mesh.N_x):
+        for j in range(field.mesh.N_y):
+            a_e, b_e, phi_e = add_east(i, j)
+            a_w, b_w, phi_w = add_west(i, j)
+            a_n, b_n, phi_n = add_north(i, j)
+            a_s, b_s, phi_s = add_south(i, j)
+            add_center(i, j, (phi_e*(1.0-a_e), -phi_w*(1.0-a_w), phi_n*(1.0-a_n), -phi_s*(1.0-a_s)))
+            add_source(i, j, (b_e, b_w, b_n, b_s))
+        
+    return FVMatrix(pt.sparse_coo_tensor([row, col], val),
+                    source, field)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 5, 5, 1.0, 1.0)
+vel = create_surface_velocity_field(mesh, 1.0)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 1.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+matrix = fvm_div(vel, T)
+fig, ax = matrix.visualize(scale=80)
+plt.savefig(join(output, &quot;conv_fv_matrix.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_45_0.png" src="../_images/cfd_intro_45_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 5, 5, 1.0, 1.0)
+vel = create_surface_velocity_field(mesh, 0.05)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 0.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+pde = fvm_div(vel, T) - fvm_laplace(0.1, T)
+
+Tsol, res_coarse = gauss_seidel(pde.matrix, pde.source, pde.field.internal_field.flatten(), tol=1.0e-2)
+T = VolScalarField(mesh, &quot;T&quot;, Tsol.reshape(5, 5), bc)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear solver converged in 20 iterations.
+Final residual: 9.34e-03
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = T.visualize()
+plt.savefig(join(output, &quot;5x5_full_solution.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_47_0.png" src="../_images/cfd_intro_47_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 10, 10, 1.0, 1.0)
+vel = create_surface_velocity_field(mesh, 0.05)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 0.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+pde = fvm_div(vel, T) - fvm_laplace(0.1, T)
+
+Tsol, res_coarse = gauss_seidel(pde.matrix, pde.source, pde.field.internal_field.flatten(), tol=1.0e-2)
+T = VolScalarField(mesh, &quot;T&quot;, Tsol.reshape(10, 10), bc)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear solver converged in 66 iterations.
+Final residual: 9.97e-03
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = T.visualize()
+plt.savefig(join(output, &quot;10x10_full_solution.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_49_0.png" src="../_images/cfd_intro_49_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mesh = Mesh(1.0, 1.0, 10, 10, 1.0, 1.0)
+vel = create_surface_velocity_field(mesh, 0.05)
+bc = {
+    &quot;left&quot; : (&quot;fixedValue&quot;, 2.0),
+    &quot;right&quot; : (&quot;fixedGradient&quot;, -2.0),
+    &quot;top&quot; : (&quot;fixedValue&quot;, 1.0),
+    &quot;bottom&quot; : (&quot;fixedGradient&quot;, -5.0),
+}
+T = VolScalarField(mesh, &quot;T&quot;, 0.0, bc)
+pde = fvm_div(vel, T) - fvm_laplace(0.1, T)
+
+Tsol, res_coarse = gauss_seidel(pde.matrix, pde.source, pde.field.internal_field.flatten(), tol=1.0e-6)
+T = VolScalarField(mesh, &quot;T&quot;, Tsol.reshape(10, 10), bc)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear solver converged in 358 iterations.
+Final residual: 9.53e-07
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = T.visualize()
+plt.savefig(join(output, &quot;10x10_full_solution_with_inlet.svg&quot;), bbox_inches=&quot;tight&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cfd_intro_51_0.png" src="../_images/cfd_intro_51_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="fvm-in-openfoam">
+<h2>FVM in OpenFOAM<a class="headerlink" href="#fvm-in-openfoam" title="Permalink to this headline">#</a></h2>
+<p>Running the same simulation as above in OpenFOAM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># starting from the repository&#39;s top level</span>
+<span class="c1"># define environment variables</span>
+<span class="n">source</span> <span class="n">setup</span><span class="o">-</span><span class="n">env</span>
+<span class="c1"># create a copy, navigate to the copy, and run the simulation</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">corner_flow</span> <span class="n">exercises</span><span class="o">/</span>
+<span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">corner_flow</span><span class="o">/</span>
+<span class="o">./</span><span class="n">Allrun</span>
+<span class="c1"># post-processing in ParaView</span>
+<span class="n">paraview</span> <span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+</pre></div>
+</div>
+</section>
+<section id="fvm-in-basilisk">
+<h2>FVM in Basilisk<a class="headerlink" href="#fvm-in-basilisk" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ml_cfd_intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Course overview and motivation</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ml_intro.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction to machine learning</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

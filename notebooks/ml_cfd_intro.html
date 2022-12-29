@@ -1,0 +1,1063 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Course overview and motivation &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Finite-volume-based CFD in a nutshell" href="cfd_intro.html" />
+    <link rel="prev" title="Machine learning in computational fluid dynamics" href="../README.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/ml_cfd_intro.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#about-this-course">
+   About this course
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#audience-structure-and-communication">
+     Audience, structure, and communication
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#technology-stack">
+     Technology stack
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-combine-cfd-and-ml">
+   Why combine CFD and ML?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#types-of-problems-that-ml-solves">
+   Types of problems that ML solves
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supervised-learning">
+     Supervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#unsupervised-learning">
+     Unsupervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reinforcement-learning">
+     Reinforcement learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#other-types-of-learning">
+     Other types of learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#challenges-encountered-in-ml">
+   Challenges encountered in ML
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-combine-cfd-and-ml">
+   How to combine CFD and ML
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#trends-not-considered-in-this-course">
+   Trends not considered in this course
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#physics-informed-neural-networks-pinns">
+     Physics-informed neural networks (PINNs)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#advanced-neural-network-architectures">
+     Advanced neural network architectures
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Course overview and motivation</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#about-this-course">
+   About this course
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#audience-structure-and-communication">
+     Audience, structure, and communication
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#technology-stack">
+     Technology stack
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-combine-cfd-and-ml">
+   Why combine CFD and ML?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#types-of-problems-that-ml-solves">
+   Types of problems that ML solves
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supervised-learning">
+     Supervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#unsupervised-learning">
+     Unsupervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reinforcement-learning">
+     Reinforcement learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#other-types-of-learning">
+     Other types of learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#challenges-encountered-in-ml">
+   Challenges encountered in ML
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-combine-cfd-and-ml">
+   How to combine CFD and ML
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#trends-not-considered-in-this-course">
+   Trends not considered in this course
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#physics-informed-neural-networks-pinns">
+     Physics-informed neural networks (PINNs)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#advanced-neural-network-architectures">
+     Advanced neural network architectures
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="course-overview-and-motivation">
+<h1>Course overview and motivation<a class="headerlink" href="#course-overview-and-motivation" title="Permalink to this headline">#</a></h1>
+<p>In this notebook, we cover the following topics:</p>
+<ul class="simple">
+<li><p>About this course</p>
+<ul>
+<li><p>Audience, structure, and communication</p></li>
+<li><p>Technology stack</p></li>
+</ul>
+</li>
+<li><p>Why combine CFD and ML?</p></li>
+<li><p>Types of problems that ML solves</p>
+<ul>
+<li><p>Supervised learning</p></li>
+<li><p>Unsupervised learning</p></li>
+<li><p>Reinforcement learning</p></li>
+</ul>
+</li>
+<li><p>Challenges encountered in ML</p></li>
+<li><p>How to combine CFD and ML</p></li>
+<li><p>Trends not considered in this course</p></li>
+</ul>
+<section id="about-this-course">
+<h2>About this course<a class="headerlink" href="#about-this-course" title="Permalink to this headline">#</a></h2>
+<section id="audience-structure-and-communication">
+<h3>Audience, structure, and communication<a class="headerlink" href="#audience-structure-and-communication" title="Permalink to this headline">#</a></h3>
+<p>The target audience for this course are students and professionals with some basic knowledge in both computational fluid dynamics (CFD) and machine learning (ML). Both fields require a good knowledge about programming as well as mathematics (linear algebra and analysis) and a general affinity to computers. It is also absolutely possible to study the course material with little to no prior knowledge in CFD and ML, since we cover many techniques from ground up. However, the required time investment might be significantly higher.</p>
+<p>The course consists of 11 lectures accompanied by 11 exercise sessions. In the lecture, we build up the theoretical foundations guided by practical problem solving. For the exercise session, instructions are provided to guide students through the practical implementation or modification of the applications covered in the lecture. <strong>Students are meant to solve the exercises by themselves</strong> or, even better, <strong>in small groups</strong>. During the exercise session, students have the possibility to ask questions about practical or theoretical aspects of the exercise. Moreover, students have the chance to reach out for help as described in section <em>Getting and providing help and feedback</em> in the repository’s <a class="reference external" href="https://github.com/AndreWeiner/ml-cfd-lecture">README</a> file. Active participation in helping fellow students is highly welcome and appreciated. The README file also contains a list of complementary material for further self-study.</p>
+<p>The tone of this course and the reminder of this script is meant to be rather informative and informal.</p>
+<p>We start the course with a short overview of everything we cover and look at a few topics we won’t cover in detail. In the second lecture, we build a simple CFD solver from scratch as a short refresher on the basic steps that solving a fluid mechanical problem entails. In the third lecture, we take a look at the PyTorch library and learn to create approximate functions based on data. The remainder of the lectures is organized along several applications, in which we solve common problems encountered in CFD using different types of ML.</p>
+</section>
+<section id="technology-stack">
+<h3>Technology stack<a class="headerlink" href="#technology-stack" title="Permalink to this headline">#</a></h3>
+<p>In the practical parts of this course, we rely on a variety of technologies, which offer great benefits after a relatively short learning phase. Most of the tools listed below can be considered as industry standard in the fields of CFD and ML.</p>
+<p><strong>Linux-based operating system</strong></p>
+<p>Operating systems (OS) based on the Linux Kernel run most of all high-performance clusters (HPCs), data centers, severs, mobile phones, and embedded devices (e.g., your watch, television, car, or washing machine). Both CFD and ML applications are typically data and compute intensive and run on HPCs or data centers (e.g., via cloud services). Therefore, most CFD and ML libraries are designed to be developed and run on Linux. A good knowledge of the <a class="reference external" href="https://ubuntu.com/tutorials/command-line-for-beginners#1-overview">command line</a> is essential to develop new applications or to handle large datasets. In the material of exercise 1, you learn about different options to get access to Linux.</p>
+<p><strong>Git and GitHub</strong></p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Git">Git</a> is a tool to keep track of changes in text files. Files associated to a project are organized in a so-called repository. Every time some file in the repository is changed, these changes are added to the repository’s history. If Git is used correctly, we can always jump back to a previous state or compare different states. Github is a platform to host Git repositories. Since you are reading this document, chances are good that you came here via Github. In this course, we use Git and Github only for distributing material and for communicating problems with the course material. Therefore, a superficial knowledge of both tools is sufficient.</p>
+<p><strong>Jupyter labs</strong></p>
+<p>Jupyter labs are interactive documents containing written text, source code, and visualizations. This very document is a Jupyter lab. Currently, you are reading a text written in a <a class="reference external" href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> cell. Further down, we also solve some simple ML problems by running Python code cells. Jupyter labs are a great tool for teaching and communicating science, but they are also used by professionals, e.g, to combine practical analysis and reporting.</p>
+<p><strong>Python programming language</strong></p>
+<p>Python is the number one programming language in data science, machine learning, process automation, and related fields. Python is a scripting language, which means that a so-called interpreter executes our script line by line. Python is popular because it comes with a very easy syntax and allows completing complex tasks in a few lines of code. In this course, we use Python for data-processing (Pandas, NumPy), ML model training (PyTorch), visualizations (Matplotlib), and automation. For compute-intensive tasks, Python typically defers the work to library functions implemented in compiled languages like Fortran, C, or C++.</p>
+<p><strong>C++ programming language</strong></p>
+<p>C++ has become the number one language for writing the low-level part of ML and CFD libraries. Compared to Python, C++ is a compiled language and offers much greater performance and flexibility, for example, for parallelization. A drawback is that implementing C++ applications is more time consuming and complex. Therefore, popular ML libraries like PyTorch or Tensorflow offer top-level ML functions via a Python frontend, while performance critical tasks are executed by optimized C++ code running in the backend.</p>
+<p><strong>OpenFOAM library</strong></p>
+<p><a class="reference external" href="https://www.openfoam.com/">OpenFOAM</a> is the most widely used open-source CFD library. OpenFOAM comes with a variety of flow solvers supporting a broad range of physical phenomena. We use OpenFOAM to run most of the CFD applications, for example, to generate data, and we also use ML models inside of OpenFOAM solvers. OpenFOAM is a C++ library, too, and employs an unstructured finite volume method to solve transport problems.</p>
+<p><strong>Basilisk library</strong></p>
+<p><a class="reference external" href="http://basilisk.fr/">Basilisk</a> is a relatively small library specialized in simulating multiphase flows based on the geometrical volume-of-fluid (VOF) approach. In contrast to OpenFOAM, Basilisk uses an octree mesh (quadtree in 2D), which is a compromise between the flexibility of unstructured and the performance of structured meshes. Moreover, Basilsik has extremely good support for adaptive mesh refinement, which is particularly important for simulating flows with a large range of spatial and temporal scales. Basilisk is implemented in an extended version of C (Basilisk C).</p>
+<p><strong>ParaView</strong></p>
+<p><a class="reference external" href="https://www.paraview.org/">ParaView</a> is an open-source tool for visualizing scientific data. Internally, ParaView uses the visualization toolkit (VTK) format to represent mesh-based datasets. The software is mostly implemented in C++ but also comes with <a class="reference external" href="https://pypi.org/project/vtk/">Python binding</a> to create scripted post-processing pipelines. We will use ParaView to visualize OpenFOAM and Basilisk simulations. Another great open-source tool similar to ParaView is <a class="reference external" href="https://visit-dav.github.io/visit-website/index.html">VisIt</a>.</p>
+<p><strong>Singularity containers</strong></p>
+<p>The list of the tools above is by no means comprehensive in terms of available CFD and ML packages but covers only the ones used in this course. All of these complement one another in different ways and typically used in conjunction. Setting up these tools and managing all the dependencies to other packages not explicitly mentioned can be daunting task. To make out lives easier, we use software containers, which come with an encapsulated minimal version of the software itself and all its dependencies. Singularity is a container tool specialized for working with <a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</a>-parallel programs and HPCs using a <a class="reference external" href="https://slurm.schedmd.com/documentation.html">scheduler</a> to allocate and distribute resources. Most CFD tools use MPI-parallelization and run on HPCs. Other container tools more suitable for cloud computing are Docker or Podman.</p>
+</section>
+</section>
+<section id="why-combine-cfd-and-ml">
+<h2>Why combine CFD and ML?<a class="headerlink" href="#why-combine-cfd-and-ml" title="Permalink to this headline">#</a></h2>
+<p><strong>CFD produces massive amounts of data.</strong> With the increasing computational resources available on HPCs and workstations, CFD simulations create enormous datasets. The most demanding type of simulation is a so-called direct numerical simulation (DNS). DNS focuses on resolving all spatial and temporal scales in flows displaying turbulent behavior. DNS data is valuable to derive and validate scaled-reduced simulation approaches, in which turbulence is modeled to reduce the computational effort. The table below shows, how the size of a single snapshot progressed over the last three decades.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p>year</p></th>
+<th class="text-align:left head"><p>Source</p></th>
+<th class="text-align:center head"><p>snapshot size</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p>1987</p></td>
+<td class="text-align:left"><p><a class="reference external" href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/turbulence-statistics-in-fully-developed-channel-flow-at-low-reynolds-number/308DCF387F4488D6A0FB189D8206DF7B">J. Kim, P. Moin, R. D. Moser</a></p></td>
+<td class="text-align:center"><p>~30MB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>1999</p></td>
+<td class="text-align:left"><p><a class="reference external" href="https://aip.scitation.org/doi/10.1063/1.869966">R. D. Moser, J. Kim, N. N. Mansour</a></p></td>
+<td class="text-align:center"><p>~290MB</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>2015</p></td>
+<td class="text-align:left"><p><a class="reference external" href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/direct-numerical-simulation-of-turbulent-channel-flow-up-to-mathitreittauapprox-5200/3AE84A5A48F83AF294F6CB042AF92DA8">M. Lee, R. D. Moser</a></p></td>
+<td class="text-align:center"><p>~900GB</p></td>
+</tr>
+</tbody>
+</table>
+<p>DNS lies at the upper end of the scale in terms of storage and computational requirements. But also large eddy simulations (LES) or Reynolds-averaged Navier Stokes (RANS) simulations may produce datasets in the hundreds of GB. Finding patterns in such data to create insights or compact representations is usually not possible by means of a simple visual inspection but requires automated processing. “Insights” is a relatively broad term. What it usually means is that we want to find a relatively simple explanation or model for a flow phenomenon. For example, if we look at fully-developed turbulent boundary layer, we are presented with an enormous amount of detail and a list of different flow phenomena. Nonetheless, we know for this particular example that the average velocity component along the wall changes logarithmically with the distance to the wall in its vicinity (<em>law of the wall</em>). This connection holds true for a large range of Reynolds numbers, which is absolutely remarkable considering the visually observed complexity of turbulence in <a class="reference external" href="https://www.youtube.com/watch?v=e1TbkLIDWys">this video</a>.</p>
+<p>Now, why are simple representations (insights) important? Besides the sheer pleasure of finding such patterns, they may be relevant for optimizing technical applications. On the one hand side, a simple model of a phenomenon can guide us to modify our application such that the phenomenon is avoided. For example, a simple model explaining <a class="reference external" href="https://www.dlr.de/ae/en/desktopdefault.aspx/tabid-9619/16552_read-36584/">shock buffets at airfoils</a> may be used to design passive or active measures to avoid or mitigate the strong dynamic load experienced by the aircraft. On the other hand side, we could also want to foster a phenomenon because it improves the properties of an application. For example, <a class="reference external" href="https://en.wikipedia.org/wiki/Rayleigh%E2%80%93B%C3%A9nard_convection">Rayleigh-Bénard convection</a> is a convection phenomenon that significantly enhances the heat exchange between a cold and a warm plate separated by a fluid. This configuration is typical for heat exchangers. The <a class="reference external" href="https://en.wikipedia.org/wiki/Lorenz_system">Lorenz attractor</a> is a very simple model of 3 ordinary differential equations (ODEs) characterizing Rayleigh-Bérnard convection.</p>
+<p>ML is a key technique to discover such simplified models. How exactly ML helps in the process will be the content of follow-up lectures.</p>
+<p><strong>CFD require data and representations thereof.</strong> Even DNS requires some data as input to produce meaningful outputs. For example, the constitutive relation describing the shear stress introduces viscosity as free parameter in the case of Newtonian fluids. As we introduce more physical models in our simulation, the number of closure models and tunable parameters increases. The free parameters must be tuned based on available data sources. Often, a compromise must be found between the complexity of a model and its ability to reflect the data.</p>
+<p>But also boundary and initial conditions must be known. If these conditions are oversimplified, we can not expect to find good agreement with real flows. If experimental or high-fidelity numerical data is available, we could use that data to create a much more realistic simulation setup and improve the accuracy of our results. However, mapping a data source to the target application is not always straightforward because the data might contain noise or they might be simply too large to deal with them a the run time of the simulation.</p>
+<p>Again, ML is a suitable tool because it allows creating representations of data that are much more convenient to use in other applications.</p>
+</section>
+<section id="types-of-problems-that-ml-solves">
+<h2>Types of problems that ML solves<a class="headerlink" href="#types-of-problems-that-ml-solves" title="Permalink to this headline">#</a></h2>
+<p>Solving problems in fluid mechanics typically involves mathematical, physical, and numerical modeling. Not all of these tasks are solved by ML. First of all, data must be available or it must be possible to generate them. Second, there is a relatively fixed set of problems that ML solves. It is useful to have a simple mind map to remember these problems or learning categories.</p>
+<section id="supervised-learning">
+<h3>Supervised learning<a class="headerlink" href="#supervised-learning" title="Permalink to this headline">#</a></h3>
+<p>Supervised learning deals with two types of tasks: <em>regression</em> and <em>classification</em>. For both tasks, we need examples of a given input and the expected output. The input values are typically called features. The expected output values are termed labels. In supervised ML, we create a mapping from the feature to the label space based on the examples we have. If the variable of interest is continuous, the learning task is called regression. In contrast, classification deals with the prediction of categorical variables. In the figure below, the plot on the left side depicts a typical regression problem. We have a dataset containing the drag coefficient recorded for different Reynolds numbers. The Reynolds number is the feature and the drag coefficient the label in this example. A simple ML model could now be trained to make predictions similar to the red dashed line. On the left side, we have a typical classification problem. The dataset consists of two features, the Reynolds number and the angle of attack, and a categorical label with the categories being <em>laminar</em> and turbulent. A classification model could now learn to predict the correct category for a given input pair of Reynolds number and angle of attack. Internally, the model would learn some representation of the dividing line depicted in red.</p>
+<img alt="../_images/regression_classification.svg" src="../_images/regression_classification.svg" /></section>
+<section id="unsupervised-learning">
+<h3>Unsupervised learning<a class="headerlink" href="#unsupervised-learning" title="Permalink to this headline">#</a></h3>
+<p>Also unsupervised learning solves two types of problems, namely <em>dimensionality reduction</em> and <em>clustering</em>. No clear distinction between features and labels must be known to apply unsupervised learning algorithms. Techniques for dimensionality reduction aim to find more suitable coordinate systems, which allow to represent the data with fewer coordinates than the number of natural coordinates the data are provided. In the example problem depicted below, we could replace the natural coordinates the data are given in, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>, with a single coordinate <span class="math notranslate nohighlight">\(y_1\)</span> if we are willing to accept a small information loss. By storing the data in the reduced coordinate system, every data point would be represented by its <span class="math notranslate nohighlight">\(y_1\)</span> value, which corresponds to the orthogonal projection of each point onto <span class="math notranslate nohighlight">\(y_1\)</span>. Of course, we would lose the information about the distance to the <span class="math notranslate nohighlight">\(y_1\)</span> axis, for which we would need a second coordinate <span class="math notranslate nohighlight">\(y_2\)</span> orthogonal to <span class="math notranslate nohighlight">\(y_1\)</span>. However, sometimes it can be even advantageous to lose information, for example, if the deviation normal to <span class="math notranslate nohighlight">\(y_1\)</span> was actually some measurement noise. In that case, reducing the dimensionality would also reduces the noise in the data. Also the second type of unsupervised learning, clustering, may be used to remove spurious data. In clustering, we define a metric to measure the distance between data points in the feature space. Groups of points close to one another form so-called clusters. For the example on the right side in the figure below, we could use the Euclidean distance between points in the plane spanned by <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. Clustering may be used to find isolated points that do not really belong to any of the other clusters (they form their own cluster with only one point in it). Finding those point might be interesting because they may represent outliers (unwanted data), which we want to remove or avoid.</p>
+<img alt="../_images/unsupervised.svg" src="../_images/unsupervised.svg" /></section>
+<section id="reinforcement-learning">
+<h3>Reinforcement learning<a class="headerlink" href="#reinforcement-learning" title="Permalink to this headline">#</a></h3>
+<p>In reinforcement learning, our aim is to <em>solve control problems</em>. On the top-level, the reinforcement learning setting consists of two elements, the agent and the environment. The agent is basically the controller we want to optimize. The environment is defined by a state and an intrinsic goal. The intrinsic goal is expressed by the environment as a so-called reward signal. A typical goal in fluid mechanics would be to reduce the drag force acting on a body. From an engineering perspective, we would probably not associate drag reduction as an intrinsic goal of the object the force is acting on, but we will stick to this notion, since it is the standard way to formulate reinforcement learning problems. The agent has a mean of acting on the environment such that the environment’s state changes. The agent choses its action based on a set of rules and the current state of the environment. This set of rules is also called <em>policy</em>. At the beginning of the learning process, the policy is unlikely to be optimal. However, thanks to the reward signal provided by the environment, the agent has data to improve its policy. Coming back to the flow control problem, the environment’s state might be defined by pressure probes taken on the object’s surface. The reward signal would be some function based on the currently acting drag force. The function would return high values if the drag force is low and low values if the drag force is high, because we want to maximize the cumulatively received rewards (by definition). The agent’s action could be to inject mass somewhere on the object’s surface by opening a valve. The policy would be the actual control law that tells us, based on the currently measured pressure value, when to open or close the valves such that the drag forces becomes minimal.</p>
+<img alt="../_images/reinforcement.svg" src="../_images/reinforcement.svg" /></section>
+<section id="other-types-of-learning">
+<h3>Other types of learning<a class="headerlink" href="#other-types-of-learning" title="Permalink to this headline">#</a></h3>
+<p>Of course, it is also possible to combine different types of learning to solve a problem. One example is semi-supervised learning, where a few feature-labels-pairs are provided initially to associate elements in an unlabeled dataset with the most suitable label, e.g, by clustering.</p>
+</section>
+</section>
+<section id="challenges-encountered-in-ml">
+<h2>Challenges encountered in ML<a class="headerlink" href="#challenges-encountered-in-ml" title="Permalink to this headline">#</a></h2>
+<p>Of course, ML does not come for free and introduces new challenges. The <em>learning</em> in ML is nothing but the optimization of free parameters based on data. This optimization is often high-dimensional and non-linear. Moreover, one has to deal with potential flaws in the datasets like spurious or missing values. Another challenge is the assessment of the ML model’s predictive quality. It might be that the models reflect the dataset extremely well while failing to interpolate between the data points. The latter scenario would be called over-fitting in ML terminology. Luckily, there are well-established techniques to deal with non-linear optimization and over-fitting. However, a good rule of thumb is that all ML-related problems become much easier to deal with if there is enough data and the data are of high quality.</p>
+</section>
+<section id="how-to-combine-cfd-and-ml">
+<h2>How to combine CFD and ML<a class="headerlink" href="#how-to-combine-cfd-and-ml" title="Permalink to this headline">#</a></h2>
+<p>In the examples provided in the previous sections, ML modeling interacted in different ways with the CFD simulation. There are typical processing pipelines to categorize this interaction. These categories are sketched below.</p>
+<p>The most common and natural workflow is to use ML as a means for post-processing CFD data. The simulation generates characteristic flow data like velocity, pressure, or temperature field but also secondary data like forces acting on objects or the heat flux through a wall. ML could then be used to create a regression model, e.g., to predict the heat flux based on the inflow velocity, or to extract patterns from the flow fields, e.g, by finding coherent structures in turbulent flows by means of dimensionality reduction.</p>
+<img alt="../_images/data_workflows_2.svg" src="../_images/data_workflows_2.svg" /><p>A second typical workflow is to create a representation of an available dataset such that we can use the data/model to improve the simulation. A potential scenario might be that particle image velocimetry (PIV) provides a time series of velocity vectors in one plane of the experiment. Let’s say we also want to perform a CFD simulation of the experimental setup to obtain 3D velocity and pressure fields in addition to the PIV data. We could now train a regression model that learns to predict the inlet velocity for the simulation as a function of time based on the PIV data. The model would be very simple to evaluate, perform interpolation tasks for us, and could potentially also remove some of the noise in the experimental data. Realistic initial and boundary conditions are essential to find good agreement with experimental data.</p>
+<img alt="../_images/data_workflows_1.svg" src="../_images/data_workflows_1.svg" /><p>Of course, both of the workflows outlined before can be combined and repeated in some kind of CFD-ML pipeline. A typical scenario for such a pipeline would be scale-up modeling. Scale-up modeling starts with a limited range of small scales being investigated with dedicated numerical tools. These tool resolve phenomena with great detail and require little modeling. In the next step, the range of investigated scales is extended. Small scales are modeled based on the previously conducted small scale investigations. Then, the range of scales is extended again and this process continues until the full range of scales is reached. In the field of multiphase flow reactors, the pipeline of simulation tools might look as follows:</p>
+<ol class="simple">
+<li><p>single-phase simulations of reactive boundary layers</p></li>
+<li><p>particle-resolved multiphase simulations of individual fluid particles with reactive mass transfer</p></li>
+<li><p>Euler-Lagrange simulations with the fluid particles being abstracted as point-particles</p></li>
+<li><p>Euler-Euler simulations with transport equations for gas-liquid mixtures</p></li>
+</ol>
+<p>ML can be used in this pipeline to transport information from one simulation approach to the next.</p>
+<img alt="../_images/data_workflows_3.svg" src="../_images/data_workflows_3.svg" /><p>The last workflow presented here is slightly different from the previous ones. The simulation generates data based on which a ML model is trained. The model is then used in the simulation to generate new data based on which the previous model is further improved. The iterative process is typical for reinforcement learning or direct shape optimization.</p>
+<img alt="../_images/data_workflows_4.svg" src="../_images/data_workflows_4.svg" /></section>
+<section id="trends-not-considered-in-this-course">
+<h2>Trends not considered in this course<a class="headerlink" href="#trends-not-considered-in-this-course" title="Permalink to this headline">#</a></h2>
+<section id="physics-informed-neural-networks-pinns">
+<h3>Physics-informed neural networks (PINNs)<a class="headerlink" href="#physics-informed-neural-networks-pinns" title="Permalink to this headline">#</a></h3>
+<p>The term physics-informed neural network (PINN) was first coined by <a class="reference external" href="https://arxiv.org/abs/1711.10561">M. Raissi et al. (2017)</a>. However, the basic concept of PINNs was already introduced in <a class="reference external" href="https://arxiv.org/abs/physics/9705023">I. E. Lagaris et al. (1997)</a> about 20 years earlier. There exists a large body of literature concerned with the approximate solution of ordinary differential equations (ODEs), partial differential equations (PDEs), and systems of ODEs and PDEs in various disciplines. However, with the publication of libraries like Tensorflow in 2014 and PyTorch in 2017, the concept of transforming an initial/boundary value problem into an optimization problem became significantly easier to implement. Some of main improvements of the last decade enabling PINNs are:</p>
+<ul class="simple">
+<li><p>powerful automatic differentiation engines (backpropagation)</p></li>
+<li><p>affordable and fast hardware accelerators (GPUs, TPUs)</p></li>
+<li><p>ability to train deep neural networks (weight initialization, batch normalization, optimizer)</p></li>
+<li><p>libraries with high-level abstractions for building and training neural networks.</p></li>
+</ul>
+<p>In this course, we do not make use of PINNs . Nonetheless, we introduce the core idea, since PINNs might become more relevant in future applications. Specifically, we do not even train a physics-informed <em>neural network</em> but a physics-informed <em>polynomial</em> for simplicity. The polynomial is not as flexible as the network, but the general steps to a find a solution are the same.</p>
+<p>Consider the following initial values problem:</p>
+<div class="math notranslate nohighlight">
+\[
+  \frac{\mathrm{d}x}{\mathrm{d}t} = -kx\quad \text{with}\quad x(t=0)=1\quad \text{and}\quad x\in\left[0, 1\right].
+\]</div>
+<p>The problem’s solution is
+$<span class="math notranslate nohighlight">\(
+  x(t) = \mathrm{exp}\left(-kx\right).
+\)</span>$</p>
+<p>Let’s start by plotting this function with Matplotlib. Moreover, we use PyTorch tensors as array data structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
+import torch as pt
+
+# increase plot resolution
+plt.rcParams[&quot;figure.dpi&quot;] = 160
+
+# create output directory
+output = &quot;output&quot;
+!mkdir -p $output
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t = pt.linspace(0.0, 1.0, 20)
+k = 3.0
+x = pt.exp(-k * t)
+
+plt.plot(t, x)
+plt.scatter(t, x)
+plt.xlim(0, 1)
+plt.ylim(0, 1.1)
+plt.xlabel(r&quot;$t$&quot;)
+plt.ylabel(r&quot;$x$&quot;)
+plt.savefig(f&quot;{output}/exp_decay.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_8_0.png" src="../_images/ml_cfd_intro_8_0.png" />
+</div>
+</div>
+<p>To plot the curve shown above, we evaluated the analytical function at 20 linearly spaced values of <span class="math notranslate nohighlight">\(t\)</span> between 0 and 1. Before implementing the concept of physics-informed training, we fit the polynomial in the classical ML fashion. To do so, let’s pretend that we do not know the analytical solution to the initial value problem, but we only know the 20 pairs of <span class="math notranslate nohighlight">\(x_i\)</span> and <span class="math notranslate nohighlight">\(t_i\)</span> used for plotting. In ML languange, <span class="math notranslate nohighlight">\(t\)</span> is the feature and <span class="math notranslate nohighlight">\(x\)</span> is the label. We have a training dataset of 20 feature-label pairs. We want to use this dataset to create a simple regression model. As ansatz, we use a polynomial of the form:
+$<span class="math notranslate nohighlight">\(
+  \hat{x}(t) = at^2+bt+1.
+\)</span><span class="math notranslate nohighlight">\(
+Note that we set the intercept to 1 such that we do not have to worry about the initial condition. The model weights \)</span>a<span class="math notranslate nohighlight">\( and \)</span>b<span class="math notranslate nohighlight">\( are found by solving the minimization problem:
+\)</span><span class="math notranslate nohighlight">\(
+  \underset{a,b}{\mathrm{argmin}}(L(a,b)),
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>L(a,b)<span class="math notranslate nohighlight">\( is the so-called loss function. The loss function in ML describes how well the current parameter configuration represents the training data. A typical loss function for regression is the mean squared error (MSE). For the present problem, the MSE reads:
+\)</span><span class="math notranslate nohighlight">\(
+  L(a,b) = \frac{1}{2N_p}\sum\limits_{i=1}^{N_p}\left(x_i - \hat{x}_i\right)^2,
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>N_p<span class="math notranslate nohighlight">\( is the number of data points in the training dataset (20) and \)</span>\hat{x}_i = \hat{x}(t=t_i)<span class="math notranslate nohighlight">\( is the polynomial ansatz evaluated at \)</span>t_i<span class="math notranslate nohighlight">\(. One of the simplest algorithms to find the parameters leading to a minimal loss is gradient decent. In gradient decent, we compute the gradient of the loss function with respect to the weight and nudge the weights in the negative gradient direction. Employing the chain rule, the loss gradient is:
+\)</span>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-72c40425-606b-4651-86f9-1faf9d6f7a84">
+<span class="eqno">(1)<a class="headerlink" href="#equation-72c40425-606b-4651-86f9-1faf9d6f7a84" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \frac{\partial L}{\partial a} &amp;= \frac{1}{N_p}\sum\limits_{i=1}^{N_p}\left(x_i - \hat{x}_i\right) \left(-\frac{\partial \hat{x}_i}{\partial a}\right),\\
+  \frac{\partial L}{\partial b} &amp;= \frac{1}{N_p}\sum\limits_{i=1}^{N_p}\left(x_i - \hat{x}_i\right) \left(-\frac{\partial \hat{x}_i}{\partial b}\right).
+\end{align}\]</div>
+<p>$$
+Let’s define these functions in code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def ansatz(t, a, b):
+    return a*t**2 + b*t + 1
+
+def da_ansatz(t):
+    return t**2
+
+def db_ansatz(t):
+    return t
+
+def data_loss(t, x_true, a, b):
+    loss = 0.5*(x_true - ansatz(t, a, b))**2
+    return loss.mean()
+
+def data_loss_gradient(t, x_true, a, b):
+    diff = x_true - ansatz(t, a, b)
+    da_loss = (diff * (-da_ansatz(t))).mean()
+    db_loss = (diff * (-db_ansatz(t))).mean()
+    return pt.stack((da_loss, db_loss))
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the next cell, the weights <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are initialized with random values between 0 and 1. Then 5000 steps of gradient decent are performed to minimize the MSE loss. To visualize the optimization process, we save the loss and the weight configuration after every step.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>weights = 2 * pt.rand(2) - 1.0
+data_loss_values = []
+max_iter = 1000
+data_weights_history = pt.zeros(max_iter+1, 2)
+data_weights_history[0, :] = weights
+for i in range(max_iter):
+    weights -= 1.0*data_loss_gradient(t, x, *weights)
+    data_weights_history[i+1, :] = weights
+    data_loss_values.append(data_loss(t, x, *weights))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(range(len(data_loss_values)), data_loss_values)
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;MSE loss&quot;)
+plt.yscale(&quot;log&quot;)
+plt.savefig(f&quot;{output}/ml_loss.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_13_0.png" src="../_images/ml_cfd_intro_13_0.png" />
+</div>
+</div>
+<p>The optimal weights are found after about 5000 iterations (epochs). Note that there are plenty of advanced optimization algorithms, which could find the minimum much quicker. Let’s plot the optimized polynomial and compare it against the exact solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(t, x, label=&quot;exact solution&quot;)
+plt.plot(t, ansatz(t, *weights), label=&quot;polynomial fit (data)&quot;)
+plt.xlim(0, 1)
+plt.ylim(0, 1.1)
+plt.xlabel(r&quot;$t$&quot;)
+plt.ylabel(r&quot;$x$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/ml_fit_data.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_15_0.png" src="../_images/ml_cfd_intro_15_0.png" />
+</div>
+</div>
+<p>The agreement between polynomial and exact solution is acceptable considering that the model has only two adjustable parameters. An advantage of having only two parameters is also the possibility to visualize the loss function (loss landscape) and steps we undertook to get to the optimal solution. The loss landscape is plotted as a filled contour plot; see figure below. The red markers show the weight configuration after every 10th epoch.</p>
+<p>We could also plot the loss landscape as a <a class="reference external" href="https://matplotlib.org/stable/gallery/mplot3d/surface3d.html">surface plot</a> with the height being the loss value as a function of the weights <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. If you randomly pick any two points on the resulting surface and connect them by a straight line, you would notice that you never cut through the surface. Therefore, we say the loss function is <a class="reference external" href="https://en.wikipedia.org/wiki/Convex_function">convex</a>, and the problem we solved is a convex optimization problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>a_plot = pt.linspace(weights[0]-4, weights[0]+4, 100)
+b_plot = pt.linspace(weights[1]-4, weights[1]+4, 100)
+aa, bb = pt.meshgrid(a_plot, b_plot)
+loss_surface = pt.zeros_like(aa.flatten())
+for i, (a, b) in enumerate(zip(aa.flatten(), bb.flatten())):
+    loss_surface[i] = data_loss(t, x, a, b)
+loss_surface = loss_surface.reshape(aa.shape)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cont = plt.contourf(aa, bb, pt.log(loss_surface), levels=20)
+plt.scatter(data_weights_history[::10, 0], data_weights_history[::10, 1], facecolors=&quot;none&quot;, edgecolor=&quot;r&quot;, lw=0.5)
+plt.xlabel(r&quot;$a$&quot;)
+plt.ylabel(r&quot;$b$&quot;)
+plt.colorbar(cont, label=&quot;log. MSE loss&quot;)
+plt.savefig(f&quot;{output}/mse_loss_landscape_data.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_18_0.png" src="../_images/ml_cfd_intro_18_0.png" />
+</div>
+</div>
+<p>Now let’s make the polynomial physics-informed! The core idea is to embed the initial value problem in the loss function. The same procedure also works for more complex initial boundary value problems. First, the ordinary differential equation (ODE) is re-written as:
+$<span class="math notranslate nohighlight">\(
+  \frac{\mathrm{d}x}{\mathrm{d}t} + kx = 0
+\)</span><span class="math notranslate nohighlight">\(
+We now that the ODE must be fulfilled for any input \)</span>t<span class="math notranslate nohighlight">\(. Therefore, we can replace the variable \)</span>x<span class="math notranslate nohighlight">\( with the ansatz \)</span>\hat{x}<span class="math notranslate nohighlight">\(, evaluate the ansatz and its derivative with respect to \)</span>t<span class="math notranslate nohighlight">\( at selected control points in the interval between 0 and 1, and formulate the loss function in terms of the residual (if the ansatz fulfills the ODE perfectly the sum over all control points would always be zero):
+\)</span><span class="math notranslate nohighlight">\(
+  L(a,b) = \frac{1}{2N_c}\sum\limits_{i=1}^{N_c}\left(\left.\frac{\mathrm{d}\hat{x}}{\mathrm{d}t}\right|_i + k\hat{x}_i\right)^2.
+\)</span><span class="math notranslate nohighlight">\(
+\)</span>N_c<span class="math notranslate nohighlight">\( is the number of control points, which is also 20 in this case since the same points \)</span>t_i<span class="math notranslate nohighlight">\( as for platting will be used. The term \)</span>\left.\frac{\mathrm{d}\hat{x}}{\mathrm{d}t}\right|_i<span class="math notranslate nohighlight">\( is the derivative of the polynomial with respect to \)</span>t<span class="math notranslate nohighlight">\( evaluated at \)</span>t_i<span class="math notranslate nohighlight">\(. Computing the gradient of the loss with respect to the weights becomes slightly more complex:
+\)</span>$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0ff81f14-c236-4744-ba49-94c873c960ab">
+<span class="eqno">(2)<a class="headerlink" href="#equation-0ff81f14-c236-4744-ba49-94c873c960ab" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \frac{\partial L}{\partial a} &amp;= \frac{1}{N_c}\sum\limits_{i=1}^{N_c}\left(\left.\frac{\mathrm{d}\hat{x}}{\mathrm{d}t}\right|_i + k\hat{x}_i\right)\frac{\partial}{\partial a}\left(\left.\frac{\mathrm{d}\hat{x}}{\mathrm{d}t}\right|_i + k\hat{x}_i\right),\\
+  \frac{\partial L}{\partial b} &amp;= \frac{1}{N_c}\sum\limits_{i=1}^{N_c}\left(\left.\frac{\mathrm{d}\hat{x}}{\mathrm{d}t}\right|_i + k\hat{x}_i\right)\frac{\partial}{\partial b}\left(\left.\frac{\mathrm{d}\hat{x}}{\mathrm{d}t}\right|_i + k\hat{x}_i\right).
+\end{align}\]</div>
+<p>$$
+The results for the last term in each derivative can be inferred from the functions implemented in the cell below. The rest of the optimization process is analogous to the classical regression approach.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def dt_ansatz(t, a, b):
+    return 2*a*t + b
+
+def ode_ansatz(t, k, a, b):
+    return dt_ansatz(t, a, b) + k*ansatz(t, a, b)
+
+def da_ode_ansatz(t, k):
+    return 2*t+k*t**2
+
+def db_ode_ansatz(t, k):
+    return 1+k*t
+
+def ode_loss(t, k, a, b):
+    loss = (ode_ansatz(t, k, a, b))**2
+    return loss.mean()
+
+def ode_loss_gradient(t, k, a, b):
+    da_loss = (ode_ansatz(t, k, a, b) * da_ode_ansatz(t, k)).mean()
+    db_loss = (ode_ansatz(t, k, a, b) * db_ode_ansatz(t, k)).mean()
+    return pt.stack((da_loss, db_loss))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>weights = 2 * pt.rand(2) - 1.0
+ode_loss_values = []
+max_iter = 1000
+weights_history = pt.zeros(max_iter+1, 2)
+weights_history[0, :] = weights
+for i in range(max_iter):
+    weights -= 0.1*ode_loss_gradient(t, k, *weights)
+    weights_history[i+1, :] = weights
+    ode_loss_values.append(ode_loss(t, k, *weights))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(range(len(ode_loss_values)), ode_loss_values)
+plt.xlabel(&quot;epoch&quot;)
+plt.ylabel(&quot;MSE loss&quot;)
+plt.yscale(&quot;log&quot;)
+plt.savefig(f&quot;{output}/ode_loss.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_22_0.png" src="../_images/ml_cfd_intro_22_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t = pt.linspace(0.0, 1.0, 20)
+k = 3.0
+x = pt.exp(-k * t)
+
+plt.plot(t, x, label=&quot;exact solution&quot;)
+plt.plot(t, ansatz(t, *data_weights_history[-1]), label=&quot;polynomial fit (data)&quot;)
+plt.plot(t, ansatz(t, *weights), label=&quot;polynomial fit (ODE)&quot;)
+plt.xlim(0, 1)
+plt.ylim(0, 1.1)
+plt.xlabel(r&quot;$t$&quot;)
+plt.ylabel(r&quot;$x$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/ml_fit_ode.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_23_0.png" src="../_images/ml_cfd_intro_23_0.png" />
+</div>
+</div>
+<p>Both polynomial fits look very similar. How much the second polynomial is <em>informed</em> about the decay process is left to your interpretation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>a_plot = pt.linspace(weights[0]-4, weights[0]+4, 100)
+b_plot = pt.linspace(weights[1]-4, weights[1]+4, 100)
+aa, bb = pt.meshgrid(a_plot, b_plot)
+loss_surface = pt.zeros_like(aa.flatten())
+for i, (a, b) in enumerate(zip(aa.flatten(), bb.flatten())):
+    loss_surface[i] = ode_loss(t, k, a, b)
+loss_surface = loss_surface.reshape(aa.shape)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cont = plt.contourf(aa, bb, pt.log(loss_surface), levels=20)
+plt.scatter(weights_history[::10, 0], weights_history[::10, 1], facecolors=&quot;none&quot;, edgecolor=&quot;r&quot;, lw=0.5)
+plt.xlabel(r&quot;$a$&quot;)
+plt.ylabel(r&quot;$b$&quot;)
+plt.colorbar(cont, label=&quot;log. MSE loss&quot;)
+plt.savefig(f&quot;{output}/mse_loss_landscape_ode.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ml_cfd_intro_26_0.png" src="../_images/ml_cfd_intro_26_0.png" />
+</div>
+</div>
+<p>Constraining the loss function based on physical relations is certainly a pleasing idea. However, if neural networks are used as ansatz, formulating the loss in terms of partial derivatives also introduces several new challenges, which are only briefly listed below:</p>
+<ul class="simple">
+<li><p>activation functions: if higher-order derivative with respect to the network’s input have to be computed, the number of possible activation functions is very limited (the derivative must not be zero); these activation functions cause so-called vanishing or exploding gradients, which have to be counteracted by other measures like batch normalization</p></li>
+<li><p>training and evaluating PINNs is slow due to multiple backpropagation loops (some algorithm to compute derivatives automatically) and the evaluation of many exponential functions</p></li>
+<li><p>fulfilling initial and boundary conditions requires additional terms in the loss function, for which suitable weighting factors must be determined</p></li>
+<li><p>generating training data and following the classical regression approach is typically faster and leads to more accurate models (even though they are not <em>informed</em>)</p></li>
+</ul>
+</section>
+<section id="advanced-neural-network-architectures">
+<h3>Advanced neural network architectures<a class="headerlink" href="#advanced-neural-network-architectures" title="Permalink to this headline">#</a></h3>
+<p>There is a zoo of neural network building blocks designed for tasks in speech recognition, computer vision, or translation. Most of these architectures are not particularly useful when combined with CFD applications. The focus of this lecture is on solving challenging problems in CFD with the aid of ML. The exact algorithm used to solve the ML part of the problem is secondary and, oftentimes, there are multiple suitable options available.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../README.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Machine learning in computational fluid dynamics</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="cfd_intro.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Finite-volume-based CFD in a nutshell</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

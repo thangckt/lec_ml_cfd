@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Controlling the flow past a cylinder with OpenFOAM and PyTorch &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Open-loop control of the flow past a cylinder" href="cylinder_bayesian_opt_exercise.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/cylinder_drl_exercise.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#open-loop-active-flow-control">
+   Open-loop active flow control
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#closed-loop-active-flow-control">
+   Closed-loop active flow control
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Controlling the flow past a cylinder with OpenFOAM and PyTorch</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#open-loop-active-flow-control">
+   Open-loop active flow control
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#closed-loop-active-flow-control">
+   Closed-loop active flow control
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="controlling-the-flow-past-a-cylinder-with-openfoam-and-pytorch">
+<h1>Controlling the flow past a cylinder with OpenFOAM and PyTorch<a class="headerlink" href="#controlling-the-flow-past-a-cylinder-with-openfoam-and-pytorch" title="Permalink to this headline">#</a></h1>
+<p><strong>Note: this exercise still needs to be updated for the winter term 2022/2023.</strong></p>
+<p>This exercise consists of two parts, which are meant to be solved in two individual sessions. We will implement two active flow control approaches to reduce drag and lift forces acting on the surface of a circular cylinder in a stream. The base simulation is the same as in exercises 2 and 9. In both control approaches, the flow is actuated by rotating the cylinder. The rotation is easily implemented in a CFD simulation by modifying the velocity boundary condition applied to the <em>cylinder</em> patch. Say that <span class="math notranslate nohighlight">\(u_\parallel\)</span> is the signed cross-radial speed of the cylinder’s surface. Then the surface velocity vector field <span class="math notranslate nohighlight">\(\mathbf{u}_\parallel\)</span> is obtained by multiplying the speed with tangential unit vector <span class="math notranslate nohighlight">\(\mathbf{t}_\parallel (\mathbf{x})\)</span>:
+$<span class="math notranslate nohighlight">\(
+  \mathbf{u}_\parallel = u_\parallel \mathbf{t}_\parallel (\mathbf{x}),
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>\mathbf{t}<em>\parallel (\mathbf{x})<span class="math notranslate nohighlight">\( is tangential to the cylinder's surface (note that the simulation is 2D, so there is only one sensible tangent). The two control approaches vary in the way how they determine \)</span>u</em>\parallel<span class="math notranslate nohighlight">\(. In open-loop control, the control law is a function of time, e.g., \)</span>u_\parallel = u_\parallel (t)<span class="math notranslate nohighlight">\(. The closed-loop control law is a function of the pressure sensors \)</span>\mathbf{p}<span class="math notranslate nohighlight">\(, e.g., \)</span>u_\parallel = u_\parallel (\mathbf{p})$.</p>
+<section id="open-loop-active-flow-control">
+<h2>Open-loop active flow control<a class="headerlink" href="#open-loop-active-flow-control" title="Permalink to this headline">#</a></h2>
+<p>As observed in exercise 2, the uncontrolled flow past the cylinder at <span class="math notranslate nohighlight">\(Re=100\)</span> yields almost perfectly sinusoidal lift and drag curves in the quasi-steady state (neglecting the non-zero mean). Therefore, we could try to interrupt the natural vortex shedding by rotating the cylinder periodically in alternating directions. A suitable control law might be:
+$<span class="math notranslate nohighlight">\(
+  u_\perp (t) = A \mathrm{sin}(2\pi f t),
+\)</span><span class="math notranslate nohighlight">\(
+where the amplitude \)</span>A<span class="math notranslate nohighlight">\( and the frequency \)</span>f$ are adjustable parameters. To implement this new velocity boundary condition, we use OpenFOAM’s <a class="reference external" href="https://www.openfoam.com/news/main-news/openfoam-v1912/pre-processing#pre-processing-expressions-syntax">inline expressions for dictionaries</a>. To get started, create a dedicated folder and make a copy of the base simulation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">exercises</span><span class="o">/</span><span class="n">openloop_control</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">cylinder2D</span><span class="o">/</span> <span class="n">exercises</span><span class="o">/</span><span class="n">openloop_control</span><span class="o">/</span><span class="n">A2f6</span>
+</pre></div>
+</div>
+<p>The velocity boundary condition is specified in the <em><a class="reference external" href="http://0.org/U">0.org/U</a></em> dictionary. Open the dictionary and make the following modifications:</p>
+<ol class="simple">
+<li><p>currently, there is one entry for the <em>cylinder</em>, <em>top</em>, and <em>bottom</em> patches, because the same boundary condition is applied to these patches; remove the <em>cylinder</em> patch from the joint entry and create a new separate entry only for <em>cylinder</em></p></li>
+<li><p>use the <em>exprFixedValue</em> type boundary condition as follows:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cylinder
+{
+  type        exprFixedValue;
+  value       $internalField;
+  amplitude   2.0;
+  frequency   6.0;
+  valueExpr   &quot;(vector(0, 0, 1) ^ face()) / area() * ???&quot;;
+}
+</pre></div>
+</div>
+<p>Variables can be accessed using the syntax <code class="docutils literal notranslate"><span class="pre">$variable</span></code>. E.g., <code class="docutils literal notranslate"><span class="pre">$frequency</span></code> becomes 6.0 in the example above. The expression <code class="docutils literal notranslate"><span class="pre">(vector(0,</span> <span class="pre">0,</span> <span class="pre">1)</span> <span class="pre">^</span> <span class="pre">face())</span> <span class="pre">/</span> <span class="pre">area()</span></code> computes the tangential unit vector. The only missing piece is the expression for <span class="math notranslate nohighlight">\(u_\perp (t)\)</span> in place of the three question marks. You can find the names for the required mathematical functions in the <a class="reference external" href="https://www.openfoam.com/documentation/guides/latest/doc/openfoam-guide-expression-syntax.html">documentation</a>.</p>
+<p>One additional modification of the workflow is necessary when running the simulation with the Singularity container. The default workflow expects the Singularity image to be stored in the simulation’s parent folder, but for this exercise, we created one more subfolder, namely <em>openloop_control</em>. To modify the default behavior, open the <em>Allrun.singularity</em> script and change/add the following lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># replace . ../../functions with</span>
+<span class="o">.</span> <span class="o">../../../</span><span class="n">functions</span>
+<span class="c1"># and add the line</span>
+<span class="n">setImage</span> <span class="s2">&quot;../../../of2106.sif&quot;</span>
+<span class="c1"># before using the image for the first time</span>
+</pre></div>
+</div>
+<p>Once the execution is complete, open the case in ParaView:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">paraview</span> <span class="n">post</span><span class="o">.</span><span class="n">foam</span>
+</pre></div>
+</div>
+<p>and apply the following steps to check if the control works:</p>
+<ol class="simple">
+<li><p>set <em>Case Type</em> to <em>Decomposed Case</em></p></li>
+<li><p>under <em>Mesh Regions</em>, select only the cylinder patch</p></li>
+<li><p>click <em>Apply</em></p></li>
+<li><p>create a <em>Glyph</em> filter and set the <em>Scale Array</em> to <em>U</em></p></li>
+<li><p>click the play button and observe the surface velocity field</p></li>
+</ol>
+<p>If the control is implemented correctly, we can now check its effect on the forces acting on the cylinder. To do so, create a new Jupyter notebook, load the drag and lift coefficients as in previous exercises, and plot the controlled against the un-controlled coefficients.</p>
+<p>Finally, create one or two additional parameter variations in terms of <span class="math notranslate nohighlight">\(f\)</span> and <span class="math notranslate nohighlight">\(A\)</span>, and repeat the process of evaluating the force coefficients.</p>
+</section>
+<section id="closed-loop-active-flow-control">
+<h2>Closed-loop active flow control<a class="headerlink" href="#closed-loop-active-flow-control" title="Permalink to this headline">#</a></h2>
+<p>The agent’s aim in the DRL-based closed-loop control is to learn a control law <span class="math notranslate nohighlight">\(u_\parallel = u_\parallel (\mathbf{p})\)</span> by trail and error. First, copy the initial setup to the exercise folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">test_cases</span><span class="o">/</span><span class="n">drl_control_cylinder</span> <span class="n">exercises</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>The controller is implemented as an OpenFOAM boundary condition (BC). In the BC implementation, actions (angular velocities) are sampled and applied based on the policy’s output. To compile the BC, go to the repository’s top level, log into the Singularity container, and execute the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">singularity</span> <span class="n">shell</span> <span class="n">of2106</span><span class="o">.</span><span class="n">sif</span>
+<span class="n">Singularity</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">openfoam</span><span class="o">/</span><span class="n">openfoam2106</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">bashrc</span>
+<span class="n">Singularity</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">drl_control_cylinder</span><span class="o">/</span><span class="n">agentRotatingWallVelocity</span><span class="o">/</span>
+<span class="n">wmake</span>
+<span class="c1"># check if the library file libAgentRotatingWallVelocity.so was created</span>
+<span class="c1"># and than leave the container</span>
+<span class="n">ls</span>
+<span class="n">exit</span>
+</pre></div>
+</div>
+<p>Now we are ready to start the training. Navigate to the <em>drl_control_cylinder</em> folder and initiate the training by running the <em><a class="reference external" href="http://main.py">main.py</a></em> script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">exercises</span><span class="o">/</span><span class="n">drl_control_cylinder</span><span class="o">/</span>
+<span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The output created during the training is mainly stored in two directories:</p>
+<ul class="simple">
+<li><p><em>Data</em>: contains the trajectory and force coefficient data for each PPO iteration</p></li>
+<li><p><em>results</em>: contains three subfolders:</p>
+<ul>
+<li><p><em>evaluation</em>: Numpy binary data holding the mean reward after each PPO iteration, e.g, <em>evaluations_0.npy</em> contains the mean reward after iteration <em>0</em></p></li>
+<li><p><em>models</em>: snapshots of the policy model after each PPO iteration</p></li>
+<li><p><em>value_models</em>: snapshots of the value model after each PPO iteration</p></li>
+</ul>
+</li>
+</ul>
+<p>Meanwhile the training is running, write three scripts that:</p>
+<ol class="simple">
+<li><p>visualize the mean rewards as the learning progresses</p></li>
+<li><p>visualize the mean angular velocity as the training progresses</p></li>
+<li><p>visualize the drag and lift curves as the training progresses</p></li>
+</ol>
+<p>The first two array entries of each <em>evaluations_i.npy</em> file hold mean and standard deviation of all rewards obtained during the <em>i</em>th PPO iteration. The predicted mean angular velocity of each control step and simulation is stored in the corresponding <em>trajectory.csv</em> file. The drag and lift coefficients are also available in the <em>Data</em> folder. Use the <em>read_data_from_trajectory</em> function to load trajectory and coefficient data from the disk.</p>
+<p>Once the training is completed (approximately after 1h), test the best policy as follows:</p>
+<ol class="simple">
+<li><p>copy the policy associated with the highest mean reward from the <em>results</em> folder to <em>env/base_case/test_policy/policy.pt</em></p></li>
+<li><p>navigate to the <em>test_policy</em> folder; in the file <em><a class="reference external" href="http://0.org/U">0.org/U</a></em>, set <em>train</em> to <em>false</em> and <em>absOmegaMax</em> to <em>10.0</em></p></li>
+<li><p>run the simulation by executing the <em>Allrun.singularity</em> script</p></li>
+<li><p>visualize drag and lift curves once the simulation is completed</p></li>
+<li><p>animate the controlled flow using ParaView</p></li>
+</ol>
+<p><strong>Congratulations! This completes the final two exercise session.</strong></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="cylinder_bayesian_opt_exercise.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Open-loop control of the flow past a cylinder</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

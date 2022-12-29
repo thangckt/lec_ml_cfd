@@ -1,0 +1,1439 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Analyzing coherent structures in flows displaying transonic buffets &#8212; Machine learning in computational fluid dynamics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="https://github.com/thangckt/note/blob/main/docs/1images/one-note-128-y.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reduced-order modeling of the flow past a cylinder" href="cylinder_rom.html" />
+    <link rel="prev" title="Approximating the flow past a cylinder with limited data" href="cylinder_pinn.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Machine learning in computational fluid dynamics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Machine learning in computational fluid dynamics
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Lectures
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_cfd_intro.html">
+   Course overview and motivation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro.html">
+   Finite-volume-based CFD in a nutshell
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro.html">
+   Introduction to machine learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom.html">
+   Reduced-order modeling of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt.html">
+   Optimizing parameters for open-loop flow control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl.html">
+   Controlling the flow past a cylinder
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_intro.html">
+   A brief introduction to Python programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_setup.html">
+   Setting up your system
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cfd_intro_exercise.html">
+   End-to-end simulations in OpenFOAM and Basilisk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ml_intro_exercise.html">
+   End-to-end ML project with OpenFOAM and PyTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bubble_path_classification_exercise.html">
+   Predicting the stability regime of rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mass_transfer_regression_exercise.html">
+   Computing highly accurate mass transfer at rising bubbles
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_pinn_exercise.html">
+   Approximating the flow past a cylinder with limited data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="coherent_structures_dim_reduction_exercise.html">
+   Analyzing coherent structures in flows displaying transonic buffets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_rom_exercise.html">
+   Reduced-order modeling of the flow past a cylinder in flowTorch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_bayesian_opt_exercise.html">
+   Open-loop control of the flow past a cylinder
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cylinder_drl_exercise.html">
+   Controlling the flow past a cylinder with OpenFOAM and PyTorch
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/notebooks/coherent_structures_dim_reduction.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dynamic-mode-decomposition">
+   Dynamic mode decomposition
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Analyzing coherent structures in flows displaying transonic buffets</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dynamic-mode-decomposition">
+   Dynamic mode decomposition
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><img alt="CC" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></p>
+<p>This work is licensed under a <a class="reference external" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="analyzing-coherent-structures-in-flows-displaying-transonic-buffets">
+<h1>Analyzing coherent structures in flows displaying transonic buffets<a class="headerlink" href="#analyzing-coherent-structures-in-flows-displaying-transonic-buffets" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
+import matplotlib.tri as tri
+from stl import mesh
+import torch as pt
+import numpy as np
+from flowtorch import DATASETS
+from flowtorch.data import FOAMDataloader, mask_box
+
+# increase plot resolution
+plt.rcParams[&quot;figure.dpi&quot;] = 160
+
+# create output directory
+output = &quot;output&quot;
+!mkdir -p $output
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>path = DATASETS[&quot;of_cylinder2D_binary&quot;]
+loader = FOAMDataloader(path)
+times = loader.write_times
+fields = loader.field_names
+print(f&quot;Number of available snapshots: {len(times)}&quot;)
+print(&quot;First five write times: &quot;, times[:5])
+print(f&quot;Fields available at t={times[-1]}: &quot;, fields[times[-1]])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of available snapshots: 401
+First five write times:  [&#39;0&#39;, &#39;0.025&#39;, &#39;0.05&#39;, &#39;0.075&#39;, &#39;0.1&#39;]
+Fields available at t=10:  [&#39;p&#39;, &#39;vorticity&#39;, &#39;phi&#39;, &#39;U&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># load vertices and discard z-coordinate
+vertices = loader.vertices[:, :2]
+mask = mask_box(vertices, lower=[0.1, -1], upper=[0.75, 1])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Could not find precomputed cell centers and volumes.
+Computing cell geometry from scratch (slow, not recommended for large meshes).
+To compute cell centers and volumes in OpenFOAM, run:
+
+postProcess -func &quot;writeCellCentres&quot; -constant -time none
+postProcess -func &quot;writeCellVolumes&quot; -constant -time none
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;Selected vertices: {mask.sum().item()}/{mask.shape[0]}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Selected vertices: 7190/13678
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>every = 4 # use only every 4th vertex
+fig, ax = plt.subplots()
+d = 0.1
+ax.scatter(vertices[::every, 0]/d, vertices[::every, 1]/d, s=0.5, c=mask[::every])
+ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+ax.set_xlim(0.0, 2.2/d)
+ax.set_ylim(0.0, 0.41/d)
+ax.set_xlabel(r&quot;$x/d$&quot;)
+ax.set_ylabel(r&quot;$y/d$&quot;)
+plt.savefig(f&quot;{output}/cylinder_mask.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_6_0.png" src="../_images/coherent_structures_dim_reduction_6_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>window_times = [t for t in times if float(t) &gt;= 4.0]
+n_points = mask.sum().item()
+U = pt.zeros((n_points, len(window_times)))
+V = pt.zeros_like(U)
+for i, t in enumerate(window_times):
+    Utemp = loader.load_snapshot(&quot;U&quot;, t)
+    U[:, i] = pt.masked_select(Utemp[:, 0], mask)
+    V[:, i] = pt.masked_select(Utemp[:, 1], mask)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = pt.masked_select(vertices[:, 0], mask)/d
+y = pt.masked_select(vertices[:, 1], mask)/d
+
+fig, axarr = plt.subplots(2, 2, sharex=True, sharey=True)
+axarr[0, 0].tricontourf(x, y, U.mean(dim=1), levels=14, cmap=&quot;jet&quot;)
+axarr[0, 1].tricontourf(x, y, V.mean(dim=1), levels=14, cmap=&quot;jet&quot;)
+axarr[1, 0].tricontourf(x, y, U.var(dim=1), levels=14, cmap=&quot;jet&quot;)
+axarr[1, 1].tricontourf(x, y, V.var(dim=1), levels=14, cmap=&quot;jet&quot;)
+#axarr[0, 1].tricontour(x, y, svd.U[:, count], levels=14, linewidths=0.5, colors=&#39;k&#39;)
+
+for ax in axarr.flatten():  
+    ax.add_patch(plt.Circle((0.2/d, 0.2/d), 0.05/d, color=&#39;k&#39;))
+    ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+axarr[1, 0].set_xlabel(r&quot;$x/d$&quot;)
+axarr[1, 1].set_xlabel(r&quot;$x/d$&quot;)
+axarr[0, 0].set_ylabel(r&quot;$y/d$&quot;)
+axarr[1, 0].set_ylabel(r&quot;$y/d$&quot;)
+axarr[0, 0].set_title(r&quot;$\mathrm{mean}(u)$&quot;)
+axarr[0, 1].set_title(r&quot;$\mathrm{mean}(v)$&quot;)
+axarr[1, 0].set_title(r&quot;$\mathrm{var}(u)$&quot;)
+axarr[1, 1].set_title(r&quot;$\mathrm{var}(v)$&quot;)
+plt.savefig(f&quot;{output}/cylinder_mean_var.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_8_0.png" src="../_images/coherent_structures_dim_reduction_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.tricontourf(x, y, U.var(dim=1), levels=14, cmap=&quot;jet&quot;)
+plt.scatter([4, 4], [1.6, 2.4], c=&quot;k&quot;, marker=&quot;x&quot;, s=50)
+plt.text(4.1, 1.6, &quot;probe 1&quot;)
+plt.text(4.1, 2.4, &quot;probe 2&quot;)
+ax = plt.gca()
+ax.add_patch(plt.Circle((0.2/d, 0.2/d), 0.05/d, color=&#39;k&#39;))
+ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+plt.xlabel(r&quot;$x/d$&quot;)
+plt.ylabel(r&quot;$y/d$&quot;)
+plt.title(r&quot;$\mathrm{var}(u)$&quot;)
+plt.savefig(f&quot;{output}/cylinder_Ux_var_markers.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_9_0.png" src="../_images/coherent_structures_dim_reduction_9_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xy = pt.stack((x, y)).T
+p1_id = pt.argmin((xy-pt.tensor([4.0, 1.6])).norm(dim=1))
+p2_id = pt.argmin((xy-pt.tensor([4.0, 2.4])).norm(dim=1))
+p1_id, p2_id
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(tensor(806), tensor(813))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Up = U - U.mean(dim=1).unsqueeze(-1)
+Up_p1 = Up[p1_id]
+Up_p2 = Up[p2_id]
+times_num = [float(t) for t in window_times]
+plt.plot(times_num, Up_p1, label=r&quot;$u_1^\prime$&quot;)
+plt.plot(times_num, Up_p2, label=r&quot;$u_2^\prime$&quot;)
+plt.xlabel(r&quot;$t$ in $s$&quot;)
+plt.ylabel(r&quot;$u^\prime$ in $m/s$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/Up_probes_vs_time.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_11_0.png" src="../_images/coherent_structures_dim_reduction_11_0.png" />
+</div>
+</div>
+<p>The basic idea of dimensionality reduction with PCA and related methods is as follows: if the observations are correlated, then there is some redundancy in the data, and we should be able to the data into a more effective representation. For example, to reduce the amount of data gathered from the two probe locations, we could remember only the observations of point one together with some meaningful relationship between observations from points one and two. In the visualization below, I assumed that <span class="math notranslate nohighlight">\(u^\prime_2(u^\prime_1) = - u^\prime_1\)</span>. As you can see, the new representation is not too bad. When plotting the observation of point one against those of point two, the canvas presents a two-dimensional space in which the observations lie. The position vector of each observation on the canvas has two components, one for <span class="math notranslate nohighlight">\(u^\prime_1\)</span> and one for <span class="math notranslate nohighlight">\(u^\prime_2\)</span>. In other words, each sample point provides a direction (a basis vector) of the space containing the observations. This basis is naturally given to us by the points we picked and also by the basis in which the dataset is available (e.g., <span class="math notranslate nohighlight">\(u\)</span> being the velocity component in <span class="math notranslate nohighlight">\(x\)</span>-direction and <span class="math notranslate nohighlight">\(x\)</span> being the coordinate along the channel). If <span class="math notranslate nohighlight">\(u\)</span> would not be the velocity component along the channel but along a slightly rotated axis, the plot below would look differently.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.scatter(Up_p1, Up_p2, marker=&quot;+&quot;)
+plt.plot(Up_p1, -Up_p1, c=&quot;k&quot;, label=r&quot;$u^\prime_2(u^\prime_1) = - u^\prime_1$&quot;)
+plt.xlabel(r&quot;$u_1^\prime$&quot;)
+plt.ylabel(r&quot;$u_2^\prime$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/Up1_vs_Up2.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_13_0.png" src="../_images/coherent_structures_dim_reduction_13_0.png" />
+</div>
+</div>
+<p>If the canvas above represents the space spanned by the natural basis, then the black line represents lower-dimensional subspace. One unit vector along the black line given in coordinates of the natural basis is <span class="math notranslate nohighlight">\(\mathbf{\phi}=(1/\sqrt{2}, -1/\sqrt{2})^T\)</span> (look at the functional definition of the line if that is not clear). To get the coordinates of the observations along the <span class="math notranslate nohighlight">\(\mathbf{\phi}\)</span> axis, we have to project every observation onto <span class="math notranslate nohighlight">\(\mathbf{\phi}\)</span>. Suppose we organize the velocity fluctuations of the two sample points in the following data matrix:
+$<span class="math notranslate nohighlight">\(
+\mathbf{X} = \left[
+  \begin{array}{cccc}
+|            &amp; |            &amp;     &amp; | \\
+\mathbf{u}^\prime_1 &amp; \mathbf{u}^\prime_2 &amp; ... &amp; \mathbf{u}^\prime_{N} \\
+|            &amp; |            &amp;     &amp; | \\
+\end{array}\right],
+\)</span><span class="math notranslate nohighlight">\(
+where the index \)</span>j<span class="math notranslate nohighlight">\( of \)</span>\mathbf{u}^\prime_j<span class="math notranslate nohighlight">\( indicates the snapshot number and \)</span>N<span class="math notranslate nohighlight">\( is the overall number of snapshots. Each column vector \)</span>\mathbf{u}^\prime_j<span class="math notranslate nohighlight">\( has two rows, one for each sample point. The resulting data matrix is therefore \)</span>\mathbf{X}\in \mathbb{R}^{2\times N}<span class="math notranslate nohighlight">\(. To project all data points at once onto \)</span>\mathbf{\phi}<span class="math notranslate nohighlight">\(, we compute:
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{y} = \mathbf{\phi}^T \mathbf{X}.
+\)</span><span class="math notranslate nohighlight">\(
+The resulting vector \)</span>\mathbf{y}<span class="math notranslate nohighlight">\( is \)</span>\mathbf{y}\in \mathbb{R}^{1\times N}<span class="math notranslate nohighlight">\( and contains the coordinate of each snapshot in the \)</span>\mathbf{\phi}<span class="math notranslate nohighlight">\( basis. We can visualize the projected snapshot in the natural basis by multiplying the coordinate with the \)</span>\mathbf{\phi}$ vector.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X = pt.stack((Up_p1, Up_p2))
+print(&quot;data matrix of shape: &quot;, X.shape)
+phi_unit = pt.tensor([1.0, -1.0])
+phi_unit /= phi_unit.norm()
+y = phi_unit.reshape(1, 2) @ X
+Y = (y.T @ phi_unit.reshape(1, 2)).T
+plt.scatter(X[0, :], X[1, :], marker=&quot;+&quot;)
+plt.scatter(Y[0, :], Y[1, :])
+plt.plot(Up_p1, -Up_p1, c=&quot;k&quot;, label=r&quot;$u^\prime_2(u^\prime_1) = - u^\prime_1$&quot;)
+plt.gca().set_aspect(&quot;equal&quot;)
+plt.xlabel(r&quot;$u_1^\prime$&quot;)
+plt.ylabel(r&quot;$u_2^\prime$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/Up12_proj.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data matrix of shape:  torch.Size([2, 241])
+</pre></div>
+</div>
+<img alt="../_images/coherent_structures_dim_reduction_15_1.png" src="../_images/coherent_structures_dim_reduction_15_1.png" />
+</div>
+</div>
+<p>We can see that the data points are much more spread along the new <span class="math notranslate nohighlight">\(\mathbf{\phi}\)</span> axis. To measure the spread, we can compute the variance of the projection onto <span class="math notranslate nohighlight">\(\mathbf{\phi}\)</span>:
+$<span class="math notranslate nohighlight">\(
+  \mathrm{var}(\mathbf{y}) = \mathbf{yy}^T = \mathbf{\phi}^T \mathbf{X} (\mathbf{\phi}^T \mathbf{X})^T = \mathbf{\phi}^T \mathbf{XX}^T \mathbf{\phi}
+\)</span><span class="math notranslate nohighlight">\(
+The matrix \)</span>\mathbf{XX}^T<span class="math notranslate nohighlight">\( is \)</span>2\times 2<span class="math notranslate nohighlight">\( matrix in the present example. If we substituted \)</span>\mathbf{\phi}<span class="math notranslate nohighlight">\( with the first unit vector of the natural basis \)</span>\mathbf{e}_1 = (1, 0)^T<span class="math notranslate nohighlight">\( then we would effectively extract the first row of the first column of \)</span>\mathbf{XX}^T<span class="math notranslate nohighlight">\(, which is \)</span>N-1<span class="math notranslate nohighlight">\( times the sample variance of \)</span>u^\prime_1<span class="math notranslate nohighlight">\(. If we computed instead \)</span>\mathbf{e}_2^T \mathbf{XX}^T \mathbf{e}_1<span class="math notranslate nohighlight">\(, we would extract the second row of the first colum of \)</span>\mathbf{XX}^T<span class="math notranslate nohighlight">\(, which is \)</span>N-1<span class="math notranslate nohighlight">\( times the sample covariance between \)</span>u^\prime_1<span class="math notranslate nohighlight">\( and  \)</span>u^\prime_2<span class="math notranslate nohighlight">\(. Therefore, the so-called covariance matrix is defined as follows:
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{C} = \frac{1}{N-1} \mathbf{XX}^T.
+\)</span><span class="math notranslate nohighlight">\(
+[This article](https://www.willemsleegers.com/posts/why-divide-by-n-1/) provides a nice and intuitive reasoning for the pre-factor \)</span>N-1$. The covariance matrix of the data in the natural basis is computed and depicted below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>N = X.shape[1]
+print(&quot;Variance along new dimension (phi): &quot;, (y @ y.T).item() /  (N-1))
+C = (X @ X.T) / (N - 1)
+plt.imshow(C)
+plt.gca().set_xticks([])
+plt.gca().set_yticks([])
+for i in range(C.shape[0]):
+    for j in range(C.shape[1]):
+        ind = f&quot;{i}{j}&quot;
+        text = r&quot;$c_{&quot; + f&quot;{i+1}{j+1}&quot; + r&quot;}=&quot; + f&quot;{C[i, j]:2.2f}$&quot;
+        plt.text(i, j, text, c=&quot;C3&quot;, fontsize=12, ha=&quot;center&quot;)
+plt.savefig(f&quot;{output}/cov_org.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variance along new dimension (phi):  0.6717532475789388
+</pre></div>
+</div>
+<img alt="../_images/coherent_structures_dim_reduction_17_1.png" src="../_images/coherent_structures_dim_reduction_17_1.png" />
+</div>
+</div>
+<p>The new unit vector <span class="math notranslate nohighlight">\(\mathbf{\phi}\)</span> we experimented with before corresponds to the unit vector <span class="math notranslate nohighlight">\(\mathbf{e}_1\)</span> rotated by <span class="math notranslate nohighlight">\(-45^\circ\)</span>. The variance along the new dimension was significantly larger than any coefficient of <span class="math notranslate nohighlight">\(\mathbf{C}\)</span>. We can execute another small experiment and test the rotation by several different  <span class="math notranslate nohighlight">\(\beta\)</span> affect the covariance matrix. The first and second unit vector of the rotated basis are obtained by multiplying the corresponding unit vector of the natural basis by the rotation matrix:
+$<span class="math notranslate nohighlight">\(
+  \mathbf{\phi}_1 = \mathbf{Re}_1\quad\text{and}\quad \mathbf{\phi}_2 = \mathbf{Re}_2,
+\)</span><span class="math notranslate nohighlight">\(
+with \)</span>\mathbf{R}<span class="math notranslate nohighlight">\( being:
+\)</span><span class="math notranslate nohighlight">\(
+\mathbf{R} = \left[
+  \begin{array}{cc}
+  \mathrm{cos}(\beta) &amp; -\mathrm{sin}(\beta) \\
+  \mathrm{sin}(\beta) &amp;  \mathrm{cos}(\beta) \\
+\end{array}\right].
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def rotate_vector(vector, angle):
+    rot_matrix = pt.tensor([[pt.cos(angle), -pt.sin(angle)], [pt.sin(angle), pt.cos(angle)]])
+    return rot_matrix @ vector
+
+fig, axarr = plt.subplots(2, 4, figsize=(8, 4), sharex=True, sharey=True)
+angles = pt.linspace(0.25, 1, 4) * np.pi
+origin = pt.zeros(2)
+unit_1 = pt.tensor([1, 0], dtype=pt.float32)
+for i, angle in enumerate(angles):
+    phi_1 = rotate_vector(unit_1, angle)
+    phi_2 = rotate_vector(unit_1, angle+np.pi*0.5)
+    axis_1 = pt.stack((-phi_1, phi_1))
+    axis_2 = pt.stack((-phi_2, phi_2))
+    Y_1 = phi_1.reshape(2, 1) * (phi_1.reshape(1, 2) @ X)
+    Y_2 = phi_2.reshape(2, 1) * (phi_2.reshape(1, 2) @ X)
+    axarr[0, i].plot(axis_1[:, 0]*1.5, axis_1[:, 1]*1.5, c=&quot;k&quot;, ls=&quot;--&quot;)
+    axarr[0, i].plot(axis_2[:, 0]*1.5, axis_2[:, 1]*1.5, c=&quot;k&quot;, ls=&quot;:&quot;)
+    axarr[0, i].scatter(X[0, :], X[1, :], marker=&quot;+&quot;, lw=1, s=10)
+    axarr[0, i].scatter(Y_1[0, :], Y_1[1, :], marker=&quot;+&quot;, lw=1, s=10)
+    axarr[0, i].scatter(Y_2[0, :], Y_2[1, :], marker=&quot;+&quot;, lw=1, s=10)
+    axarr[0, i].set_aspect(&quot;equal&quot;)
+    axarr[0, i].set_xlim(-1, 1)
+    axarr[0, i].set_ylim(-1, 1)
+    phi = pt.stack((phi_1, phi_2)).T
+    X_pro = X.T @ phi
+    axarr[1, i].scatter(X_pro[:, 0], X_pro[:, 1], marker=&quot;+&quot;, s=10)
+    axarr[0, i].set_title(r&quot;$\alpha = {:1.2f}\pi$&quot;.format(angle/np.pi))
+    axarr[1, i].set_title(&quot;rot. data&quot;)
+plt.savefig(f&quot;{output}/rotated_data.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_19_0.png" src="../_images/coherent_structures_dim_reduction_19_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(1, 4, figsize=(8, 4), sharex=True, sharey=True)
+angles = pt.linspace(0.25, 1, 4) * np.pi
+origin = pt.zeros(2)
+unit_1 = pt.tensor([1, 0], dtype=pt.float32)
+for i, angle in enumerate(angles):
+    new_unit_1 = rotate_vector(unit_1, angle)
+    new_unit_2 = rotate_vector(unit_1, angle+np.pi*0.5)
+    phi = pt.stack((new_unit_1, new_unit_2)).T
+    X_pro = (X.T @ phi).T
+    C_pro = (X_pro @ X_pro.T) / (N -1)
+    axarr[i].imshow(C_pro, vmin=-0.66, vmax=0.66)
+    axarr[i].set_xticks([])
+    axarr[i].set_yticks([])
+    axarr[i].set_title(r&quot;$\beta = {:1.2f}\pi$&quot;.format(angle/np.pi))
+    for k in range(C.shape[0]):
+        for l in range(C.shape[1]):
+            axarr[i].text(k, l, f&quot;{C_pro[k, l]:2.2f}&quot;, c=&quot;C3&quot;, fontsize=12, ha=&quot;center&quot;)
+plt.savefig(f&quot;{output}/cov_rotated_data.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_20_0.png" src="../_images/coherent_structures_dim_reduction_20_0.png" />
+</div>
+</div>
+<p>As we can see, choosing a favorable new basis, like a <span class="math notranslate nohighlight">\(45^\circ\)</span> rotated version of the natural basis, tends to reduce the off-diagonal coefficients of the covariance matrix while one of the diagonal coefficients becomes much larger. We can now use this observation to define a clear metric according to which we choose an optimal new basis. In the PCA, the first axis is chosen such that the variance along this axis is maximal under the condition that the new basis vector is a unit vector:
+$<span class="math notranslate nohighlight">\(
+  \underset{\mathbf{\phi}_1}{\mathrm{max}}( \mathbf{\phi}^T_1 \mathbf{C} \mathbf{\phi}_1)\quad\text{given that}\quad \mathbf{\phi}^T_1\mathbf{\phi}_1 = 1.
+\)</span><span class="math notranslate nohighlight">\(
+To solve the optimization problem, we use the method of [Lagrange multipliers](https://en.wikipedia.org/wiki/Lagrange_multiplier), which entails subtracting \)</span>\lambda<span class="math notranslate nohighlight">\( times the constrained from the objective function (the variance along the new axis):
+\)</span><span class="math notranslate nohighlight">\(
+L(\mathbf{\phi}_1, \lambda) =  \mathbf{\phi}^T_1 \mathbf{C} \mathbf{\phi}_1 - l(\mathbf{\phi}^T_1\mathbf{\phi}_1 - 1),
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>\lambda<span class="math notranslate nohighlight">\( is the Lagrange multiplier. The new objective function is quadratic in the component of \)</span>\mathbf{\phi}_1<span class="math notranslate nohighlight">\( (compute the above equation for a generic \)</span>2\times 2<span class="math notranslate nohighlight">\( it that's not clear yet). To find the maximum, we compute the derivative with respect to \)</span>\mathbf{\phi}_1<span class="math notranslate nohighlight">\( and set it to zero. Note that the derivative of the scalar objective function with resect to a vector yields a vector:
+\)</span><span class="math notranslate nohighlight">\(
+  \frac{\partial L}{\partial \mathbf{\phi}} = 2\mathbf{C}\mathbf{\phi}_1 - 2\lambda \mathbf{\phi}_1 = \mathbf{0}.
+\)</span><span class="math notranslate nohighlight">\(
+Refactoring the derivative yields an eigenvalue problem:
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{C\phi}_1 = \lambda \mathbf{\phi}_1.
+\)</span><span class="math notranslate nohighlight">\(
+The equation above says that the objective function is maximized of the Lagrange multiplier is an eigenvalue of the covariance matrix and \)</span>\mathbf{\phi}<span class="math notranslate nohighlight">\( is the corresponding eigenvector. However, in the current problem, \)</span>\mathbf{C}<span class="math notranslate nohighlight">\( is a \)</span>2\times 2<span class="math notranslate nohighlight">\( and could have two non-negative eigenvalues (the (co)variance is always larger or equal to zero; see [positive semi-definite matrix](https://en.wikipedia.org/wiki/Definite_matrix)), so which eigenvalue/eigenvector pair is the one we are searching? To solve this mystery it suffices to \)</span>\mathbf{C\phi}_1<span class="math notranslate nohighlight">\( in the maximization problem with \)</span>\lambda \mathbf{\phi}_1<span class="math notranslate nohighlight">\(:
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{\phi}^T_1 \mathbf{C} \mathbf{\phi}_1 = \lambda\mathbf{\phi}^T_1\mathbf{\phi}_1 = \lambda.
+\)</span><span class="math notranslate nohighlight">\(
+Now it becomes clear that the maximum eigenvalue maximizes the objective function. Let's say we compute the eigen decomposition of the covariance matrix:
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{C} = \mathbf{\Phi \Lambda \Phi}^{-1}\quad\text{given that}\quad \mathbf{\phi}^T_1\mathbf{\phi}_1 = 1,
+\)</span><span class="math notranslate nohighlight">\(
+where the column vectors of \)</span>\mathbf{\Phi}<span class="math notranslate nohighlight">\( are the eigenvectors and the diagonal coefficients of \)</span>\mathbf{Lambda}<span class="math notranslate nohighlight">\( are the eigenvalues of the covariance matrix. The eigenvectors \)</span>\mathbf{\phi}_i$ form an orthonormal basis because the covariance matrix is symmetric. If the eigenvectors are sorted according to the eigenvalues in descending order, then the new basis vector with the second largest variance is the eigenvector with the second largest eigenvalue and so on. The eigenvectors of the covariance matrix are also referred to as principal components. The eigenvalues correspond to the variance along each new axis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>C = (X @ X.T) / (N - 1)
+vals, vecs = pt.linalg.eigh(C)
+vals, indices = pt.sort(vals, descending=True)
+vecs = vecs[:, indices]
+print(vals)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0.6718, 0.0096])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t = pt.linspace(0, 2 * np.pi, 100)
+plt.plot(pt.cos(t), pt.sin(t), ls=&quot;--&quot;, color=&quot;k&quot;, lw=2)
+plt.gca().set_aspect(&quot;equal&quot;)
+plt.xlabel(r&quot;$u_1^\prime$&quot;)
+plt.xlabel(r&quot;$u_2^\prime$&quot;)
+plt.axhline(0.0, ls=&quot;:&quot;, c=&quot;k&quot;)
+plt.axvline(0.0, ls=&quot;:&quot;, c=&quot;k&quot;)
+plt.arrow(0, 0, *vecs[:, 0]*(1-0.1), width=0.01, head_length=0.1, color=&quot;C0&quot;)
+plt.arrow(0, 0, *vecs[:, 1]*(1-0.1), width=0.01, head_length=0.1, color=&quot;C1&quot;)
+plt.text(vecs[0, 0]+0.05, vecs[1, 0], r&quot;$\mathbf{\varphi}_1 = &quot; + r&quot;({:1.2f} , {:1.2f})^T$&quot;.format(*vecs[:, 0]))
+plt.text(vecs[0, 1]+0.05, vecs[1, 1], r&quot;$\mathbf{\varphi}_2 = &quot; + r&quot;({:1.2f} , {:1.2f})^T$&quot;.format(*vecs[:, 1]))
+plt.savefig(f&quot;{output}/cov_eigvecs_2D.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_23_0.png" src="../_images/coherent_structures_dim_reduction_23_0.png" />
+</div>
+</div>
+<p>the mode coefficients are defined as
+$<span class="math notranslate nohighlight">\(
+  \mathbf{A} = \mathbf{\Phi}^T \mathbf{X}
+\)</span><span class="math notranslate nohighlight">\(
+note that
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{A}^T = (\mathbf{\Phi}^T \mathbf{X})^T = \mathbf{X}^T \mathbf{\Phi}
+\)</span><span class="math notranslate nohighlight">\(
+and
+\)</span><span class="math notranslate nohighlight">\(
+  \mathbf{X} = \mathbf{\Phi A}
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>A = vecs.T @ X
+A.shape
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([2, 241])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(times_num, A[0, :], label=&quot;mode 1 coeff.&quot;)
+plt.plot(times_num, A[1, :], label=&quot;mode 2 coeff.&quot;)
+plt.xlabel(r&quot;$t$ in $s$&quot;)
+plt.legend()
+plt.savefig(f&quot;{output}/mode_coeffs_2points.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_26_0.png" src="../_images/coherent_structures_dim_reduction_26_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 3), sharex=True, sharey=True)
+X_11 = vecs[0, 0] * A[0, :]
+X_12 = vecs[0, 1] * A[1, :]
+X_21 = vecs[1, 0] * A[0, :]
+X_22 = vecs[1, 1] * A[1, :]
+
+ax1.plot(times_num, X[0, :], ls=&quot;-&quot;, label=&quot;org.&quot;)
+ax1.plot(times_num, X_11, ls=&quot;--&quot;, label=&quot;contr. mode 1&quot;)
+ax1.plot(times_num, X_12, ls=&quot;--&quot;, label=&quot;contr. mode 2&quot;)
+ax1.plot(times_num, X_11+X_12, ls=&quot;--&quot;, label=&quot;recon.&quot;)
+ax2.plot(times_num, X[1, :], ls=&quot;-&quot;)
+ax2.plot(times_num, X_21, ls=&quot;--&quot;)
+ax2.plot(times_num, X_22, ls=&quot;--&quot;)
+ax2.plot(times_num, X_21+X_22, ls=&quot;--&quot;)
+ax2.set_xlabel(r&quot;$t$ in $s$&quot;)
+ax1.set_ylabel(r&quot;$u_1^\prime$ in $m/s$&quot;)
+ax2.set_ylabel(r&quot;$u_2^\prime$ in $m/s$&quot;)
+ax1.legend(ncol=4, fontsize=8, bbox_to_anchor=(0.5, 1.15), loc=&quot;center&quot;)
+plt.savefig(f&quot;{output}/mode_recon_2points.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_27_0.png" src="../_images/coherent_structures_dim_reduction_27_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>C_direct = (Up @ Up.T) / (N - 1)
+vals, vecs = pt.linalg.eigh(C_direct)
+vals, indices = pt.sort(vals, descending=True)
+vecs = vecs[:, indices]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.bar(range(1, 11), vals[:10]/vals.sum()*100)
+plt.gca().set_xticks(range(1, 11))
+plt.xlabel(r&quot;$i$&quot;)
+plt.ylabel(r&quot;$\lambda_{i,rel} \times 100\%$&quot;)
+plt.title(&quot;individual contribution to TKE&quot;)
+plt.savefig(f&quot;{output}/Up_cylinder_eigvals.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_29_0.png" src="../_images/coherent_structures_dim_reduction_29_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = pt.masked_select(vertices[:, 0], mask)/d
+y = pt.masked_select(vertices[:, 1], mask)/d
+
+fig, axarr = plt.subplots(2, 2, sharex=True, sharey=True)
+count = 0
+for row in range(2):
+    for col in range(2):
+        axarr[row, col].tricontourf(x, y, vecs[:, count], levels=14, cmap=&quot;jet&quot;)
+        axarr[row, col].tricontour(x, y, vecs[:, count], levels=14, linewidths=0.5, colors=&#39;k&#39;)
+        axarr[row, col].add_patch(plt.Circle((0.2/d, 0.2/d), 0.05/d, color=&#39;k&#39;))
+        axarr[row, col].set_aspect(&quot;equal&quot;, &#39;box&#39;)
+        # add 1 for the POD mode number since we subtracted the mean
+        axarr[row, col].set_title(f&quot;mode {count + 1}&quot;)
+        count += 1
+plt.savefig(f&quot;{output}/Up_cylinder_eigvecs.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_30_0.png" src="../_images/coherent_structures_dim_reduction_30_0.png" />
+</div>
+</div>
+<p>singular value decomposition
+$<span class="math notranslate nohighlight">\(
+  \mathbf{X} = \mathbf{U\Sigma V}^T
+\)</span>$</p>
+<ul class="simple">
+<li><p>left/right singular vectors are unitary</p></li>
+<li><p>non-zero part of <span class="math notranslate nohighlight">\(\mathbf{\Sigma}\)</span> is a diagonal matrix</p></li>
+</ul>
+<p>direct PCA by means of SVD
+$<span class="math notranslate nohighlight">\(
+  \mathbf{C} = \frac{1}{N-1}\mathbf{XX}^T = \frac{1}{N-1} \mathbf{U\Sigma V}^T\mathbf{V\Sigma}^T\mathbf{U}^T =  \frac{1}{N-1} \mathbf{U\Sigma}^2\mathbf{U}^T = \mathbf{\Phi\Lambda\Phi}^T
+\)</span>$</p>
+<ul class="simple">
+<li><p>principal components are equivalent to the left singular vectors</p></li>
+<li><p>eigenvalues times <span class="math notranslate nohighlight">\(N-1\)</span> equals singular values squared: <span class="math notranslate nohighlight">\(\mathbf{\Lambda} = \frac{\mathbf{\Sigma}^2}{N-1}\)</span></p></li>
+<li><p>singular values times right singular values are mode coefficients</p></li>
+</ul>
+<p>snapshot covariance matrix
+$<span class="math notranslate nohighlight">\(
+  \mathbf{C}_s = \frac{1}{N-1} \mathbf{X}^T\mathbf{X} = \mathbf{\Phi}_s\mathbf{\Lambda}_s\mathbf{\Phi}_s^T
+\)</span>$</p>
+<div class="math notranslate nohighlight">
+\[
+  \mathbf{C}_s = \frac{1}{N-1} \mathbf{V\Sigma}^T\mathbf{U}^T\mathbf{U\Sigma V}^T = \frac{1}{N-1} \mathbf{V\Sigma}^2\mathbf{V}^T = \mathbf{\Phi}_s\mathbf{\Lambda}_s\mathbf{\Phi}_s^T
+\]</div>
+<p>getting the principal modes:
+$<span class="math notranslate nohighlight">\(
+  \mathbf{X\Phi}_s = \mathbf{U\Sigma V}^T\mathbf{\Phi}_s = \mathbf{U\Sigma V}^T\mathbf{V} = \mathbf{U\Sigma}
+\)</span>$</p>
+<div class="math notranslate nohighlight">
+\[
+  \mathbf{\Phi} = \mathbf{U} = \mathbf{X\Phi}_s\mathbf{\Sigma}^{-1} = \mathbf{X\Phi}_s (\mathbf{\Lambda}_s(N-1))^{-1/2}
+\]</div>
+<ul class="simple">
+<li><p>eigenvalues of <span class="math notranslate nohighlight">\(\mathbf{C}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{C}_s\)</span> are the same</p></li>
+<li><p>eigenvectors correspond to normalized mode coefficients/right singular vectors</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>C_snap = Up.T @ Up / (N - 1)
+vals_s, vecs_s = pt.linalg.eigh(C_snap)
+vals_s, indices = pt.sort(vals_s, descending=True)
+vecs_s = vecs_s[:, indices]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.bar(range(1, 11), vals_s[:10]/vals_s.sum()*100)
+plt.gca().set_xticks(range(1, 11))
+plt.xlabel(r&quot;$i$&quot;)
+plt.ylabel(r&quot;$\lambda_{i,rel} \times 100\%$&quot;)
+plt.title(&quot;individual contribution to TKE&quot;)
+plt.savefig(f&quot;{output}/Up_cylinder_eigvals_snap.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_33_0.png" src="../_images/coherent_structures_dim_reduction_33_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>scale = pt.sqrt(1.0 / vals_s / (N-1))
+modes_s = (Up @ vecs_s) * scale
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>(vecs[:, :10] - modes_s[:, :10]).sum()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor(0.3125)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Vp = V - V.mean(dim=1).unsqueeze(-1)
+X = pt.zeros(n_points*2, N)
+X[:n_points, :] = Up
+X[n_points:, :] = Vp
+C_snap = X.T @ X / (N - 1)
+vals_s, vecs_s = pt.linalg.eigh(C_snap)
+vals_s, indices = pt.sort(vals_s, descending=True)
+vecs_s = vecs_s[:, indices]
+scale = pt.sqrt(1.0 / vals_s / (N-1))
+modes_s = (X @ vecs_s) * scale
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(2, 2, sharex=True, sharey=True)
+count = 0
+for row in range(2):
+    axarr[row, 0].tricontourf(x, y, modes_s[:n_points, row], levels=14, cmap=&quot;jet&quot;)
+    axarr[row, 0].tricontour(x, y, modes_s[:n_points, row], levels=14, linewidths=0.5, colors=&#39;k&#39;)
+    axarr[row, 1].tricontourf(x, y, modes_s[n_points:, row], levels=14, cmap=&quot;jet&quot;)
+    axarr[row, 1].tricontour(x, y, modes_s[n_points:, row], levels=14, linewidths=0.5, colors=&#39;k&#39;)
+    for ax in axarr[row, :]:
+        ax.add_patch(plt.Circle((0.2/d, 0.2/d), 0.05/d, color=&#39;k&#39;))
+        ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+    # add 1 for the POD mode number since we subtracted the mean
+    axarr[row, 0].set_title(f&quot;mode {row + 1}, &quot; + &quot;$U^\prime$&quot;)
+    axarr[row, 1].set_title(f&quot;mode {row + 1}, &quot; + &quot;$V^\prime$&quot;)
+plt.savefig(f&quot;{output}/UV_cylinder_eigvecs.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_37_0.png" src="../_images/coherent_structures_dim_reduction_37_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(2, 2, figsize=(7.5, 5), sharex=True, sharey=True)
+count = 0
+for row in range(2):
+    for col in range(2):
+        axarr[row, col].quiver(x[::4], y[::4], modes_s[:n_points:4, count], modes_s[n_points::4, count])
+        axarr[row, col].add_patch(plt.Circle((0.2/d, 0.2/d), 0.05/d, color=&#39;k&#39;))
+        axarr[row, col].set_aspect(&quot;equal&quot;, &#39;box&#39;)
+        # add 1 for the POD mode number since we subtracted the mean
+        axarr[row, col].set_title(f&quot;mode {count + 1}&quot;)
+        count += 1
+plt.savefig(f&quot;{output}/cylinder_modes_quiver.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_38_0.png" src="../_images/coherent_structures_dim_reduction_38_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>triang = tri.Triangulation(x, y)
+xi = np.linspace(0, 7.5, 100)
+yi = np.linspace(0, 4.1, int(100*4.1/7.5))
+Xi, Yi = np.meshgrid(xi, yi)
+
+fig, axarr = plt.subplots(2, 2, figsize=(7.5, 5), sharex=True, sharey=True)
+count = 0
+for row in range(2):
+    for col in range(2):
+        interpolatorU = tri.LinearTriInterpolator(triang, modes_s[:n_points, count].numpy())
+        interpolatorV = tri.LinearTriInterpolator(triang, modes_s[n_points:, count].numpy())
+        Ui = interpolatorU(Xi, Yi)
+        Vi = interpolatorV(Xi, Yi)
+        mag = np.sqrt(Ui**2 + Vi**2)
+        axarr[row, col].streamplot(xi, yi, Ui, Vi, color=mag, density=1.5, cmap=&quot;jet&quot;)
+        axarr[row, col].add_patch(plt.Circle((0.2/d, 0.2/d), 0.05/d, color=&#39;k&#39;, zorder=5))
+        axarr[row, col].set_aspect(&quot;equal&quot;, &#39;box&#39;)
+        # add 1 for the POD mode number since we subtracted the mean
+        axarr[row, col].set_title(f&quot;mode {count + 1}&quot;)
+        count += 1
+plt.savefig(f&quot;{output}/cylinder_modes_streamplot.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_39_0.png" src="../_images/coherent_structures_dim_reduction_39_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>naca_data = &quot;../datasets/naca0012_buffet/&quot;
+xa = pt.load(naca_data + &quot;x_masked_3D_ref0_lecture.pt&quot;)
+ya = pt.load(naca_data + &quot;y_masked_3D_ref0_lecture.pt&quot;)
+vol = pt.load(naca_data + &quot;vol_masked_3D_ref0_lecture.pt&quot;)
+Uxy = pt.load(naca_data + &quot;U_masked_3D_ref0_lecture.pt&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def add_naca0012_patch(axis, scale=1.0):
+    x_up = naca_stl.x[naca_stl.y &gt; 0] * scale
+    y_up = naca_stl.y[naca_stl.y &gt; 0] * scale
+    x_low = naca_stl.x[naca_stl.y &lt; 0] * scale
+    y_low = naca_stl.y[naca_stl.y &lt; 0] * scale
+    axis.fill_between(x_up, 0.0, y_up, color=&quot;k&quot;, zorder=5)
+    axis.fill_between(x_low, y_low, 0.0, color=&quot;k&quot;, zorder=5)
+    
+naca_stl = mesh.Mesh.from_file(naca_data + &quot;naca0012.stl&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(2, 2, sharex=True, sharey=True)
+axarr[0, 0].tricontourf(xa, ya, Uxy[:, 0, :].mean(dim=1), levels=14, cmap=&quot;jet&quot;)
+axarr[0, 1].tricontourf(xa, ya, Uxy[:, 1, :].mean(dim=1), levels=14, cmap=&quot;jet&quot;)
+axarr[1, 0].tricontourf(xa, ya, Uxy[:, 0, :].var(dim=1), levels=14, cmap=&quot;jet&quot;)
+axarr[1, 1].tricontourf(xa, ya, Uxy[:, 1, :].var(dim=1), levels=14, cmap=&quot;jet&quot;)
+
+for ax in axarr.flatten():  
+    add_naca0012_patch(ax)
+    ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+    ax.set_xlim(-0.1, 2.0)
+    ax.set_ylim(-0.3, 0.75)
+axarr[1, 0].set_xlabel(r&quot;$x/c$&quot;)
+axarr[1, 1].set_xlabel(r&quot;$x/c$&quot;)
+axarr[0, 0].set_ylabel(r&quot;$y/c$&quot;)
+axarr[1, 0].set_ylabel(r&quot;$y/c$&quot;)
+axarr[0, 0].set_title(r&quot;$\mathrm{mean}(u)$&quot;)
+axarr[0, 1].set_title(r&quot;$\mathrm{mean}(v)$&quot;)
+axarr[1, 0].set_title(r&quot;$\mathrm{var}(u)$&quot;)
+axarr[1, 1].set_title(r&quot;$\mathrm{var}(v)$&quot;)
+plt.savefig(f&quot;{output}/naca_mean_var.svg&quot;, bbox_inches=&quot;tight&quot;)
+plt.savefig(f&quot;{output}/naca_mean_var.png&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_42_0.png" src="../_images/coherent_structures_dim_reduction_42_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>n_points = Uxy.shape[0]
+data_matrix = pt.zeros((n_points*2, Uxy.shape[-1]))
+weights = pt.sqrt(vol).unsqueeze(-1)
+data_matrix[:n_points, :] = Uxy[:, 0, :]*weights
+data_matrix[n_points:, :] = Uxy[:, 1, :]*weights
+data_matrix -= data_matrix.mean(dim=1).unsqueeze(-1)
+U, s, VH = pt.linalg.svd(data_matrix, full_matrices=False)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.bar(range(1, 21), s[:20]/s.sum()*100)
+plt.gca().set_xticks(range(1, 21))
+plt.xlabel(r&quot;$i$&quot;)
+plt.ylabel(r&quot;$\sigma_{i,rel} \times 100\%$&quot;)
+plt.title(&quot;individual contribution&quot;)
+plt.savefig(f&quot;{output}/naca_sing_vals.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_44_0.png" src="../_images/coherent_structures_dim_reduction_44_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(3, 2, figsize=(6, 5), sharex=True, sharey=True)
+
+for i in range(3):
+    axarr[i, 0].tricontourf(xa, ya, U[:n_points, i], levels=14, cmap=&quot;jet&quot;)
+    axarr[i, 1].tricontourf(xa, ya, U[n_points:, i], levels=14, cmap=&quot;jet&quot;)
+    for ax in axarr[i, :]:  
+        add_naca0012_patch(ax)
+        ax.set_aspect(&quot;equal&quot;, &#39;box&#39;)
+        ax.set_xlim(-0.1, 2.0)
+        ax.set_ylim(-0.3, 0.75)
+    axarr[i, 0].set_title(f&quot;mode {i+1}, u&quot;)
+    axarr[i, 1].set_title(f&quot;mode {i+1}, v&quot;)
+plt.savefig(f&quot;{output}/naca_pod_modes.png&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_45_0.png" src="../_images/coherent_structures_dim_reduction_45_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, axarr = plt.subplots(3, 1, figsize=(6, 8), sharex=True, sharey=True)
+
+triang = tri.Triangulation(xa, ya)
+xi = np.linspace(-0.1, 2.0, 100)
+yi = np.linspace(-0.3, 0.75, int(100*0.75/2.0))
+Xi, Yi = np.meshgrid(xi, yi)
+
+for i in range(3):
+    interpolatorU = tri.LinearTriInterpolator(triang, U[:n_points, i].numpy())
+    interpolatorV = tri.LinearTriInterpolator(triang, U[n_points:, i].numpy())
+    Ui = interpolatorU(Xi, Yi)
+    Vi = interpolatorV(Xi, Yi)
+    mag = np.sqrt(Ui**2 + Vi**2)
+    axarr[i].streamplot(xi, yi, Ui, Vi, color=mag, density=1.5, cmap=&quot;jet&quot;, linewidth=1)
+    add_naca0012_patch(axarr[i])
+    axarr[i].set_aspect(&quot;equal&quot;, &#39;box&#39;)
+    axarr[i].set_xlim(-0.1, 2.0)
+    axarr[i].set_ylim(-0.3, 0.75)
+    axarr[i].set_title(f&quot;mode {i+1}&quot;)
+plt.savefig(f&quot;{output}/naca_pod_modes_streamlines.png&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_46_0.png" src="../_images/coherent_structures_dim_reduction_46_0.png" />
+</div>
+</div>
+<section id="dynamic-mode-decomposition">
+<h2>Dynamic mode decomposition<a class="headerlink" href="#dynamic-mode-decomposition" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X = pt.stack((Up_p1, Up_p2))
+U, s, VT = pt.linalg.svd(X[:, :-1], full_matrices=False)
+A = X[:, 1:] @ VT.T @ pt.diag(1/s) @ U.T
+A
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[ 0.4526, -0.4412],
+        [ 0.0749,  0.9579]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Xpred = A @ X[:, :-1]
+fig, ax = plt.subplots(figsize=(6,3))
+ax.plot(times_num[1:], X[0, 1:], c=&quot;C0&quot;, ls=&quot;-&quot;, label=&quot;p. 1 true&quot;)
+ax.plot(times_num[1:], Xpred[0, :], c=&quot;C0&quot;, ls=&quot;--&quot;, label=&quot;p. 1 pred.&quot;)
+ax.plot(times_num[1:], X[1, 1:], c=&quot;C1&quot;, ls=&quot;-&quot;, label=&quot;p. 2 true&quot;)
+ax.plot(times_num[1:], Xpred[1, :], c=&quot;C1&quot;, ls=&quot;--&quot;, label=&quot;p. 2 pred.&quot;)
+ax.set_xlabel(r&quot;$t$ in $s$&quot;)
+ax.set_ylabel(r&quot;$u_i^\prime$&quot;)
+ax.legend(ncol=4, loc=&quot;upper center&quot;, bbox_to_anchor=(0.5, 1.15))
+plt.savefig(f&quot;{output}/dmd_probes_prediction.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_50_0.png" src="../_images/coherent_structures_dim_reduction_50_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Xpred = pt.zeros_like(Xpred)
+Xpred[:, 0] = A @ X[:, 0]
+for n in range(1, X.shape[1]-1):
+    Xpred[:, n] = A @ Xpred[:, n-1]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(figsize=(6,3))
+ax.plot(times_num[1:], X[0, 1:], c=&quot;C0&quot;, ls=&quot;-&quot;, label=&quot;p. 1 true&quot;)
+ax.plot(times_num[1:], Xpred[0, :], c=&quot;C0&quot;, ls=&quot;--&quot;, label=&quot;p. 1 pred.&quot;)
+ax.plot(times_num[1:], X[1, 1:], c=&quot;C1&quot;, ls=&quot;-&quot;, label=&quot;p. 2 true&quot;)
+ax.plot(times_num[1:], Xpred[1, :], c=&quot;C1&quot;, ls=&quot;--&quot;, label=&quot;p. 2 pred.&quot;)
+ax.set_xlabel(r&quot;$t$ in $s$&quot;)
+ax.set_ylabel(r&quot;$u_i^\prime$&quot;)
+ax.legend(ncol=4, loc=&quot;upper center&quot;, bbox_to_anchor=(0.5, 1.15))
+plt.savefig(f&quot;{output}/dmd_probes_prediction_steps.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_52_0.png" src="../_images/coherent_structures_dim_reduction_52_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vals, vecs = pt.linalg.eig(A)
+print(vecs.norm(dim=0))
+vals, vecs
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([1.0000, 1.0000])
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(tensor([0.5298+0.j, 0.8807+0.j]),
+ tensor([[-0.9850+0.j,  0.7177+0.j],
+         [ 0.1723+0.j, -0.6964+0.j]]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>U, s, VT = pt.linalg.svd(Up[:, :-1], full_matrices=False)
+A = Up[:, 1:] @ VT.T @ pt.diag(1.0/s) @ U.T
+print(&quot;Shape of linear operator:&quot;, A.shape)
+vals, vecs = pt.linalg.eig(A)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of linear operator: torch.Size([7190, 7190])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(1, 1, figsize=(4, 4))
+t = pt.linspace(0, 2 * np.pi, 100)
+ax.plot(pt.cos(t), pt.sin(t), ls=&quot;--&quot;, color=&quot;k&quot;, lw=2)
+ax.scatter(vals.real, vals.imag, marker=&quot;x&quot;, lw=1, s=20, zorder=7)
+ax.set_xlim(-1.3, 1.3)
+ax.set_ylim(-1.3, 1.3)
+ax.set_xlabel(r&quot;$Re(\lambda)$&quot;)
+ax.set_ylabel(r&quot;$Im(\lambda)$&quot;)
+plt.savefig(f&quot;{output}/cylinder_eigvals_direct.svg&quot;, bbox_inches=&quot;tight&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/coherent_structures_dim_reduction_55_0.png" src="../_images/coherent_structures_dim_reduction_55_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="cylinder_pinn.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Approximating the flow past a cylinder with limited data</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="cylinder_rom.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reduced-order modeling of the flow past a cylinder</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By AndreWeiner, converted by thangckt<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
