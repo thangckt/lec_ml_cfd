@@ -1,4 +1,5 @@
-![funding_logo](logo_stiftung_hochschullehre.png)
+[thangckt convert available at this link](https://thangckt.github.io/lec_multiscale)
+
 
 This lecture is funded by the [foundation for innovation in higher education](https://stiftung-hochschullehre.de/).
 
