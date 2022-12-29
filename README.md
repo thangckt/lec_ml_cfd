@@ -1,5 +1,4 @@
-[thangckt convert available at this link](https://thangckt.github.io/lec_multiscale)
-
+[thangckt convert available at this link](https://thangckt.github.io/lec_ml_cfd)
 
 This lecture is funded by the [foundation for innovation in higher education](https://stiftung-hochschullehre.de/).
 
@@ -53,6 +52,7 @@ Both exercises and lectures sometimes require datasets. Usually, there are instr
 ## Getting and providing help and feedback
 
 If you
+
 - get stuck solving an exercise problem
 - have technical issues
 - have theoretical questions about math or programming
